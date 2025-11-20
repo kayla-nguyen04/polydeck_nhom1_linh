@@ -35,7 +35,7 @@
     <string name="search_users_hint">Tìm kiếm người dùng...</string>
     <string name="total_label">Tổng</string>
     <string name="blocked_label">Bị khóa</string>
-    
+
     <!-- Login Screen -->
     <string name="login_title">Đăng nhập vào tài khoản của bạn</string>
     <string name="email_label">Email</string>

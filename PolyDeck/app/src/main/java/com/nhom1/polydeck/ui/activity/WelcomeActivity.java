@@ -37,7 +37,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 .start();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(WelcomeActivity.this, AdminDashboardActivity.class);
+            Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }, SPLASH_DELAY);

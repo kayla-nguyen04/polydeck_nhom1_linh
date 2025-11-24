@@ -35,6 +35,7 @@
         <!-- Main/App Activities -->
         <activity android:name=".ui.activity.MainActivity" android:exported="false" />
         <activity android:name=".ui.activity.AdminDashboardActivity" android:exported="false" />
+        <activity android:name=".ui.activity.AdminPanelActivity" android:exported="false" />
 
         <!-- User & Deck Management -->
         <activity android:name=".ui.activity.UserManagementActivity" />

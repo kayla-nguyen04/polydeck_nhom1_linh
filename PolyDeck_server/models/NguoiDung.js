@@ -4,7 +4,7 @@ const nguoiDungSchema = new mongoose.Schema({
   ma_nguoi_dung: { type: String, required: true, unique: true, trim: true },
   ho_ten: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  mat_khau_hash: { type: String, required: true },
+  mat_khau_hash: { type: String, required: false }, // Không bắt buộc vì có thể đăng nhập bằng Google
   link_anh_dai_dien: { type: String, default: null },
   google_id: { type: String, default: null },
   cap_do: { type: Number, default: 1, min: 1 },

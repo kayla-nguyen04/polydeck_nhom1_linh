@@ -146,6 +146,14 @@ const login = async (req, res) => {
       });
     }
 
+    // Kiểm tra user có password không (user đăng nhập Google không có password)
+    if (!user.mat_khau_hash) {
+      return res.status(401).json({
+        success: false,
+        message: 'Tài khoản này đăng nhập bằng Google. Vui lòng sử dụng Google để đăng nhập.'
+      });
+    }
+
     // Kiểm tra mật khẩu
     const isPasswordValid = await bcrypt.compare(mat_khau, user.mat_khau_hash);
     if (!isPasswordValid) {
@@ -483,7 +491,7 @@ const googleLogin = async (req, res) => {
         email: email.toLowerCase(),
         google_id: google_id,
         link_anh_dai_dien: picture,
-        mat_khau_hash: '', // Không cần password cho Google login
+        // Không set mat_khau_hash vì đăng nhập bằng Google không cần password
         cap_do: 1,
         diem_tich_luy: 0,
         chuoi_ngay_hoc: 0,

@@ -527,11 +527,90 @@ const googleLogin = async (req, res) => {
   }
 };
 
+// Đổi mật khẩu
+const changePassword = async (req, res) => {
+  try {
+    const { email, mat_khau_cu, mat_khau_moi } = req.body;
+
+    // Validate input
+    if (!email || !mat_khau_cu || !mat_khau_moi) {
+      return res.status(400).json({
+        success: false,
+        message: 'Vui lòng điền đầy đủ thông tin'
+      });
+    }
+
+    // Validate password length
+    if (mat_khau_moi.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'Mật khẩu mới phải có ít nhất 6 ký tự'
+      });
+    }
+
+    // Tìm người dùng
+    const user = await NguoiDung.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Email không tồn tại'
+      });
+    }
+
+    // Kiểm tra user có password không (user đăng nhập Google không có password)
+    if (!user.mat_khau_hash) {
+      return res.status(400).json({
+        success: false,
+        message: 'Tài khoản này đăng nhập bằng Google. Không thể đổi mật khẩu.'
+      });
+    }
+
+    // Kiểm tra mật khẩu cũ
+    const isOldPasswordValid = await bcrypt.compare(mat_khau_cu, user.mat_khau_hash);
+    if (!isOldPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Mật khẩu cũ không đúng'
+      });
+    }
+
+    // Kiểm tra mật khẩu mới có khác mật khẩu cũ không
+    const isSamePassword = await bcrypt.compare(mat_khau_moi, user.mat_khau_hash);
+    if (isSamePassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Mật khẩu mới phải khác mật khẩu cũ'
+      });
+    }
+
+    // Hash mật khẩu mới
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(mat_khau_moi, salt);
+
+    // Cập nhật mật khẩu
+    user.mat_khau_hash = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Đổi mật khẩu thành công'
+    });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi server khi đổi mật khẩu',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   googleLogin,
   verifyEmail,
   resendVerificationEmail,
-  forgotPassword
+  forgotPassword,
+  changePassword
 };

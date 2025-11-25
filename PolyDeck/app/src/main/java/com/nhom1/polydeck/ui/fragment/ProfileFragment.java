@@ -55,8 +55,10 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(requireContext(), "Chức năng chỉnh sửa sẽ sớm có", Toast.LENGTH_SHORT).show());
         view.findViewById(R.id.row_favorites).setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Từ yêu thích", Toast.LENGTH_SHORT).show());
-        view.findViewById(R.id.row_settings).setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Cài đặt", Toast.LENGTH_SHORT).show());
+        view.findViewById(R.id.row_settings).setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SettingsActivity.class);
+            startActivity(intent);
+        });
         view.findViewById(R.id.row_ranking).setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Bảng xếp hạng", Toast.LENGTH_SHORT).show());
         view.findViewById(R.id.row_support).setOnClickListener(v ->

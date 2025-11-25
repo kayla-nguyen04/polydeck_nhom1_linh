@@ -16,28 +16,43 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PolyDeck"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ChangePasswordActivity"
+            android:exported="false" />
         <!-- Welcome & Auth -->
         <activity
             android:name=".ui.activity.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.LoginActivity" android:exported="true" />
-        <activity android:name=".ui.activity.RegisterActivity" android:exported="false" />
-        <activity android:name=".ui.activity.ForgotPasswordActivity" android:exported="false" />
-        <activity android:name=".ui.activity.ResetPasswordActivity" android:exported="false" />
-
-        <!-- Main/App Activities -->
-        <activity android:name=".ui.activity.MainActivity" android:exported="false" />
-        <activity android:name=".ui.activity.AdminDashboardActivity" android:exported="false" />
-        <activity android:name=".ui.activity.AdminPanelActivity" android:exported="false" />
-
-        <!-- User & Deck Management -->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ResetPasswordActivity"
+            android:exported="false" /> <!-- Main/App Activities -->
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AdminPanelActivity"
+            android:exported="false" /> <!-- User & Deck Management -->
         <activity android:name=".ui.activity.UserManagementActivity" />
         <activity android:name=".ui.activity.UserDetailActivity" />
         <activity android:name=".ui.activity.DeckManagementActivity" />
@@ -46,14 +61,11 @@
         <activity android:name=".ui.activity.AddVocabularyActivity" />
         <activity android:name=".ui.activity.CreateQuizActivity" />
         <activity android:name=".ui.activity.SendNotificationActivity" />
-        <activity android:name=".ui.activity.VocabularyListActivity" />
-
-        <!-- Newly added user UI activities -->
+        <activity android:name=".ui.activity.VocabularyListActivity" /> <!-- Newly added user UI activities -->
         <activity android:name=".ui.activity.TopicDetailActivity" />
         <activity android:name=".ui.activity.NotificationsActivity" />
         <activity android:name=".ui.activity.QuizActivity" />
         <activity android:name=".ui.activity.QuizResultActivity" />
-
     </application>
 
 </manifest>

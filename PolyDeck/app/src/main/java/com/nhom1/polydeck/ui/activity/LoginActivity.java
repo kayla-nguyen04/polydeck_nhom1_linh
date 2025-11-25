@@ -217,18 +217,18 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Dữ liệu đăng nhập không hợp lệ", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    String errorMessage = "Đăng nhập thất bại";
-                    if (response.errorBody() != null) {
-                        try {
-                            errorMessage = "Lỗi: " + response.code();
-                        } catch (Exception e) {
-                            errorMessage = "Lỗi kết nối";
+                        String message = apiResponse.getMessage();
+                        if (message == null || message.trim().isEmpty()) {
+                            message = "Đăng nhập thất bại";
+                        }
+                        if (isCredentialErrorMessage(message)) {
+                            showCredentialError(message);
+                        } else {
+                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                         }
                     }
-                    Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                } else {
+                    handleLoginErrorResponse(response);
                 }
             }
 
@@ -246,6 +246,48 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void handleLoginErrorResponse(Response<ApiResponse<LoginResponse>> response) {
+        String errorMessage = "Đăng nhập thất bại";
+        boolean credentialError = response.code() == 401;
+
+        if (response.errorBody() != null) {
+            try {
+                String errorBody = response.errorBody().string();
+                Gson gson = new Gson();
+                ApiResponse<?> errorResponse = gson.fromJson(errorBody, ApiResponse.class);
+                if (errorResponse != null && errorResponse.getMessage() != null && !errorResponse.getMessage().isEmpty()) {
+                    errorMessage = errorResponse.getMessage();
+                }
+                if (errorBody.contains("Email hoặc mật khẩu không đúng")) {
+                    credentialError = true;
+                }
+            } catch (Exception e) {
+                errorMessage = "Lỗi: " + response.code();
+            }
+        } else {
+            errorMessage = "Lỗi: " + response.code();
+        }
+
+        if (isCredentialErrorMessage(errorMessage) || credentialError) {
+            showCredentialError("Email hoặc mật khẩu không đúng");
+        } else {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isCredentialErrorMessage(String message) {
+        if (message == null) return false;
+        String lower = message.toLowerCase();
+        return lower.contains("email hoặc mật khẩu") || lower.contains("không đúng");
+    }
+
+    private void showCredentialError(String message) {
+        inputEmail.setError(message);
+        inputPassword.setError(message);
+        inputPassword.requestFocus();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void showLoading(boolean show) {

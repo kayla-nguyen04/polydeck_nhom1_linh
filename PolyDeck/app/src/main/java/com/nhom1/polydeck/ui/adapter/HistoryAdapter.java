@@ -13,18 +13,27 @@ import com.nhom1.polydeck.data.model.LichSuLamBai;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
     private final List<LichSuLamBai> items = new ArrayList<>();
     private final SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final SimpleDateFormat dfTime = new SimpleDateFormat("mm:ss", Locale.getDefault());
+    private final Map<String, String> topicNameMap = new HashMap<>();
 
     public void setItems(List<LichSuLamBai> list) {
         items.clear();
         if (list != null) items.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void updateTopicNames(Map<String, String> map) {
+        if (map == null) return;
+        topicNameMap.putAll(map);
         notifyDataSetChanged();
     }
 
@@ -38,7 +47,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
     @Override
     public void onBindViewHolder(@NonNull Holder h, int position) {
         LichSuLamBai it = items.get(position);
-        h.tvTopic.setText("Chủ đề: " + (it.maChuDe != null ? it.maChuDe : "-"));
+        String topicId = it.maChuDe;
+        String topicName = topicId != null ? topicNameMap.get(topicId) : null;
+        h.tvTopic.setText("Chủ đề: " + (topicName != null ? topicName : (topicId != null ? topicId : "-")));
         h.tvScore.setText(it.diemSo + "%");
 
         String dateStr = "-";
@@ -71,5 +82,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
         }
     }
 }
+
 
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Selected: near-black for maximum contrast on yellow -->
-    <item android:state_checked="true" android:color="#0B1220" />
-    <!-- Default: strong dark gray -->
-    <item android:color="#1F2937" />
+	<!-- Selected: brand purple -->
+	<item android:state_checked="true" android:color="@color/purple" />
+	<!-- Default: medium gray -->
+	<item android:color="@color/gray_medium" />
 </selector>
 

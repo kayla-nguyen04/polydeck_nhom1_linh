@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        android:background="@color/yellow_bar"
+        android:background="@drawable/bg_bottom_nav_rounded"
         android:elevation="8dp"
         app:itemIconSize="30dp"
         app:itemIconTint="@color/bottom_nav_tint"

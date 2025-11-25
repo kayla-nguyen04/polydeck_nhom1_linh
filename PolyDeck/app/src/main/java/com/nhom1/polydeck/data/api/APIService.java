@@ -35,6 +35,9 @@ public interface APIService {
     @POST("api/auth/forgot-password")
     Call<ApiResponse<Void>> forgotPassword(@Body ForgotPasswordRequest request);
 
+    @POST("api/auth/change-password")
+    Call<ApiResponse<Void>> changePassword(@Body com.nhom1.polydeck.data.model.ChangePasswordRequest request);
+
 
     // ============= ADMIN DASHBOARD =============
     @GET("api/admin/stats")

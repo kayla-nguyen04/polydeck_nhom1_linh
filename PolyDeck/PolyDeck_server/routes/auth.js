@@ -20,4 +20,7 @@ router.post('/resend-verification-email', authController.resendVerificationEmail
 // Quên mật khẩu - gửi mật khẩu mới qua email
 router.post('/forgot-password', authController.forgotPassword);
 
+// Đổi mật khẩu
+router.post('/change-password', authController.changePassword);
+
 module.exports = router;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <EditText
+        android:id="@+id/edt_search_topic"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Tìm kiếm chủ đề..."
+        android:drawableStart="@drawable/ic_search"
+        android:paddingStart="12dp"
+        android:background="@drawable/bg_search_edit_text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_decks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="8dp"/>
+</LinearLayout>
+
+

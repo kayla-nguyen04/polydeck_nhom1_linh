@@ -14,6 +14,15 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         tools:title="Danh sách từ của bộ Động vật" />
 
+    <EditText
+        android:id="@+id/edtSearchVocab"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Tìm kiếm từ vựng..."
+        android:drawableStart="@drawable/ic_search"
+        android:paddingStart="12dp"
+        android:background="@drawable/bg_search_edit_text" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvVocabulary"
         android:layout_width="match_parent"

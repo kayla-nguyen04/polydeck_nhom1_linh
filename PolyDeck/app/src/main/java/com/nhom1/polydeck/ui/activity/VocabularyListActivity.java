@@ -2,6 +2,7 @@ package com.nhom1.polydeck.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.nhom1.polydeck.ui.adapter.VocabularyAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +35,9 @@ public class VocabularyListActivity extends AppCompatActivity {
     private RecyclerView rvVocabulary;
     private VocabularyAdapter adapter;
     private APIService apiService;
+    private EditText edtSearchVocab;
+
+    private final List<TuVung> original = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +58,14 @@ public class VocabularyListActivity extends AppCompatActivity {
         initViews();
         setupToolbar(deckName);
         setupRecyclerView();
+        setupSearch();
         fetchVocabulary(deckId);
     }
 
     private void initViews() {
         toolbar = findViewById(R.id.toolbar_vocab_list);
         rvVocabulary = findViewById(R.id.rvVocabulary);
+        edtSearchVocab = findViewById(R.id.edtSearchVocab);
     }
 
     private void setupToolbar(String deckName) {
@@ -74,12 +81,31 @@ public class VocabularyListActivity extends AppCompatActivity {
         rvVocabulary.setAdapter(adapter);
     }
 
+    private void setupSearch() {
+        edtSearchVocab.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                String q = s.toString().trim().toLowerCase(Locale.getDefault());
+                List<TuVung> filtered = new ArrayList<>();
+                for (TuVung t : original) {
+                    String en = t.getTuTiengAnh() != null ? t.getTuTiengAnh().toLowerCase(Locale.getDefault()) : "";
+                    String vi = t.getNghiaTiengViet() != null ? t.getNghiaTiengViet().toLowerCase(Locale.getDefault()) : "";
+                    if (en.contains(q) || vi.contains(q)) filtered.add(t);
+                }
+                adapter.updateData(filtered);
+            }
+        });
+    }
+
     private void fetchVocabulary(String deckId) {
         apiService.getTuVungByBoTu(deckId).enqueue(new Callback<List<TuVung>>() {
             @Override
             public void onResponse(@NonNull Call<List<TuVung>> call, @NonNull Response<List<TuVung>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter.updateData(response.body());
+                    original.clear();
+                    original.addAll(response.body());
+                    adapter.updateData(original);
                 } else {
                     Toast.makeText(VocabularyListActivity.this, "Không thể tải danh sách từ vựng", Toast.LENGTH_SHORT).show();
                 }

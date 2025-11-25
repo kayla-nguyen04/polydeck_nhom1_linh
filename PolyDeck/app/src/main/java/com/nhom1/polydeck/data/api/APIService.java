@@ -94,4 +94,22 @@ public interface APIService {
 
     @GET("api/chude/{chuDeId}/tuvung")
     Call<List<TuVung>> getTuVungByBoTu(@Path("chuDeId") String chuDeId);
+
+
+    // ============= NOTIFICATIONS =============
+    @GET("api/thongbao")
+    Call<ApiResponse<List<ThongBao>>> getThongBao(@Query("ma_nguoi_dung") String maNguoiDung);
+
+    @POST("api/thongbao/{id}/read")
+    Call<ApiResponse<Void>> markThongBaoRead(@Path("id") String thongBaoId, @Body com.nhom1.polydeck.data.model.ReadRequest body);
+
+    // ============= QUIZ =============
+    @GET("api/quizzes/by-topic/{ma_chu_de}")
+    Call<ApiResponse<com.nhom1.polydeck.data.model.QuizBundle>> getQuizByTopic(@Path("ma_chu_de") String maChuDe);
+
+    @POST("api/quizzes/submit")
+    Call<ApiResponse<com.nhom1.polydeck.data.model.QuizResult>> submitQuiz(@Body com.nhom1.polydeck.data.model.SubmitQuizRequest request);
+
+    @GET("api/quizzes/history/{ma_nguoi_dung}")
+    Call<ApiResponse<List<com.nhom1.polydeck.data.model.LichSuLamBai>>> getQuizHistory(@Path("ma_nguoi_dung") String maNguoiDung);
 }

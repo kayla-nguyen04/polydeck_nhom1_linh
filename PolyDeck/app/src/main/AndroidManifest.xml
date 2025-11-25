@@ -48,6 +48,12 @@
         <activity android:name=".ui.activity.SendNotificationActivity" />
         <activity android:name=".ui.activity.VocabularyListActivity" />
 
+        <!-- Newly added user UI activities -->
+        <activity android:name=".ui.activity.TopicDetailActivity" />
+        <activity android:name=".ui.activity.NotificationsActivity" />
+        <activity android:name=".ui.activity.QuizActivity" />
+        <activity android:name=".ui.activity.QuizResultActivity" />
+
     </application>
 
 </manifest>

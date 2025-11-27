@@ -65,9 +65,9 @@ public class TopicDetailActivity extends AppCompatActivity {
         String finalDeckId = deckId;
         String finalDeckName = deckName;
         btnFlashcard.setOnClickListener(v -> {
-            Intent i = new Intent(this, VocabularyListActivity.class);
-            i.putExtra(VocabularyListActivity.EXTRA_DECK_ID, finalDeckId);
-            i.putExtra(VocabularyListActivity.EXTRA_DECK_NAME, finalDeckName);
+            Intent i = new Intent(this, FlashcardActivity.class);
+            i.putExtra(FlashcardActivity.EXTRA_DECK_ID, finalDeckId);
+            i.putExtra(FlashcardActivity.EXTRA_DECK_NAME, finalDeckName);
             startActivity(i);
         });
 

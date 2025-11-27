@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.model.LoginResponse;
+import com.nhom1.polydeck.ui.activity.FavoritesActivity;
 import com.nhom1.polydeck.ui.activity.LoginActivity;
 import com.nhom1.polydeck.utils.SessionManager;
 
@@ -52,17 +53,15 @@ public class ProfileFragment extends Fragment {
         }
 
         view.findViewById(R.id.row_edit_profile).setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Chức năng chỉnh sửa sẽ sớm có", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.EditProfileActivity.class)));
         view.findViewById(R.id.row_favorites).setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Từ yêu thích", Toast.LENGTH_SHORT).show());
-        view.findViewById(R.id.row_settings).setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SettingsActivity.class);
-            startActivity(intent);
-        });
+                startActivity(new Intent(requireContext(), FavoritesActivity.class)));
+        view.findViewById(R.id.row_settings).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SettingsActivity.class)));
         view.findViewById(R.id.row_ranking).setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Bảng xếp hạng", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.LeaderboardActivity.class)));
         view.findViewById(R.id.row_support).setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Hỗ trợ", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SupportActivity.class)));
         view.findViewById(R.id.row_logout).setOnClickListener(v -> {
             sm.logout();
             Intent i = new Intent(requireContext(), LoginActivity.class);

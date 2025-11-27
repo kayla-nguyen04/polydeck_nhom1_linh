@@ -1,76 +1,45 @@
 package com.nhom1.polydeck.ui.activity;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.button.MaterialButton;
 import com.nhom1.polydeck.R;
-import com.nhom1.polydeck.utils.SessionManager;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    private ImageView btnBack;
-    private SwitchCompat switchDarkMode;
-    private SwitchCompat switchSound;
-    private MaterialButton btnLogout;
-    private SessionManager sessionManager;
+    private static final String PREFS = "PolyDeckSettings";
+    private static final String KEY_SOUND = "sound_enabled";
+    private static final String KEY_DARK = "dark_mode";
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
 
-        sessionManager = new SessionManager(this);
+        ImageButton btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> onBackPressed());
 
-        initViews();
-        setupClickListeners();
-    }
+        Switch swSound = findViewById(R.id.sw_sound);
+        Switch swDark = findViewById(R.id.sw_dark);
 
-    private void initViews() {
-        btnBack = findViewById(R.id.btnBack);
-        switchDarkMode = findViewById(R.id.switchDarkMode);
-        switchSound = findViewById(R.id.switchSound);
-        btnLogout = findViewById(R.id.btnLogout);
-    }
+        swSound.setChecked(prefs.getBoolean(KEY_SOUND, true));
+        swDark.setChecked(prefs.getBoolean(KEY_DARK, false));
 
-    private void setupClickListeners() {
-        btnBack.setOnClickListener(v -> finish());
-
-        findViewById(R.id.itemChangePassword).setOnClickListener(v -> {
-            Intent intent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
-            startActivity(intent);
-        });
-
-        findViewById(R.id.itemLanguage).setOnClickListener(v ->
-                Toast.makeText(this, "Tính năng sẽ sớm có mặt", Toast.LENGTH_SHORT).show());
-
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) ->
-                Toast.makeText(this, isChecked ? "Bật chế độ tối" : "Tắt chế độ tối", Toast.LENGTH_SHORT).show());
-
-        switchSound.setOnCheckedChangeListener((buttonView, isChecked) ->
-                Toast.makeText(this, isChecked ? "Bật âm thanh" : "Tắt âm thanh", Toast.LENGTH_SHORT).show());
-
-        btnLogout.setOnClickListener(v -> {
-            sessionManager.logout();
-            Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        });
+        CompoundButton.OnCheckedChangeListener l = (buttonView, isChecked) -> {
+            if (buttonView == swSound) {
+                prefs.edit().putBoolean(KEY_SOUND, isChecked).apply();
+            } else if (buttonView == swDark) {
+                prefs.edit().putBoolean(KEY_DARK, isChecked).apply();
+            }
+        };
+        swSound.setOnCheckedChangeListener(l);
+        swDark.setOnCheckedChangeListener(l);
     }
 }

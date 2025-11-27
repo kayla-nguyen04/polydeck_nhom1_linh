@@ -37,7 +37,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="8dp"
-                android:src="@drawable/ic_quiz"
+                android:src="@drawable/ic_volume"
                 android:tint="#7C3AED" />
 
             <TextView
@@ -63,7 +63,7 @@
                 android:id="@+id/btnFavorite"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_more_vert"
+                android:src="@drawable/ic_heart_outline"
                 android:tint="#9CA3AF"/>
         </LinearLayout>
 

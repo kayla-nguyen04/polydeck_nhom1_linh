@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class UserManagementActivity extends AppCompatActivity {
     private EditText etSearchUser;
     private RecyclerView rvUsers;
     private TextView tvTotalUsers, tvBannedUsers;
+    private ImageView btnRefresh;
     private UserAdapter userAdapter;
     private APIService apiService;
     private List<User> fullUserList = new ArrayList<>();
@@ -49,6 +51,7 @@ public class UserManagementActivity extends AppCompatActivity {
         setupToolbar();
         setupRecyclerView();
         setupSearch();
+        fetchUsers(); // Fetch data on create
     }
 
     @Override
@@ -64,6 +67,9 @@ public class UserManagementActivity extends AppCompatActivity {
         rvUsers = findViewById(R.id.rvUsers);
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
         tvBannedUsers = findViewById(R.id.tvBannedUsers);
+        btnRefresh = findViewById(R.id.btnRefresh);
+        
+        btnRefresh.setOnClickListener(v -> fetchUsers());
     }
 
     private void setupToolbar() {

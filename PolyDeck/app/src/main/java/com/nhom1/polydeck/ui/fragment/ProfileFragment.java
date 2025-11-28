@@ -21,6 +21,11 @@ import com.nhom1.polydeck.ui.activity.LoginActivity;
 import com.nhom1.polydeck.utils.SessionManager;
 
 public class ProfileFragment extends Fragment {
+    
+    private TextView tvName, tvEmail, tvLevel, tvXp;
+    private ProgressBar pb;
+    private ImageView avatar;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,27 +35,15 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SessionManager sm = new SessionManager(requireContext());
-        LoginResponse user = sm.getUserData();
-
-        TextView tvName = view.findViewById(R.id.tv_name);
-        TextView tvEmail = view.findViewById(R.id.tv_email);
-        TextView tvLevel = view.findViewById(R.id.tv_level);
-        TextView tvXp = view.findViewById(R.id.tv_xp);
-        ProgressBar pb = view.findViewById(R.id.progress_xp);
-        ImageView avatar = view.findViewById(R.id.img_avatar);
-
-        if (user != null) {
-            tvName.setText(user.getHoTen());
-            tvEmail.setText(user.getEmail());
-            int level = Math.max(1, user.getCapDo());
-            int xp = Math.max(0, user.getDiemTichLuy());
-            int next = Math.max(100, ((level + 1) * 400));
-            tvLevel.setText("Level " + level);
-            tvXp.setText(xp + " / " + next + " XP");
-            int percent = Math.min(100, (int) Math.round((xp * 100.0) / next));
-            pb.setProgress(percent);
-        }
+        
+        tvName = view.findViewById(R.id.tv_name);
+        tvEmail = view.findViewById(R.id.tv_email);
+        tvLevel = view.findViewById(R.id.tv_level);
+        tvXp = view.findViewById(R.id.tv_xp);
+        pb = view.findViewById(R.id.progress_xp);
+        avatar = view.findViewById(R.id.img_avatar);
+        
+        loadUserData();
 
         view.findViewById(R.id.row_edit_profile).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.EditProfileActivity.class)));
@@ -63,11 +56,44 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.row_support).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SupportActivity.class)));
         view.findViewById(R.id.row_logout).setOnClickListener(v -> {
+            SessionManager sm = new SessionManager(requireContext());
             sm.logout();
             Intent i = new Intent(requireContext(), LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload user data when returning from EditProfileActivity
+        loadUserData();
+    }
+
+    private void loadUserData() {
+        SessionManager sm = new SessionManager(requireContext());
+        LoginResponse user = sm.getUserData();
+
+        if (user != null) {
+            tvName.setText(user.getHoTen());
+            tvEmail.setText(user.getEmail());
+            int level = Math.max(1, user.getCapDo());
+            int xp = Math.max(0, user.getDiemTichLuy());
+            int next = Math.max(100, ((level + 1) * 400));
+            tvLevel.setText("Level " + level);
+            tvXp.setText(xp + " / " + next + " XP");
+            int percent = Math.min(100, (int) Math.round((xp * 100.0) / next));
+            pb.setProgress(percent);
+            
+            // Load avatar if exists
+            if (user.getLinkAnhDaiDien() != null && !user.getLinkAnhDaiDien().isEmpty()) {
+                com.bumptech.glide.Glide.with(requireContext())
+                        .load(user.getLinkAnhDaiDien())
+                        .error(R.drawable.circle_purple)
+                        .into(avatar);
+            }
+        }
     }
 }
 

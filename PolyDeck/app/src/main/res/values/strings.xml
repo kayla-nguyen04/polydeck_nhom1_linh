@@ -1,29 +1,17 @@
 <resources>
     <string name="app_name">PolyDeck</string>
     <string name="app_logo">PolyDeck Logo</string>
-    <string name="user_initials">NV</string>
-    <string name="user_name_placeholder">Nguyen Van A</string>
     <string name="status_active">Hoạt động</string>
     <string name="status_banned">Bị khóa</string>
-    <string name="user_email_placeholder">nguyenvana@email.com</string>
-    <string name="user_info_placeholder">Level 5 • 1250 XP • 10/10/2024</string>
     <string name="button_detail">Chi tiết</string>
     <string name="button_block">Khóa</string>
 
     <!-- Admin Dashboard -->
     <string name="admin_panel_title">Admin Panel</string>
     <string name="admin_panel_subtitle">Quản lý hệ thống PolyDeck</string>
-    <string name="user_growth">+25%</string>
-    <string name="total_users_count">1,234</string>
     <string name="total_users_label">Tổng người dùng</string>
-    <string name="deck_growth">+8%</string>
-    <string name="total_decks_count">156</string>
     <string name="decks_label">Bộ từ</string>
-    <string name="active_users_growth">+15%</string>
-    <string name="active_users_count">892</string>
     <string name="active_users_label">Người dùng hoạt động</string>
-    <string name="word_growth">+20%</string>
-    <string name="total_words_count">5,678</string>
     <string name="total_words_label">Tổng từ vựng</string>
     <string name="management_section_title">Quản lý</string>
     <string name="menu_users">Người dùng</string>

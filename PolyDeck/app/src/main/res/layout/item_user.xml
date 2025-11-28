@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -47,7 +48,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/user_name_placeholder"
+                        tools:text="User Name"
                         android:textColor="#1F2937"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
@@ -78,7 +79,7 @@
                     android:id="@+id/tvEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_email_placeholder"
+                    tools:text="user@example.com"
                     android:textColor="#6B7280"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
@@ -87,7 +88,7 @@
                     android:id="@+id/tvUserInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_info_placeholder"
+                    tools:text="Level 1 • 0 XP"
                     android:textColor="#9CA3AF"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp"/>

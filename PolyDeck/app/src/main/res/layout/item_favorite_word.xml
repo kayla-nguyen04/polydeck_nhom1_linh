@@ -51,7 +51,6 @@
                         android:id="@+id/tvWord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Beautiful"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#111827"/>
@@ -71,7 +70,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="/ˈbjuː.tɪ.fəl/"
                     android:textSize="13sp"
                     android:textColor="#6B7280"/>
 
@@ -81,7 +79,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Đẹp, xinh đẹp"
                     android:textSize="14sp"
                     android:textColor="#111827"/>
 
@@ -91,7 +88,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="&quot;What a beautiful day!&quot;"
                     android:textSize="12sp"
                     android:textStyle="italic"
                     android:textColor="#9CA3AF"/>
@@ -105,7 +101,6 @@
                     android:background="@drawable/bg_category_tag"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
-                    android:text="Basic English"
                     android:textSize="11sp"
                     android:textColor="#6B7280"/>
             </LinearLayout>

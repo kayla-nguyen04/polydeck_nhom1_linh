@@ -18,6 +18,9 @@ public class TuVung {
     @SerializedName("cau_vi_du")
     private String cauViDu;
 
+    @SerializedName("am_thanh")
+    private String amThanh;
+
     @SerializedName("ma_chu_de")
     private String maChuDe;
 
@@ -62,6 +65,14 @@ public class TuVung {
 
     public void setCauViDu(String cauViDu) {
         this.cauViDu = cauViDu;
+    }
+
+    public String getAmThanh() {
+        return amThanh;
+    }
+
+    public void setAmThanh(String amThanh) {
+        this.amThanh = amThanh;
     }
 
     public String getMaChuDe() {

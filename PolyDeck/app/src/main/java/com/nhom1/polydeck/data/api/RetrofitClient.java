@@ -22,6 +22,15 @@ public class RetrofitClient {
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(logging)
+                    .addInterceptor(chain -> {
+                        okhttp3.Request original = chain.request();
+                        okhttp3.Request request = original.newBuilder()
+                                .header("Cache-Control", "no-cache, no-store, must-revalidate")
+                                .header("Pragma", "no-cache")
+                                .header("Expires", "0")
+                                .build();
+                        return chain.proceed(request);
+                    })
                     .connectTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)

@@ -35,12 +35,14 @@ public class TopicDetailActivity extends AppCompatActivity {
     private TextView tvProgressPercent, tvCounts;
     private ProgressBar progressXp;
 
+    private String deckId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic_detail);
 
-        String deckId = getIntent().getStringExtra(EXTRA_DECK_ID);
+        deckId = getIntent().getStringExtra(EXTRA_DECK_ID);
         String deckName = getIntent().getStringExtra(EXTRA_DECK_NAME);
         if (deckId == null) deckId = "";
         if (deckName == null) deckName = "";
@@ -78,7 +80,16 @@ public class TopicDetailActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        loadPreview(finalDeckId);
+        loadPreview(deckId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh vocabulary list when returning from AddVocabularyActivity
+        if (deckId != null && !deckId.isEmpty()) {
+            loadPreview(deckId);
+        }
     }
 
     private void loadPreview(String deckId) {

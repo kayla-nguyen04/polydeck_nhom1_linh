@@ -7,17 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.textfield.TextInputEditText;
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
@@ -42,9 +41,9 @@ public class AddVocabularyActivity extends AppCompatActivity {
     private static final String TAG = "AddVocabularyActivity";
     private static final int PICK_EXCEL_FILE_REQUEST = 2;
 
-    private Toolbar toolbar;
-    private LinearLayout btnImportExcel;
-    private TextInputEditText etEnglishWord, etPronunciation, etVietnameseMeaning, etExample;
+    private ImageView btnBack;
+    private TextView btnImportExcel;
+    private EditText etEnglishWord, etPronunciation, etVietnameseMeaning, etExample, etAudioURL;
     private Button btnAddVocabulary;
     private ImageView btnSaveAndExit;
     private ProgressBar importProgressBar;
@@ -72,22 +71,21 @@ public class AddVocabularyActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        toolbar = findViewById(R.id.toolbar_add_vocab);
+        btnBack = findViewById(R.id.btnBack);
         btnImportExcel = findViewById(R.id.btnImportExcel);
-        etEnglishWord = findViewById(R.id.etEnglishWord);
-        etPronunciation = findViewById(R.id.etPronunciation);
-        etVietnameseMeaning = findViewById(R.id.etVietnameseMeaning);
-        etExample = findViewById(R.id.etExample);
-        btnAddVocabulary = findViewById(R.id.btnAddVocabulary);
-        btnSaveAndExit = findViewById(R.id.btnSaveAndExit);
+        etEnglishWord = findViewById(R.id.inputWord);
+        etPronunciation = findViewById(R.id.inputIPA);
+        etVietnameseMeaning = findViewById(R.id.inputMeaning);
+        etExample = findViewById(R.id.inputExample);
+        etAudioURL = findViewById(R.id.inputAudioURL);
+        btnAddVocabulary = findViewById(R.id.btnAddWord);
+        btnSaveAndExit = findViewById(R.id.btnSave);
         // You need to add a ProgressBar to your activity_add_vocabulary.xml
         // importProgressBar = findViewById(R.id.importProgressBar);
     }
 
     private void setupToolbar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void setupListeners() {
@@ -97,7 +95,50 @@ public class AddVocabularyActivity extends AppCompatActivity {
     }
 
     private void addVocabularyManually(boolean shouldExit) {
-        // ... (existing manual add code, no changes needed)
+        String englishWord = etEnglishWord.getText().toString().trim();
+        String pronunciation = etPronunciation.getText().toString().trim();
+        String vietnameseMeaning = etVietnameseMeaning.getText().toString().trim();
+        String example = etExample.getText().toString().trim();
+        String audioURL = etAudioURL.getText().toString().trim();
+
+        if (englishWord.isEmpty() || vietnameseMeaning.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập từ vựng và nghĩa", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        TuVung vocab = new TuVung();
+        vocab.setTuTiengAnh(englishWord);
+        vocab.setPhienAm(pronunciation);
+        vocab.setNghiaTiengViet(vietnameseMeaning);
+        vocab.setCauViDu(example.isEmpty() ? null : example);
+        vocab.setAmThanh(audioURL.isEmpty() ? null : audioURL);
+
+        apiService.addTuVungToChuDe(deckId, vocab).enqueue(new Callback<TuVung>() {
+            @Override
+            public void onResponse(@NonNull Call<TuVung> call, @NonNull Response<TuVung> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(AddVocabularyActivity.this, "Đã thêm từ vựng thành công", Toast.LENGTH_SHORT).show();
+                    // Clear fields
+                    etEnglishWord.setText("");
+                    etPronunciation.setText("");
+                    etVietnameseMeaning.setText("");
+                    etExample.setText("");
+                    etAudioURL.setText("");
+                    
+                    if (shouldExit) {
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(AddVocabularyActivity.this, "Thêm từ vựng thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TuVung> call, @NonNull Throwable t) {
+                Log.e(TAG, "API call failed: " + t.getMessage());
+                Toast.makeText(AddVocabularyActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void openFileChooser() {
@@ -130,30 +171,28 @@ public class AddVocabularyActivity extends AppCompatActivity {
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Iterator<Row> rowIterator = sheet.iterator();
 
-                // Skip header row if it exists
+                // Skip header row if it exists (check if first row looks like header)
                 if (rowIterator.hasNext()) {
-                    rowIterator.next();
+                    Row firstRow = rowIterator.next();
+                    Cell firstCell = firstRow.getCell(0);
+                    // If first cell contains common header words, skip it
+                    if (firstCell != null) {
+                        String firstCellValue = getCellValueAsString(firstCell).toLowerCase();
+                        if (firstCellValue.contains("từ") || firstCellValue.contains("word") || 
+                            firstCellValue.contains("english") || firstCellValue.contains("tiếng anh") ||
+                            firstCellValue.contains("nghĩa") || firstCellValue.contains("meaning")) {
+                            // This is a header row, skip it
+                        } else {
+                            // This is data, process it
+                            rowIterator = sheet.iterator(); // Reset iterator
+                            processRow(firstRow, vocabList);
+                        }
+                    }
                 }
 
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
-                    Cell cell1 = row.getCell(0); // English word
-                    Cell cell2 = row.getCell(1); // Vietnamese meaning
-                    Cell cell3 = row.getCell(2); // Pronunciation (optional)
-
-                    if (cell1 != null && cell2 != null) {
-                        String english = cell1.getStringCellValue();
-                        String vietnamese = cell2.getStringCellValue();
-                        String pronunciation = (cell3 != null) ? cell3.getStringCellValue() : "";
-
-                        if (!english.trim().isEmpty() && !vietnamese.trim().isEmpty()) {
-                            TuVung vocab = new TuVung();
-                            vocab.setTuTiengAnh(english);
-                            vocab.setNghiaTiengViet(vietnamese);
-                            vocab.setPhienAm(pronunciation);
-                            vocabList.add(vocab);
-                        }
-                    }
+                    processRow(row, vocabList);
                 }
 
                 if (!vocabList.isEmpty()) {
@@ -173,6 +212,60 @@ public class AddVocabularyActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    private void processRow(Row row, List<TuVung> vocabList) {
+        Cell cell1 = row.getCell(0); // English word
+        Cell cell2 = row.getCell(1); // Vietnamese meaning
+        Cell cell3 = row.getCell(2); // Pronunciation (optional)
+        Cell cell4 = row.getCell(3); // Example sentence (optional)
+        Cell cell5 = row.getCell(4); // Audio URL (optional)
+
+        if (cell1 != null && cell2 != null) {
+            String english = getCellValueAsString(cell1);
+            String vietnamese = getCellValueAsString(cell2);
+            String pronunciation = (cell3 != null) ? getCellValueAsString(cell3) : "";
+            String example = (cell4 != null) ? getCellValueAsString(cell4) : "";
+            String audioURL = (cell5 != null) ? getCellValueAsString(cell5) : "";
+
+            if (!english.trim().isEmpty() && !vietnamese.trim().isEmpty()) {
+                TuVung vocab = new TuVung();
+                vocab.setTuTiengAnh(english.trim());
+                vocab.setNghiaTiengViet(vietnamese.trim());
+                vocab.setPhienAm(pronunciation.trim().isEmpty() ? null : pronunciation.trim());
+                vocab.setCauViDu(example.trim().isEmpty() ? null : example.trim());
+                vocab.setAmThanh(audioURL.trim().isEmpty() ? null : audioURL.trim());
+                vocabList.add(vocab);
+            }
+        }
+    }
+
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) return "";
+        try {
+            switch (cell.getCellType()) {
+                case STRING:
+                    return cell.getStringCellValue();
+                case NUMERIC:
+                    // Handle numeric values (convert to string)
+                    double numericValue = cell.getNumericCellValue();
+                    // Check if it's a whole number
+                    if (numericValue == Math.floor(numericValue)) {
+                        return String.valueOf((long) numericValue);
+                    } else {
+                        return String.valueOf(numericValue);
+                    }
+                case BOOLEAN:
+                    return String.valueOf(cell.getBooleanCellValue());
+                case FORMULA:
+                    return cell.getCellFormula();
+                default:
+                    return "";
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error reading cell value: " + e.getMessage());
+            return "";
+        }
     }
 
     private void uploadVocabList(List<TuVung> vocabList) {

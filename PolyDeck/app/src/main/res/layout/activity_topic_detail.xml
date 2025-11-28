@@ -37,7 +37,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Động vật"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:textSize="26sp"/>
@@ -47,7 +46,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="50 từ • 20 đã học"
                     android:textColor="@android:color/white"/>
 
                 <TextView

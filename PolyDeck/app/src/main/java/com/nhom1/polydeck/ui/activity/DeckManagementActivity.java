@@ -11,11 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.ImageView;
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
@@ -33,11 +32,11 @@ public class DeckManagementActivity extends AppCompatActivity {
 
     private static final String TAG = "DeckManagementActivity";
 
-    private Toolbar toolbar;
+    private ImageView btnBack;
     private EditText etSearchDeck;
     private RecyclerView rvDecks;
-    private FloatingActionButton fabAddDeck;
-    private TextView tvDeckStats;
+    private ImageView btnAddDeck;
+    private TextView tvTotalDecks, tvPublishedDecks;
     private DeckAdapter deckAdapter;
     private APIService apiService;
     private List<BoTu> fullDeckList = new ArrayList<>(); // Store the full list for search restoration
@@ -54,10 +53,12 @@ public class DeckManagementActivity extends AppCompatActivity {
         setupRecyclerView();
         setupSearch();
 
-        fabAddDeck.setOnClickListener(v -> {
+        btnAddDeck.setOnClickListener(v -> {
             Intent intent = new Intent(DeckManagementActivity.this, AddDeckActivity.class);
             startActivity(intent);
         });
+        
+        btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     @Override
@@ -68,20 +69,16 @@ public class DeckManagementActivity extends AppCompatActivity {
     }
 
     private void initViews(){
-        toolbar = findViewById(R.id.toolbar_deck_management);
-        etSearchDeck = findViewById(R.id.etSearchDeck);
-        rvDecks = findViewById(R.id.rvDecks);
-        fabAddDeck = findViewById(R.id.fabAddDeck);
-        tvDeckStats = findViewById(R.id.tvDeckStats);
+        btnBack = findViewById(R.id.btnBack);
+        etSearchDeck = findViewById(R.id.inputSearch);
+        rvDecks = findViewById(R.id.recyclerViewDecks);
+        btnAddDeck = findViewById(R.id.btnAddDeck);
+        tvTotalDecks = findViewById(R.id.tvTotalDecks);
+        tvPublishedDecks = findViewById(R.id.tvPublishedDecks);
     }
 
     private void setupToolbar(){
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        // Toolbar is replaced with custom header, no action needed
     }
 
     private void setupRecyclerView() {
@@ -145,6 +142,8 @@ public class DeckManagementActivity extends AppCompatActivity {
     private void updateStats() {
         int totalDecks = fullDeckList.size();
         // Assuming all decks are published for now
-        tvDeckStats.setText(String.format("%d Tổng bộ từ • %d Đã xuất bản", totalDecks, totalDecks));
+        int publishedDecks = totalDecks; // You can add logic to check published status
+        tvTotalDecks.setText(String.valueOf(totalDecks));
+        tvPublishedDecks.setText(String.valueOf(publishedDecks));
     }
 }

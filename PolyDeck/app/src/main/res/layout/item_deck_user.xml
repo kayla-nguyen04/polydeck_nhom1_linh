@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
-            android:text="Động vật"
             android:textColor="#1F2937"
             android:textSize="16sp"
             android:textStyle="bold" />

@@ -131,6 +131,14 @@ public class EditProfileActivity extends AppCompatActivity {
         api.updateUser(userId, u).enqueue(new Callback<User>() {
             @Override public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
+                    // Update session with new data
+                    SessionManager sm = new SessionManager(EditProfileActivity.this);
+                    LoginResponse loginData = sm.getUserData();
+                    if (loginData != null) {
+                        loginData.setHoTen(etName.getText().toString().trim());
+                        loginData.setEmail(etEmail.getText().toString().trim());
+                        sm.saveUserSession(loginData);
+                    }
                     Toast.makeText(EditProfileActivity.this, "Đã lưu thay đổi", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
@@ -154,17 +162,37 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), file);
+        String mimeType = getContentResolver().getType(imageUri);
+        if (mimeType == null) {
+            mimeType = "image/jpeg";
+        }
+        RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
         api.uploadUserAvatar(userId, body).enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    // Update session with new avatar URL
+                    User updatedUser = response.body();
+                    SessionManager sm = new SessionManager(EditProfileActivity.this);
+                    LoginResponse loginData = sm.getUserData();
+                    if (loginData != null && updatedUser.getLinkAnhDaiDien() != null) {
+                        loginData.setLinkAnhDaiDien(updatedUser.getLinkAnhDaiDien());
+                        sm.saveUserSession(loginData);
+                    }
                     // After uploading avatar, update name
                     updateUserName();
                 } else {
-                    Toast.makeText(EditProfileActivity.this, "Không thể tải ảnh lên", Toast.LENGTH_SHORT).show();
+                    String errorMsg = "Không thể tải ảnh lên";
+                    if (response.errorBody() != null) {
+                        try {
+                            errorMsg = response.errorBody().string();
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error reading error body", e);
+                        }
+                    }
+                    Toast.makeText(EditProfileActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                     resetButton();
                 }
             }
@@ -186,6 +214,14 @@ public class EditProfileActivity extends AppCompatActivity {
         api.updateUser(userId, u).enqueue(new Callback<User>() {
             @Override public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (response.isSuccessful()) {
+                    // Update session with new data
+                    SessionManager sm = new SessionManager(EditProfileActivity.this);
+                    LoginResponse loginData = sm.getUserData();
+                    if (loginData != null) {
+                        loginData.setHoTen(etName.getText().toString().trim());
+                        loginData.setEmail(etEmail.getText().toString().trim());
+                        sm.saveUserSession(loginData);
+                    }
                     Toast.makeText(EditProfileActivity.this, "Đã lưu thay đổi", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {

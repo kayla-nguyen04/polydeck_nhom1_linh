@@ -102,7 +102,6 @@
                     android:id="@+id/tv_word"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cat"
                     android:textStyle="bold"
                     android:textSize="36sp"
                     android:textColor="#212121"
@@ -112,7 +111,6 @@
                     android:id="@+id/tv_pron"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="/kæt/"
                     android:textSize="18sp"
                     android:textColor="#757575"
                     android:textStyle="italic"
@@ -170,21 +168,52 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/tv_word_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="36sp"
+                    android:textColor="#212121"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_pron_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#757575"
+                    android:textStyle="italic"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+                <TextView
                     android:id="@+id/tv_meaning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Con mèo"
                     android:textStyle="bold"
                     android:textSize="32sp"
                     android:textColor="#212121"
+                    android:layout_marginTop="16dp"
                     android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_example_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#757575"
+                    android:textStyle="italic"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_gravity="bottom|center">
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:layout_width="16dp"

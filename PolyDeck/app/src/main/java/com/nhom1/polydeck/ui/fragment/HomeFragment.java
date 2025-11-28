@@ -63,19 +63,7 @@ public class HomeFragment extends Fragment {
         progressContinue = view.findViewById(R.id.progress_continue);
         ivContinueIcon = view.findViewById(R.id.iv_continue_icon);
 
-        // Bind user info from Session
-        SessionManager sessionManager = new SessionManager(requireContext());
-        LoginResponse user = sessionManager.getUserData();
-        tvGreeting.setText("Xin chào,");
-        if (user != null) {
-            tvUsername.setText(user.getHoTen());
-            tvStreak.setText(user.getChuoiNgayHoc() + " ngày");
-            tvXp.setText(String.valueOf(user.getDiemTichLuy()));
-        } else {
-            tvUsername.setText("Người học");
-            tvStreak.setText("0 ngày");
-            tvXp.setText("0");
-        }
+        loadUserData();
 
         View btnNotif = view.findViewById(R.id.btn_notifications);
         if (btnNotif != null) {
@@ -100,6 +88,29 @@ public class HomeFragment extends Fragment {
         rvDecks.setAdapter(adapter);
 
         loadDecks();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload user data when returning from EditProfileActivity
+        loadUserData();
+    }
+
+    private void loadUserData() {
+        // Bind user info from Session
+        SessionManager sessionManager = new SessionManager(requireContext());
+        LoginResponse user = sessionManager.getUserData();
+        tvGreeting.setText("Xin chào,");
+        if (user != null) {
+            tvUsername.setText(user.getHoTen());
+            tvStreak.setText(user.getChuoiNgayHoc() + " ngày");
+            tvXp.setText(String.valueOf(user.getDiemTichLuy()));
+        } else {
+            tvUsername.setText("Người học");
+            tvStreak.setText("0 ngày");
+            tvXp.setText("0");
+        }
     }
 
     private void loadDecks() {

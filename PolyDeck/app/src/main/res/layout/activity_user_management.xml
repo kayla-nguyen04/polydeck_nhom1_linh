@@ -14,7 +14,19 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
         app:title="@string/user_management_title"
-        app:navigationIcon="@drawable/ic_arrow_back" />
+        app:navigationIcon="@drawable/ic_arrow_back">
+        
+        <ImageView
+            android:id="@+id/btnRefresh"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_refresh"
+            android:tint="#3B82F6"
+            android:padding="6dp"
+            android:contentDescription="Refresh" />
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +56,7 @@
                 android:id="@+id/tvTotalUsers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1,234 Hoạt động"
+                tools:text="0 Hoạt động"
                 android:textStyle="bold" />
 
             <TextView
@@ -52,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="12 Bị khóa" />
+                tools:text="0 Bị khóa" />
         </LinearLayout>
 
     </LinearLayout>

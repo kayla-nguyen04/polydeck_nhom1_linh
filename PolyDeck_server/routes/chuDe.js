@@ -105,22 +105,17 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// POST: Thêm từ vựng mới vào một chủ đề (hỗ trợ upload ảnh/audio tùy chọn)
-router.post('/:chuDeId/them-tu-vung', upload.single('file'), async (req, res) => {
+// POST: Thêm từ vựng mới vào một chủ đề
+router.post('/:chuDeId/them-tu-vung', async (req, res) => {
     try {
         const chuDe = await ChuDe.findOne(resolveChuDeFilter(req.params.chuDeId));
         if (!chuDe) {
             return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
         }
 
-        const { tu_tieng_anh, nghia_tieng_viet, phien_am } = req.body;
+        const { tu_tieng_anh, nghia_tieng_viet, phien_am, cau_vi_du, am_thanh } = req.body;
         if (!tu_tieng_anh || !nghia_tieng_viet) {
             return res.status(400).json({ message: 'Từ tiếng Anh và nghĩa tiếng Việt là bắt buộc.' });
-        }
-
-        let fileUrl = null;
-        if (req.file) {
-            fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
         const maChuDe = chuDe.ma_chu_de || chuDe._id.toString();
@@ -131,7 +126,8 @@ router.post('/:chuDeId/them-tu-vung', upload.single('file'), async (req, res) =>
             tu_tieng_anh,
             phien_am,
             nghia_tieng_viet,
-            link_anh: fileUrl,
+            cau_vi_du: cau_vi_du || null,
+            am_thanh: am_thanh || null,
         });
 
         const newTuVung = await tuVung.save();
@@ -157,6 +153,64 @@ router.get('/:chuDeId/tuvung', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy danh sách từ vựng:', err);
         res.status(500).json({ message: 'Lỗi server' });
+    }
+});
+
+// POST: Import từ vựng hàng loạt từ Excel
+router.post('/:chuDeId/import-vocab', async (req, res) => {
+    try {
+        const chuDe = await ChuDe.findOne(resolveChuDeFilter(req.params.chuDeId));
+        if (!chuDe) {
+            return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
+        }
+
+        const vocabList = req.body; // Array of TuVung objects
+        if (!Array.isArray(vocabList) || vocabList.length === 0) {
+            return res.status(400).json({ message: 'Danh sách từ vựng không hợp lệ' });
+        }
+
+        const maChuDe = chuDe.ma_chu_de || chuDe._id.toString();
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const vocabData of vocabList) {
+            try {
+                const { tu_tieng_anh, nghia_tieng_viet, phien_am, cau_vi_du, am_thanh } = vocabData;
+                
+                if (!tu_tieng_anh || !nghia_tieng_viet) {
+                    failCount++;
+                    continue;
+                }
+
+                const tuVung = new TuVung({
+                    ma_tu_vung: `TV_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+                    ma_chu_de: maChuDe,
+                    tu_tieng_anh: tu_tieng_anh.trim(),
+                    phien_am: phien_am ? phien_am.trim() : null,
+                    nghia_tieng_viet: nghia_tieng_viet.trim(),
+                    cau_vi_du: cau_vi_du ? cau_vi_du.trim() : null,
+                    am_thanh: am_thanh ? am_thanh.trim() : null,
+                });
+
+                await tuVung.save();
+                successCount++;
+            } catch (err) {
+                console.error('Error saving vocab:', err);
+                failCount++;
+            }
+        }
+
+        // Update so_luong_tu in ChuDe
+        await ChuDe.updateOne({ _id: chuDe._id }, { $inc: { so_luong_tu: successCount } });
+
+        res.status(200).json({ 
+            message: `Đã import thành công ${successCount} từ vựng${failCount > 0 ? `, ${failCount} từ vựng thất bại` : ''}`,
+            success: successCount,
+            failed: failCount
+        });
+    } catch (err) {
+        console.error('Error importing vocab:', err);
+        res.status(500).json({ message: err.message });
     }
 });
 

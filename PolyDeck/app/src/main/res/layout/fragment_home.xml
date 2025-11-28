@@ -53,7 +53,6 @@
                         android:id="@+id/tv_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nguyen Van A"
                         android:textColor="@android:color/white"
                         android:textStyle="bold"
                         android:textSize="20sp"
@@ -235,7 +234,6 @@
                             android:id="@+id/tv_continue_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Động vật"
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:textColor="#212121"/>
@@ -244,7 +242,6 @@
                             android:id="@+id/tv_continue_subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đã học 5/20 từ"
                             android:textColor="#757575"
                             android:textSize="13sp"
                             android:layout_marginTop="4dp"/>

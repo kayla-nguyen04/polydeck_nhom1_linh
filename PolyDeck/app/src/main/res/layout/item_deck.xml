@@ -10,66 +10,117 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/ivDeckIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_default_deck_icon" 
-            android:background="@drawable/bg_deck_icon_container"
-            android:scaleType="centerInside"
-            android:padding="8dp"/>
-
+        <!-- Header: Icon + Title + Badge -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
+            <!-- Icon -->
+            <ImageView
+                android:id="@+id/deckIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_deck_animals"
+                android:background="@drawable/bg_deck_icon"
+                android:padding="12dp"
+                android:tint="#FFFFFF"/>
+
+            <!-- Title + Info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDeckName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Động vật"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#111827"/>
+
+                <TextView
+                    android:id="@+id/tvDeckInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="50 từ • 234 người dùng • 01/10/2024"
+                    android:textSize="12sp"
+                    android:textColor="#9CA3AF"/>
+            </LinearLayout>
+
+            <!-- Published Badge -->
             <TextView
-                android:id="@+id/tvDeckName"
+                android:id="@+id/badgePublished"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Động vật"
-                android:textColor="#1F2937"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvDeckStatsItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="80 từ • 284 người dùng • 11/11/2024"
-                android:textColor="#6B7280"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"/>
+                android:text="Đã xuất bản"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#10B981"
+                android:background="@drawable/bg_badge_published"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"/>
         </LinearLayout>
 
+        <!-- Action Buttons -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btnEditDeck"
-                android:layout_width="36dp"
+            <!-- View Button -->
+            <TextView
+                android:id="@+id/btnView"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_edit"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#3B82F6" />
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_button_view"
+                android:gravity="center"
+                android:text="👁 Xem"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#3B82F6"/>
 
-            <ImageButton
-                android:id="@+id/btnDeleteDeck"
-                android:layout_width="36dp"
+            <!-- Edit Button -->
+            <TextView
+                android:id="@+id/btnEdit"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_delete"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#EF4444" />
+                android:layout_weight="1"
+                android:layout_marginHorizontal="6dp"
+                android:background="@drawable/bg_button_edit"
+                android:gravity="center"
+                android:text="✏ Sửa"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#7C3AED"/>
+
+            <!-- Delete Button -->
+            <TextView
+                android:id="@+id/btnDelete"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_button_delete"
+                android:gravity="center"
+                android:text="🗑 Xóa"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#EF4444"/>
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

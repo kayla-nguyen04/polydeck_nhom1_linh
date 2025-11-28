@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +61,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 deck.getSoLuongQuiz(),
                 deck.getSoNguoiDung(),
                 deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
-        holder.tvDeckStatsItem.setText(stats);
+        holder.tvDeckInfo.setText(stats);
 
         Glide.with(context)
                 .load(deck.getLinkAnhIcon())
@@ -70,20 +69,23 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 .error(R.drawable.ic_default_deck_icon)
                 .into(holder.ivDeckIcon);
 
-        // FIX: Set listener for the whole item view to see vocabulary
-        holder.itemView.setOnClickListener(v -> {
+        // View button - navigate to vocabulary list
+        holder.btnView.setOnClickListener(v -> {
             Intent intent = new Intent(context, VocabularyListActivity.class);
             intent.putExtra(VocabularyListActivity.EXTRA_DECK_ID, deck.getId());
             intent.putExtra(VocabularyListActivity.EXTRA_DECK_NAME, deck.getTenChuDe());
             context.startActivity(intent);
         });
 
-        holder.btnDeleteDeck.setOnClickListener(v -> showDeleteConfirmationDialog(deck, position));
-        holder.btnEditDeck.setOnClickListener(v -> {
+        // Edit button
+        holder.btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(context, EditDeckActivity.class);
             intent.putExtra("DECK_ID", deck.getId());
             context.startActivity(intent);
         });
+
+        // Delete button
+        holder.btnDelete.setOnClickListener(v -> showDeleteConfirmationDialog(deck, position));
     }
 
     private void showDeleteConfirmationDialog(BoTu deck, int position) {
@@ -128,16 +130,17 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     static class DeckViewHolder extends RecyclerView.ViewHolder {
         ImageView ivDeckIcon;
-        TextView tvDeckName, tvDeckStatsItem;
-        ImageButton btnEditDeck, btnDeleteDeck;
+        TextView tvDeckName, tvDeckInfo;
+        TextView btnView, btnEdit, btnDelete;
 
         public DeckViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivDeckIcon = itemView.findViewById(R.id.ivDeckIcon);
+            ivDeckIcon = itemView.findViewById(R.id.deckIcon);
             tvDeckName = itemView.findViewById(R.id.tvDeckName);
-            tvDeckStatsItem = itemView.findViewById(R.id.tvDeckStatsItem);
-            btnEditDeck = itemView.findViewById(R.id.btnEditDeck);
-            btnDeleteDeck = itemView.findViewById(R.id.btnDeleteDeck);
+            tvDeckInfo = itemView.findViewById(R.id.tvDeckInfo);
+            btnView = itemView.findViewById(R.id.btnView);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

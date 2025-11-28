@@ -108,6 +108,10 @@ public interface APIService {
     @POST("api/chude/chude_with_image")
     Call<BoTu> createChuDeWithImage(@Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
+    @Multipart
+    @PUT("api/chude/{id}/update_with_image")
+    Call<BoTu> updateChuDeWithImage(@Path("id") String chuDeId, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
+
     @PUT("api/chude/{id}")
     Call<BoTu> updateChuDe(@Path("id") String chuDeId, @Body BoTu boTu);
 

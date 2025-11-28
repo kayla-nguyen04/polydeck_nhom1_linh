@@ -5,69 +5,153 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F9FAFB"
-    tools:context=".ui.activity.DeckManagementActivity">
+    android:background="#F9FAFB">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Header -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:padding="16dp"
+        android:background="#FFFFFF">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_deck_management"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="Quản lý bộ từ"
-            app:navigationIcon="@drawable/ic_arrow_back" />
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back"
+            android:tint="#111827"
+            android:padding="4dp"
+            android:contentDescription="Back"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <EditText
-                android:id="@+id/etSearchDeck"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tìm kiếm bộ từ..."
-                android:background="@drawable/bg_search_edit_text"
-                android:padding="12dp"
-                android:drawableStart="@drawable/ic_search"
-                android:drawablePadding="8dp"/>
-
-            <TextView
-                android:id="@+id/tvDeckStats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="156 Tổng bộ từ • 142 Đã xuất bản" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvDecks"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="16dp"
-                tools:listitem="@layout/item_deck" />
-        </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddDeck"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            app:tint="@android:color/white"
-            android:contentDescription="Tạo bộ từ mới"/>
+            android:layout_centerInParent="true"
+            android:text="Quản lý bộ từ"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#111827"/>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <ImageView
+            android:id="@+id/btnAddDeck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_add"
+            android:background="@drawable/bg_button_add"
+            android:padding="10dp"
+            android:tint="#FFFFFF"
+            android:contentDescription="Add"/>
+    </RelativeLayout>
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_search"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_search"
+            android:tint="#9CA3AF"/>
+
+        <EditText
+            android:id="@+id/inputSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:hint="Tìm kiếm bộ từ..."
+            android:textSize="15sp"
+            android:textColor="#111827"
+            android:textColorHint="#9CA3AF"
+            android:background="@null"
+            android:inputType="text"
+            android:maxLines="1"/>
+    </LinearLayout>
+
+    <!-- Stats Cards -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <!-- Total Decks -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_stats_card"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvTotalDecks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="0"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#111827"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tổng bộ từ"
+                android:textSize="13sp"
+                android:textColor="#6B7280"/>
+        </LinearLayout>
+
+        <!-- Published Decks -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_stats_card"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tvPublishedDecks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="142"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#10B981"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Đã xuất bản"
+                android:textSize="13sp"
+                android:textColor="#6B7280"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Decks List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDecks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:paddingHorizontal="16dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>

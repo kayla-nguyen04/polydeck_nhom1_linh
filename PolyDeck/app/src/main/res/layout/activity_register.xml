@@ -70,7 +70,8 @@
                 android:hint="Nguyen Van A"
                 android:inputType="textPersonName"
                 android:background="@drawable/bg_edittext"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"/>
@@ -93,7 +94,8 @@
                 android:hint="example@email.com"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/bg_edittext"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"/>
@@ -118,7 +120,8 @@
                 android:inputType="textPassword"
                 android:drawableEnd="@drawable/ic_eye_off"
                 android:drawablePadding="12dp"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"/>
@@ -143,7 +146,8 @@
                 android:inputType="textPassword"
                 android:drawableEnd="@drawable/ic_eye_off"
                 android:drawablePadding="12dp"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:textColor="#111827"
                 android:textColorHint="#9CA3AF"
                 android:textSize="15sp"/>

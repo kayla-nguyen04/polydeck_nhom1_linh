@@ -60,7 +60,8 @@
                 android:id="@+id/itemLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingHorizontal="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:background="?attr/selectableItemBackground">
 
                 <LinearLayout
@@ -112,7 +113,8 @@
                 android:id="@+id/itemDarkMode"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingHorizontal="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:background="?attr/selectableItemBackground">
 
                 <LinearLayout
@@ -170,7 +172,8 @@
                 android:id="@+id/itemSound"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingHorizontal="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:background="?attr/selectableItemBackground">
 
                 <LinearLayout
@@ -229,7 +232,8 @@
                 android:id="@+id/itemChangePassword"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingHorizontal="20dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:background="?attr/selectableItemBackground">
 
                 <LinearLayout
@@ -287,7 +291,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingHorizontal="20dp">
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"

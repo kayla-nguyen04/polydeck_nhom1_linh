@@ -21,7 +21,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:background="@android:color/white">
 
                 <ImageView
@@ -118,7 +119,8 @@
                         android:textSize="15sp"
                         android:textColor="#1F2937"
                         android:background="@drawable/bg_edittext"
-                        android:paddingHorizontal="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

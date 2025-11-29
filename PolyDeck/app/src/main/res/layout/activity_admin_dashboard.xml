@@ -113,8 +113,10 @@
                             android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:background="@drawable/bg_badge_white"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"/>
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -178,8 +180,10 @@
                             android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:background="@drawable/bg_badge_white"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"/>
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -243,8 +247,10 @@
                             android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:background="@drawable/bg_badge_white"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"/>
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -308,8 +314,10 @@
                             android:textColor="@android:color/white"
                             android:textSize="12sp"
                             android:background="@drawable/bg_badge_white"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"/>
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"/>
                     </LinearLayout>
 
                     <TextView

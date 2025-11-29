@@ -39,7 +39,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:paddingHorizontal="32dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
         android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +102,8 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@color/white"
-                    android:paddingHorizontal="14dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="6dp">
 
@@ -192,7 +194,8 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="#FFD700"
-                    android:paddingHorizontal="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="7dp">
 
@@ -283,7 +286,8 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@color/white"
-                    android:paddingHorizontal="14dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="6dp">
 
@@ -338,7 +342,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:paddingTop="4dp"
             android:paddingBottom="16dp"
             tools:listitem="@layout/item_leaderboard_row" />

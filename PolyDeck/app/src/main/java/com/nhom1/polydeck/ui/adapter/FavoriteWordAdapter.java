@@ -1,5 +1,6 @@
 package com.nhom1.polydeck.ui.adapter;
 
+import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class FavoriteWordAdapter extends RecyclerView.Adapter<FavoriteWordAdapte
     private final List<TuVung> favoriteList;
     private final String userId;
     private final APIService apiService;
+    private final Context context;
     private TextToSpeech tts;
     private OnFavoriteRemovedListener onFavoriteRemovedListener;
 
@@ -37,10 +39,11 @@ public class FavoriteWordAdapter extends RecyclerView.Adapter<FavoriteWordAdapte
         void onFavoriteRemoved(int position);
     }
 
-    public FavoriteWordAdapter(List<TuVung> favoriteList, String userId) {
+    public FavoriteWordAdapter(List<TuVung> favoriteList, String userId, Context context) {
         this.favoriteList = favoriteList;
         this.userId = userId;
         this.apiService = RetrofitClient.getApiService();
+        this.context = context;
     }
 
     public void setOnFavoriteRemovedListener(OnFavoriteRemovedListener listener) {
@@ -79,6 +82,22 @@ public class FavoriteWordAdapter extends RecyclerView.Adapter<FavoriteWordAdapte
         // Category - có thể lấy từ deck hoặc để mặc định
         holder.tvCategory.setText("Basic English");
 
+        // Icon book với màu khác nhau dựa trên position
+        int colorIndex = position % 3;
+        int backgroundResId;
+        switch (colorIndex) {
+            case 0:
+                backgroundResId = R.drawable.bg_icon_book; // Blue
+                break;
+            case 1:
+                backgroundResId = R.drawable.bg_icon_book_green; // Green
+                break;
+            default:
+                backgroundResId = R.drawable.bg_icon_book_orange; // Orange
+                break;
+        }
+        holder.iconBook.setBackgroundResource(backgroundResId);
+
         // Speaker button
         holder.btnSpeak.setOnClickListener(v -> {
             if (tts != null && vocab.getTuTiengAnh() != null) {
@@ -110,18 +129,26 @@ public class FavoriteWordAdapter extends RecyclerView.Adapter<FavoriteWordAdapte
             @Override
             public void onResponse(@NonNull Call<ApiResponse<Void>> call, @NonNull Response<ApiResponse<Void>> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    favoriteList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, favoriteList.size());
-                    if (onFavoriteRemovedListener != null) {
-                        onFavoriteRemovedListener.onFavoriteRemoved(position);
+                    if (position >= 0 && position < favoriteList.size()) {
+                        favoriteList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, favoriteList.size());
+                        if (onFavoriteRemovedListener != null) {
+                            onFavoriteRemovedListener.onFavoriteRemoved(position);
+                        }
+                    }
+                } else {
+                    if (context != null) {
+                        Toast.makeText(context, "Không thể xóa từ yêu thích", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<ApiResponse<Void>> call, @NonNull Throwable t) {
-                // Handle error
+                if (context != null) {
+                    Toast.makeText(context, "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

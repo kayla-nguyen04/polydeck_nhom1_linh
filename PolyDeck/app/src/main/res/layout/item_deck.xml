@@ -25,10 +25,9 @@
                 android:id="@+id/deckIcon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/ic_deck_animals"
-                android:background="@drawable/bg_deck_icon"
-                android:padding="12dp"
-                android:tint="#FFFFFF"/>
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:contentDescription="Deck icon"/>
 
             <!-- Title + Info -->
             <LinearLayout

@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const { Types } = require('mongoose');
 const NguoiDung = require('../models/NguoiDung');
+const TuVung = require('../models/TuVung'); // dùng cho tính năng từ vựng yêu thích
 
 const resolveUserFilter = (identifier = '') => {
     if (Types.ObjectId.isValid(identifier)) {
@@ -108,6 +109,174 @@ router.post('/:id/upload-avatar', upload.single('file'), async (req, res) => {
     } catch (err) {
         console.error('Error uploading avatar:', err);
         res.status(500).json({ message: err.message });
+    }
+});
+
+// ================== FAVORITES (TỪ VỰNG YÊU THÍCH) ==================
+
+// GET: Lấy danh sách từ vựng yêu thích của một người dùng
+// Trả về đúng format ApiResponse<T> mà Android đang dùng
+router.get('/:id/favorites', async (req, res) => {
+    try {
+        const user = await NguoiDung.findOne(resolveUserFilter(req.params.id));
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng',
+                data: null
+            });
+        }
+
+        const favoriteIds = (user.tu_vung_yeu_thich || []).map(id => id.toString());
+        if (!favoriteIds.length) {
+            return res.json({
+                success: true,
+                message: 'Người dùng chưa có từ vựng yêu thích',
+                data: []
+            });
+        }
+
+        // Vì Android đang dùng field "_id" làm id, ta lưu và truy vấn theo _id
+        const vocabList = await TuVung.find({ _id: { $in: favoriteIds } });
+        return res.json({
+            success: true,
+            message: 'Lấy danh sách từ vựng yêu thích thành công',
+            data: vocabList
+        });
+    } catch (err) {
+        console.error('Lỗi khi lấy danh sách từ vựng yêu thích:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            data: null
+        });
+    }
+});
+
+// POST: Thêm một từ vựng vào danh sách yêu thích của người dùng
+// Body từ Android: { "tu_vung_id": "TV_..." }
+router.post('/:id/favorites', async (req, res) => {
+    try {
+        const user = await NguoiDung.findOne(resolveUserFilter(req.params.id));
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng',
+                data: null
+            });
+        }
+
+        const { tu_vung_id } = req.body;
+        if (!tu_vung_id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu tu_vung_id',
+                data: null
+            });
+        }
+
+        // Kiểm tra từ vựng có tồn tại không (tránh lưu id rỗng)
+        // Android đang gửi MongoDB _id, nên ưu tiên tìm theo _id
+        let vocab = null;
+        try {
+            vocab = await TuVung.findById(tu_vung_id);
+        } catch (e) {
+            vocab = null;
+        }
+
+        // Fallback: nếu không phải ObjectId hợp lệ, thử tìm theo ma_tu_vung
+        if (!vocab) {
+            vocab = await TuVung.findOne({ ma_tu_vung: tu_vung_id });
+        }
+
+        if (!vocab) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy từ vựng',
+                data: null
+            });
+        }
+
+        if (!Array.isArray(user.tu_vung_yeu_thich)) {
+            user.tu_vung_yeu_thich = [];
+        }
+
+        const vocabIdStr = vocab._id.toString();
+
+        // Nếu đã tồn tại thì không thêm trùng, nhưng vẫn trả về success
+        if (!user.tu_vung_yeu_thich.map(id => id.toString()).includes(vocabIdStr)) {
+            user.tu_vung_yeu_thich.push(vocabIdStr);
+            await user.save();
+        }
+
+        return res.json({
+            success: true,
+            message: 'Đã thêm vào danh sách yêu thích',
+            data: null
+        });
+    } catch (err) {
+        console.error('Lỗi khi thêm từ vựng yêu thích:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            data: null
+        });
+    }
+});
+
+// DELETE: Xoá một từ vựng khỏi danh sách yêu thích
+// URL: /api/users/:id/favorites/:fav  (fav = ma_tu_vung)
+router.delete('/:id/favorites/:fav', async (req, res) => {
+    try {
+        const user = await NguoiDung.findOne(resolveUserFilter(req.params.id));
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng',
+                data: null
+            });
+        }
+
+        const favId = req.params.fav;
+        if (!favId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu mã từ vựng yêu thích',
+                data: null
+            });
+        }
+
+        if (!Array.isArray(user.tu_vung_yeu_thich)) {
+            user.tu_vung_yeu_thich = [];
+        }
+
+        const beforeLength = user.tu_vung_yeu_thich.length;
+        user.tu_vung_yeu_thich = user.tu_vung_yeu_thich
+            .map(id => id.toString())
+            .filter(id => id !== favId);
+
+        if (user.tu_vung_yeu_thich.length === beforeLength) {
+            // Không tìm thấy để xoá nhưng vẫn coi là success (idempotent)
+            return res.json({
+                success: true,
+                message: 'Từ vựng không còn trong danh sách yêu thích',
+                data: null
+            });
+        }
+
+        await user.save();
+        return res.json({
+            success: true,
+            message: 'Đã xoá khỏi danh sách yêu thích',
+            data: null
+        });
+    } catch (err) {
+        console.error('Lỗi khi xoá từ vựng yêu thích:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            data: null
+        });
     }
 });
 

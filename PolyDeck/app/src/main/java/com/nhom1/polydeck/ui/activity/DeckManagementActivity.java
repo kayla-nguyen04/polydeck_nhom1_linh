@@ -94,6 +94,13 @@ public class DeckManagementActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     fullDeckList.clear();
                     fullDeckList.addAll(response.body());
+                    
+                    // Log deck data to check icon URLs
+                    for (BoTu deck : fullDeckList) {
+                        String iconUrl = deck.getLinkAnhIcon();
+                        Log.d(TAG, "📦 Deck: " + deck.getTenChuDe() + " | Icon: [" + iconUrl + "] | IsNull: " + (iconUrl == null) + " | IsEmpty: " + (iconUrl != null && iconUrl.isEmpty()));
+                    }
+                    
                     deckAdapter.updateData(new ArrayList<>(fullDeckList)); // Pass a copy to the adapter
                     updateStats();
                 } else {

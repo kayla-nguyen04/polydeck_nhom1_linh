@@ -22,6 +22,8 @@ import com.nhom1.polydeck.data.model.LoginResponse;
 import com.nhom1.polydeck.ui.adapter.UserDeckAdapter;
 import com.nhom1.polydeck.ui.activity.NotificationsActivity;
 import com.nhom1.polydeck.utils.SessionManager;
+import com.nhom1.polydeck.data.model.ApiResponse;
+import com.nhom1.polydeck.data.model.DeckProgress;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -127,13 +129,49 @@ public class HomeFragment extends Fragment {
                         if (tvContinueTitle != null) {
                             tvContinueTitle.setText(first.getTenChuDe());
                         }
-                        if (tvContinueSubtitle != null) {
-                            int total = Math.max(first.getSoLuongQuiz(), 0);
-                            // Placeholder learned count = 0 until progress API available
-                            tvContinueSubtitle.setText("Đã học 0/" + total + " từ");
-                        }
-                        if (progressContinue != null) {
-                            progressContinue.setProgress(0);
+
+                        // Gọi API lấy tiến độ học cho chủ đề đầu tiên
+                        SessionManager sm = new SessionManager(requireContext());
+                        LoginResponse user = sm.getUserData();
+                        String userId = user != null ? user.getMaNguoiDung() : null;
+
+                        if (userId == null) {
+                            // Chưa đăng nhập: chỉ hiển thị tổng số từ
+                            if (tvContinueSubtitle != null) {
+                                int total = Math.max(first.getSoLuongQuiz(), 0);
+                                tvContinueSubtitle.setText("Đã học 0/" + total + " từ");
+                            }
+                            if (progressContinue != null) {
+                                progressContinue.setProgress(0);
+                            }
+                        } else {
+                            apiService.getDeckProgress(first.getId(), userId)
+                                    .enqueue(new Callback<ApiResponse<DeckProgress>>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<ApiResponse<DeckProgress>> call,
+                                                               @NonNull Response<ApiResponse<DeckProgress>> response) {
+                                            if (!isAdded()) return;
+                                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                                DeckProgress dp = response.body().getData();
+                                                if (dp != null) {
+                                                    int total = Math.max(dp.getTotalWords(), 0);
+                                                    int learned = Math.max(dp.getLearnedWords(), 0);
+                                                    if (tvContinueSubtitle != null) {
+                                                        tvContinueSubtitle.setText("Đã học " + learned + "/" + total + " từ");
+                                                    }
+                                                    if (progressContinue != null) {
+                                                        int percent = total > 0 ? (int) (learned * 100f / total) : 0;
+                                                        progressContinue.setProgress(percent);
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<ApiResponse<DeckProgress>> call, @NonNull Throwable t) {
+                                            // Giữ placeholder nếu lỗi
+                                        }
+                                    });
                         }
                     }
                 }

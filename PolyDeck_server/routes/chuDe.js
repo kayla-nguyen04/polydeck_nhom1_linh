@@ -5,6 +5,7 @@ const path = require('path');
 const { Types } = require('mongoose');
 const ChuDe = require('../models/ChuDe'); 
 const TuVung = require('../models/TuVung'); 
+const TienDoHocTap = require('../models/TienDoHocTap'); // dùng cho tiến độ học
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) { cb(null, 'public/uploads/') },
@@ -153,6 +154,63 @@ router.get('/:chuDeId/tuvung', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy danh sách từ vựng:', err);
         res.status(500).json({ message: 'Lỗi server' });
+    }
+});
+
+// GET: Tiến độ học tập theo chủ đề cho một người dùng
+// URL: /api/chude/:chuDeId/progress?userId=...
+router.get('/:chuDeId/progress', async (req, res) => {
+    try {
+        const { chuDeId } = req.params;
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu userId',
+                data: null
+            });
+        }
+
+        const chuDe = await ChuDe.findOne(resolveChuDeFilter(chuDeId));
+        if (!chuDe) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy chủ đề',
+                data: null
+            });
+        }
+
+        const maChuDe = chuDe.ma_chu_de || chuDeId;
+
+        // Tổng số từ trong chủ đề (ưu tiên field so_luong_tu, fallback đếm thực tế)
+        let totalWords = typeof chuDe.so_luong_tu === 'number' ? chuDe.so_luong_tu : 0;
+        if (!totalWords || totalWords <= 0) {
+            totalWords = await TuVung.countDocuments({ ma_chu_de: maChuDe });
+        }
+
+        // Số từ đã học (trạng thái 'da_nho') cho user + chủ đề này
+        const learnedWords = await TienDoHocTap.countDocuments({
+            ma_nguoi_dung: userId,
+            ma_chu_de: maChuDe,
+            trang_thai_hoc: 'da_nho'
+        });
+
+        return res.json({
+            success: true,
+            message: 'Lấy tiến độ học tập thành công',
+            data: {
+                totalWords,
+                learnedWords
+            }
+        });
+    } catch (err) {
+        console.error('Lỗi khi lấy tiến độ học tập:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            data: null
+        });
     }
 });
 

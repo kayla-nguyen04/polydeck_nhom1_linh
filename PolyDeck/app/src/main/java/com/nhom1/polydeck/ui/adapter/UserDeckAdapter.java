@@ -45,11 +45,29 @@ public class UserDeckAdapter extends RecyclerView.Adapter<UserDeckAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BoTu deck = items.get(position);
         holder.tvName.setText(deck.getTenChuDe());
-        Glide.with(context)
-                .load(deck.getLinkAnhIcon())
-                .placeholder(R.drawable.ic_default_deck_icon)
-                .error(R.drawable.ic_default_deck_icon)
-                .into(holder.ivIcon);
+        
+        String iconUrl = deck.getLinkAnhIcon();
+        if (iconUrl != null && !iconUrl.isEmpty() && !iconUrl.equals("null")) {
+            // If URL doesn't start with http, prepend base URL
+            String fullUrl = iconUrl;
+            if (!iconUrl.startsWith("http://") && !iconUrl.startsWith("https://")) {
+                String baseUrl = "http://10.0.2.2:3000";
+                if (iconUrl.startsWith("/")) {
+                    fullUrl = baseUrl + iconUrl;
+                } else {
+                    fullUrl = baseUrl + "/" + iconUrl;
+                }
+            }
+            Glide.with(context)
+                    .load(fullUrl)
+                    .placeholder(R.drawable.ic_default_deck_icon)
+                    .error(R.drawable.ic_default_deck_icon)
+                    .into(holder.ivIcon);
+        } else {
+            Glide.with(context)
+                    .load(R.drawable.ic_default_deck_icon)
+                    .into(holder.ivIcon);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, TopicDetailActivity.class);

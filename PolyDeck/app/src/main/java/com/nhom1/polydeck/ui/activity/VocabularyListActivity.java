@@ -83,7 +83,7 @@ public class VocabularyListActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         rvVocabulary.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new VocabularyAdapter(new ArrayList<>());
+        adapter = new VocabularyAdapter(new ArrayList<>(), this);
         rvVocabulary.setAdapter(adapter);
     }
 

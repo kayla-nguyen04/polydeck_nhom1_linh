@@ -2,6 +2,7 @@ package com.nhom1.polydeck.ui.activity;
 
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,8 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
     private FavoriteWordAdapter adapter;
     private TextToSpeech tts;
     private String userId;
+    private TextView tvTotalWords;
+    private RecyclerView recyclerViewFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +44,22 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
         userId = sm.getUserData() != null ? sm.getUserData().getMaNguoiDung() : null;
         if (userId == null) { finish(); return; }
 
-        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar_favorites);
-        toolbar.setTitle("Từ yêu thích");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        // Back button
+        findViewById(R.id.btnBack).setOnClickListener(v -> onBackPressed());
 
-        RecyclerView rv = findViewById(R.id.rvVocabulary);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FavoriteWordAdapter(new ArrayList<>(), userId);
-        rv.setAdapter(adapter);
+        // Total words
+        tvTotalWords = findViewById(R.id.tvTotalWords);
+
+        // RecyclerView
+        recyclerViewFavorites = findViewById(R.id.recyclerViewFavorites);
+        recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new FavoriteWordAdapter(new ArrayList<>(), userId, this);
+        recyclerViewFavorites.setAdapter(adapter);
+
+        // Set listener để cập nhật tổng số từ khi xóa
+        adapter.setOnFavoriteRemovedListener(position -> {
+            updateTotalWords();
+        });
 
         // Initialize TextToSpeech
         tts = new TextToSpeech(this, this);
@@ -58,17 +67,42 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
         // Load favorites
         api.getUserFavorites(userId).enqueue(new Callback<ApiResponse<List<TuVung>>>() {
             @Override public void onResponse(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Response<ApiResponse<List<TuVung>>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                    adapter.updateData(response.body().getData());
-                    adapter.setTextToSpeech(tts);
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        List<TuVung> data = response.body().getData();
+                        if (data != null) {
+                            adapter.updateData(data);
+                            adapter.setTextToSpeech(tts);
+                            updateTotalWords();
+                            if (data.isEmpty()) {
+                                Toast.makeText(FavoritesActivity.this, "Danh sách yêu thích trống", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            adapter.updateData(new ArrayList<>());
+                            updateTotalWords();
+                            Toast.makeText(FavoritesActivity.this, "Danh sách yêu thích trống", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        String message = response.body().getMessage();
+                        Toast.makeText(FavoritesActivity.this, 
+                            message != null ? message : "Không tải được danh sách yêu thích", 
+                            Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(FavoritesActivity.this, "Không tải được danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FavoritesActivity.this, "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
             @Override public void onFailure(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Throwable t) {
-                Toast.makeText(FavoritesActivity.this, "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+                Toast.makeText(FavoritesActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateTotalWords() {
+        if (tvTotalWords != null && adapter != null) {
+            tvTotalWords.setText(String.valueOf(adapter.getItemCount()));
+        }
     }
 
     @Override

@@ -61,7 +61,7 @@ public class TopicDetailActivity extends AppCompatActivity {
         View btnQuiz = findViewById(R.id.btn_quiz);
         RecyclerView rv = findViewById(R.id.rv_preview_vocab);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        vocabAdapter = new VocabularyAdapter(new ArrayList<>());
+        vocabAdapter = new VocabularyAdapter(new ArrayList<>(), this);
         rv.setAdapter(vocabAdapter);
 
         String finalDeckId = deckId;

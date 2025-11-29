@@ -17,6 +17,10 @@ import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.BoTu;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +36,7 @@ public class CreateDeckActivity extends AppCompatActivity {
     private View selectedColorView;
 
     private APIService apiService;
+    private List<BoTu> existingDecks = new ArrayList<>();
 
     private static final String[] COLOR_VALUES = {
             "#7C3AED", "#10B981", "#FF6B9D",
@@ -46,6 +51,35 @@ public class CreateDeckActivity extends AppCompatActivity {
         initViews();
         setupAPI();
         setupColorPicker();
+        
+        // Load existing decks to check for duplicates
+        loadExistingDecks();
+    }
+    
+    private void loadExistingDecks() {
+        apiService.getAllChuDe().enqueue(new Callback<List<BoTu>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    existingDecks.clear();
+                    existingDecks.addAll(response.body());
+                }
+            }
+            
+            @Override
+            public void onFailure(@NonNull Call<List<BoTu>> call, @NonNull Throwable t) {
+                // Silent failure, validation will still work on server side
+            }
+        });
+    }
+    
+    private boolean isDeckNameDuplicate(String deckName) {
+        for (BoTu deck : existingDecks) {
+            if (deck.getTenChuDe() != null && deck.getTenChuDe().equalsIgnoreCase(deckName.trim())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initViews() {
@@ -108,6 +142,14 @@ public class CreateDeckActivity extends AppCompatActivity {
             etDeckName.setError("Vui lòng nhập tên bộ từ");
             return;
         }
+        
+        // Check for duplicate deck name
+        if (isDeckNameDuplicate(deckName)) {
+            etDeckName.setError("Tên bộ từ đã tồn tại");
+            etDeckName.requestFocus();
+            Toast.makeText(this, "Tên bộ từ \"" + deckName + "\" đã tồn tại. Vui lòng chọn tên khác.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         BoTu boTu = new BoTu();
         boTu.setTenChuDe(deckName);
@@ -126,8 +168,26 @@ public class CreateDeckActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(CreateDeckActivity.this,
-                            "Không thể tạo bộ từ", Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Không thể tạo bộ từ";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBody = response.errorBody().string();
+                            // Check if error is about duplicate name
+                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
+                                errorBody.toLowerCase().contains("already exists") ||
+                                errorBody.toLowerCase().contains("duplicate") ||
+                                response.code() == 409) {
+                                errorMessage = "Tên bộ từ \"" + deckName + "\" đã tồn tại. Vui lòng chọn tên khác.";
+                                etDeckName.setError("Tên đã tồn tại");
+                                etDeckName.requestFocus();
+                            } else {
+                                errorMessage = "Không thể tạo bộ từ: " + response.code();
+                            }
+                        }
+                    } catch (IOException e) {
+                        // Ignore
+                    }
+                    Toast.makeText(CreateDeckActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,11 +64,51 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
         holder.tvDeckInfo.setText(stats);
 
-        Glide.with(context)
-                .load(deck.getLinkAnhIcon())
-                .placeholder(R.drawable.ic_default_deck_icon)
-                .error(R.drawable.ic_default_deck_icon)
-                .into(holder.ivDeckIcon);
+        // Load deck icon
+        String iconUrl = deck.getLinkAnhIcon();
+        android.util.Log.d("DeckAdapter", "Deck: " + deck.getTenChuDe() + " | Icon URL from server: [" + iconUrl + "]");
+        
+        String fullUrl = buildImageUrl(iconUrl);
+        
+        if (fullUrl != null) {
+            android.util.Log.d("DeckAdapter", "Loading image from: " + fullUrl);
+            
+            // Create final variable for use in inner class
+            final String finalUrl = fullUrl;
+            
+            Glide.with(context)
+                    .load(fullUrl)
+                    .placeholder(R.drawable.ic_default_deck_icon)
+                    .error(R.drawable.ic_default_deck_icon)
+                    .centerCrop()
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
+                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable com.bumptech.glide.load.engine.GlideException e, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
+                            android.util.Log.e("DeckAdapter", "❌ FAILED to load: " + finalUrl);
+                            if (e != null) {
+                                android.util.Log.e("DeckAdapter", "Exception: " + e.getMessage());
+                                if (e.getRootCauses() != null && !e.getRootCauses().isEmpty()) {
+                                    android.util.Log.e("DeckAdapter", "Root cause: " + e.getRootCauses().get(0).getMessage());
+                                }
+                            }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                            android.util.Log.d("DeckAdapter", "✅ SUCCESS loading: " + finalUrl);
+                            return false;
+                        }
+                    })
+                    .into(holder.ivDeckIcon);
+        } else {
+            android.util.Log.w("DeckAdapter", "⚠️ Icon URL is NULL/EMPTY for: " + deck.getTenChuDe());
+            Glide.with(context)
+                    .load(R.drawable.ic_default_deck_icon)
+                    .into(holder.ivDeckIcon);
+        }
 
         // View button - navigate to vocabulary list
         holder.btnView.setOnClickListener(v -> {
@@ -126,6 +167,25 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     public void updateData(List<BoTu> newList) {
         this.deckList = newList;
         notifyDataSetChanged();
+    }
+    
+    private String buildImageUrl(String iconUrl) {
+        if (iconUrl == null || iconUrl.isEmpty() || iconUrl.equals("null") || iconUrl.equalsIgnoreCase("null")) {
+            return null;
+        }
+        
+        // If already full URL, return as is
+        if (iconUrl.startsWith("http://") || iconUrl.startsWith("https://")) {
+            return iconUrl;
+        }
+        
+        // Build full URL
+        String baseUrl = "http://10.0.2.2:3000";
+        if (iconUrl.startsWith("/")) {
+            return baseUrl + iconUrl;
+        } else {
+            return baseUrl + "/" + iconUrl;
+        }
     }
 
     static class DeckViewHolder extends RecyclerView.ViewHolder {

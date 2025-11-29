@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,6 +51,7 @@ public class AddVocabularyActivity extends AppCompatActivity {
 
     private APIService apiService;
     private String deckId;
+    private List<TuVung> existingVocab = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,35 @@ public class AddVocabularyActivity extends AppCompatActivity {
         initViews();
         setupToolbar();
         setupListeners();
+        
+        // Load existing vocabulary to check for duplicates
+        loadExistingVocabulary();
+    }
+    
+    private void loadExistingVocabulary() {
+        apiService.getTuVungByBoTu(deckId).enqueue(new Callback<List<TuVung>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<TuVung>> call, @NonNull Response<List<TuVung>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    existingVocab.clear();
+                    existingVocab.addAll(response.body());
+                }
+            }
+            
+            @Override
+            public void onFailure(@NonNull Call<List<TuVung>> call, @NonNull Throwable t) {
+                Log.e(TAG, "Failed to load existing vocabulary: " + t.getMessage());
+            }
+        });
+    }
+    
+    private boolean isVocabularyDuplicate(String englishWord) {
+        for (TuVung vocab : existingVocab) {
+            if (vocab.getTuTiengAnh() != null && vocab.getTuTiengAnh().equalsIgnoreCase(englishWord.trim())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initViews() {
@@ -105,6 +136,14 @@ public class AddVocabularyActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng nhập từ vựng và nghĩa", Toast.LENGTH_SHORT).show();
             return;
         }
+        
+        // Check for duplicate vocabulary
+        if (isVocabularyDuplicate(englishWord)) {
+            etEnglishWord.setError("Từ vựng đã tồn tại");
+            etEnglishWord.requestFocus();
+            Toast.makeText(this, "Từ vựng \"" + englishWord + "\" đã tồn tại trong bộ từ này.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         TuVung vocab = new TuVung();
         vocab.setTuTiengAnh(englishWord);
@@ -118,6 +157,10 @@ public class AddVocabularyActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<TuVung> call, @NonNull Response<TuVung> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddVocabularyActivity.this, "Đã thêm từ vựng thành công", Toast.LENGTH_SHORT).show();
+                    // Add to existing list to prevent duplicates
+                    if (response.body() != null) {
+                        existingVocab.add(response.body());
+                    }
                     // Clear fields
                     etEnglishWord.setText("");
                     etPronunciation.setText("");
@@ -129,7 +172,27 @@ public class AddVocabularyActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    Toast.makeText(AddVocabularyActivity.this, "Thêm từ vựng thất bại", Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Thêm từ vựng thất bại";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBody = response.errorBody().string();
+                            Log.e(TAG, "Add vocabulary failed - Error body: " + errorBody);
+                            // Check if error is about duplicate
+                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
+                                errorBody.toLowerCase().contains("already exists") ||
+                                errorBody.toLowerCase().contains("duplicate") ||
+                                response.code() == 409) {
+                                errorMessage = "Từ vựng \"" + englishWord + "\" đã tồn tại trong bộ từ này.";
+                                etEnglishWord.setError("Từ vựng đã tồn tại");
+                                etEnglishWord.requestFocus();
+                            } else {
+                                errorMessage = "Thêm từ vựng thất bại: " + response.code();
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error reading error body", e);
+                    }
+                    Toast.makeText(AddVocabularyActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 

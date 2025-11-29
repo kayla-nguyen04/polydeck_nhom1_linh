@@ -20,6 +20,7 @@ import com.nhom1.polydeck.data.model.ThongBao;
 import com.nhom1.polydeck.data.model.TuVung;
 import com.nhom1.polydeck.data.model.User;
 import com.nhom1.polydeck.data.model.FavoriteRequest;
+import com.nhom1.polydeck.data.model.DeckProgress;
 
 import java.util.List;
 
@@ -109,14 +110,18 @@ public interface APIService {
     Call<BoTu> createChuDeWithImage(@Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @Multipart
-    @PUT("api/chude/{id}/update_with_image")
-    Call<BoTu> updateChuDeWithImage(@Path("id") String chuDeId, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
+    @POST("api/chude/chude_with_image")
+    Call<BoTu> updateChuDeWithImage(@Part("id") RequestBody id, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @PUT("api/chude/{id}")
     Call<BoTu> updateChuDe(@Path("id") String chuDeId, @Body BoTu boTu);
 
     @DELETE("api/chude/{id}")
     Call<Void> deleteChuDe(@Path("id") String chuDeId);
+
+    // Tiến độ học tập cho 1 chủ đề của 1 người dùng
+    @GET("api/chude/{id}/progress")
+    Call<ApiResponse<DeckProgress>> getDeckProgress(@Path("id") String chuDeId, @Query("userId") String userId);
 
     // ============= VOCABULARY MANAGEMENT =============
     @POST("api/chude/{chuDeId}/them-tu-vung")

@@ -31,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,6 +54,7 @@ public class AddDeckActivity extends AppCompatActivity {
 
     private Uri imageUri;
     private APIService apiService;
+    private List<BoTu> existingDecks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,35 @@ public class AddDeckActivity extends AppCompatActivity {
 
         btnSelectImage.setOnClickListener(v -> openFileChooser());
         btnCreateDeck.setOnClickListener(v -> createDeckWithImage());
+        
+        // Load existing decks to check for duplicates
+        loadExistingDecks();
+    }
+    
+    private void loadExistingDecks() {
+        apiService.getAllChuDe().enqueue(new Callback<List<BoTu>>() {
+            @Override
+            public void onResponse(Call<List<BoTu>> call, Response<List<BoTu>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    existingDecks.clear();
+                    existingDecks.addAll(response.body());
+                }
+            }
+            
+            @Override
+            public void onFailure(Call<List<BoTu>> call, Throwable t) {
+                Log.e(TAG, "Failed to load existing decks: " + t.getMessage());
+            }
+        });
+    }
+    
+    private boolean isDeckNameDuplicate(String deckName) {
+        for (BoTu deck : existingDecks) {
+            if (deck.getTenChuDe() != null && deck.getTenChuDe().equalsIgnoreCase(deckName.trim())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void openFileChooser() {
@@ -95,6 +127,14 @@ public class AddDeckActivity extends AppCompatActivity {
         if (deckName.isEmpty()) {
             etDeckName.setError("Tên bộ từ không được để trống");
             etDeckName.requestFocus();
+            return;
+        }
+        
+        // Check for duplicate deck name
+        if (isDeckNameDuplicate(deckName)) {
+            etDeckName.setError("Tên bộ từ đã tồn tại");
+            etDeckName.requestFocus();
+            Toast.makeText(this, "Tên bộ từ \"" + deckName + "\" đã tồn tại. Vui lòng chọn tên khác.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -128,7 +168,27 @@ public class AddDeckActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(AddDeckActivity.this, "Tạo bộ từ thất bại", Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Tạo bộ từ thất bại";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBody = response.errorBody().string();
+                            Log.e(TAG, "Create deck failed - Error body: " + errorBody);
+                            // Check if error is about duplicate name
+                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
+                                errorBody.toLowerCase().contains("already exists") ||
+                                errorBody.toLowerCase().contains("duplicate") ||
+                                response.code() == 409) {
+                                errorMessage = "Tên bộ từ \"" + deckName + "\" đã tồn tại. Vui lòng chọn tên khác.";
+                                etDeckName.setError("Tên đã tồn tại");
+                                etDeckName.requestFocus();
+                            } else {
+                                errorMessage = "Tạo bộ từ thất bại: " + response.code();
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error reading error body", e);
+                    }
+                    Toast.makeText(AddDeckActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
                 resetButton();
             }

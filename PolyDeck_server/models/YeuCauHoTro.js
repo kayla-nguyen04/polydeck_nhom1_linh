@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const yeuCauHoTroSchema = new mongoose.Schema({
-  ma_ho_tro: { type: String, required: true, unique: true, trim: true },
-  ma_nguoi_dung: { type: String, required: true, trim: true },
+  ma_nguoi_dung: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'NguoiDung', 
+    required: true 
+  },
   noi_dung: { type: String, required: true },
   ten_nguoi_gui: { type: String, required: true, trim: true },
   email_nguoi_gui: { type: String, required: true, trim: true },

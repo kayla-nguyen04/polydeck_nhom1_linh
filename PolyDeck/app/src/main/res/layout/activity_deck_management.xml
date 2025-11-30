@@ -20,7 +20,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back"
-            android:tint="#111827"
+            app:tint="#111827"
             android:padding="4dp"
             android:contentDescription="Back"/>
 
@@ -42,7 +42,7 @@
             android:src="@drawable/ic_add"
             android:background="@drawable/bg_button_add"
             android:padding="10dp"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:contentDescription="Add"/>
     </RelativeLayout>
 
@@ -64,7 +64,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_search"
-            android:tint="#9CA3AF"/>
+            app:tint="#9CA3AF"/>
 
         <EditText
             android:id="@+id/inputSearch"

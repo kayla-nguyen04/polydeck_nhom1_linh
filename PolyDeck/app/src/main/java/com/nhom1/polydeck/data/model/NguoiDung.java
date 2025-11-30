@@ -3,15 +3,12 @@ package com.nhom1.polydeck.data.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
-import java.util.List;
 
 public class NguoiDung {
 
     @SerializedName("_id")
     private String id;
 
-    @SerializedName("ma_nguoi_dung")
-    private String maNguoiDung;
 
     @SerializedName("ho_ten")
     private String hoTen;
@@ -47,13 +44,6 @@ public class NguoiDung {
         this.id = id;
     }
 
-    public String getMaNguoiDung() {
-        return maNguoiDung;
-    }
-
-    public void setMaNguoiDung(String maNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
-    }
 
     public String getHoTen() {
         return hoTen;

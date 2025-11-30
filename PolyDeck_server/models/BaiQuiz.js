@@ -25,7 +25,6 @@ const questionSchema = new Schema({
 
 // --- Định nghĩa cấu- trúc chính cho Bài Quiz ---
 const baiQuizSchema = new Schema({
-  ma_quiz: { type: String, required: true, unique: true, trim: true },
   ma_chu_de: { 
     type: Schema.Types.ObjectId, 
     ref: 'ChuDe', // Tham chiếu đến model 'ChuDe'

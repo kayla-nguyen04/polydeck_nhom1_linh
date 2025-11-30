@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const thongBaoSchema = new mongoose.Schema({
-  ma_thong_bao: { type: String, required: true, unique: true, trim: true },
-  ma_nguoi_dung: { type: String, default: null, trim: true }, // null = thông báo chung, có giá trị = thông báo cá nhân
+  ma_nguoi_dung: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'NguoiDung', 
+    default: null 
+  }, // null = thông báo chung, có giá trị = thông báo cá nhân
   tieu_de: { type: String, required: true, trim: true },
   noi_dung: { type: String, required: true },
   ngay_gui: { type: Date, default: Date.now },

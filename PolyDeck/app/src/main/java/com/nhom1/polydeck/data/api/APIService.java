@@ -55,8 +55,8 @@ public interface APIService {
     Call<Void> createSystemNotification(@Body ThongBao thongBao);
 
     // ============= NOTIFICATIONS =============
-    @GET("api/thongbao/{userId}")
-    Call<ApiResponse<List<ThongBao>>> getThongBao(@Path("userId") String userId);
+    @GET("api/thongbao")
+    Call<ApiResponse<List<ThongBao>>> getThongBao(@Query("userId") String userId);
 
     @POST("api/thongbao/{id}/read")
     Call<ApiResponse<Void>> markThongBaoRead(@Path("id") String thongBaoId, @Body ReadRequest request);
@@ -110,8 +110,8 @@ public interface APIService {
     Call<BoTu> createChuDeWithImage(@Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @Multipart
-    @POST("api/chude/chude_with_image")
-    Call<BoTu> updateChuDeWithImage(@Part("id") RequestBody id, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
+    @PUT("api/chude/{id}")
+    Call<BoTu> updateChuDeWithImage(@Path("id") String id, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @PUT("api/chude/{id}")
     Call<BoTu> updateChuDe(@Path("id") String chuDeId, @Body BoTu boTu);
@@ -137,13 +137,13 @@ public interface APIService {
     @POST("api/quizzes")
     Call<Quiz> createQuiz(@Body Quiz quiz);
 
-    @GET("api/quiz/by-topic/{ma_chu_de}")
-    Call<ApiResponse<QuizBundle>> getQuizByTopic(@Path("ma_chu_de") String deckId);
+    @GET("api/quizzes/by-topic/{chuDeId}")
+    Call<ApiResponse<QuizBundle>> getQuizByTopic(@Path("chuDeId") String deckId);
 
-    @POST("api/quiz/submit")
+    @POST("api/quizzes/submit")
     Call<ApiResponse<QuizResult>> submitQuiz(@Body SubmitQuizRequest request);
 
     // FIX: Added the missing getQuizHistory method
-    @GET("api/quiz/history/{userId}")
+    @GET("api/quizzes/history/{userId}")
     Call<ApiResponse<List<LichSuLamBai>>> getQuizHistory(@Path("userId") String userId);
 }

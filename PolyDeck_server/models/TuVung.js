@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const tuVungSchema = new mongoose.Schema({
-  ma_tu_vung: { type: String, required: true, unique: true, trim: true },
-  ma_chu_de: { type: String, required: true, trim: true },
+  ma_chu_de: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'ChuDe', 
+    required: true 
+  },
   tu_tieng_anh: { type: String, required: true, trim: true },
   phien_am: { type: String, default: null },
   cau_vi_du: { type: String, default: null },

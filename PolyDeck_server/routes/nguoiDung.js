@@ -7,10 +7,7 @@ const NguoiDung = require('../models/NguoiDung');
 const TuVung = require('../models/TuVung'); // dùng cho tính năng từ vựng yêu thích
 
 const resolveUserFilter = (identifier = '') => {
-    if (Types.ObjectId.isValid(identifier)) {
-        return { _id: identifier };
-    }
-    return { ma_nguoi_dung: identifier };
+    return { _id: identifier };
 };
 
 const storage = multer.diskStorage({
@@ -184,10 +181,7 @@ router.post('/:id/favorites', async (req, res) => {
             vocab = null;
         }
 
-        // Fallback: nếu không phải ObjectId hợp lệ, thử tìm theo ma_tu_vung
-        if (!vocab) {
-            vocab = await TuVung.findOne({ ma_tu_vung: tu_vung_id });
-        }
+        // Không còn fallback vì đã bỏ ma_tu_vung, chỉ dùng _id
 
         if (!vocab) {
             return res.status(404).json({
@@ -225,7 +219,7 @@ router.post('/:id/favorites', async (req, res) => {
 });
 
 // DELETE: Xoá một từ vựng khỏi danh sách yêu thích
-// URL: /api/users/:id/favorites/:fav  (fav = ma_tu_vung)
+// URL: /api/users/:id/favorites/:fav  (fav = _id của từ vựng)
 router.delete('/:id/favorites/:fav', async (req, res) => {
     try {
         const user = await NguoiDung.findOne(resolveUserFilter(req.params.id));

@@ -3,8 +3,8 @@ package com.nhom1.polydeck.data.model;
 import com.google.gson.annotations.SerializedName;
 
 public class RegisterResponse {
-    @SerializedName("ma_nguoi_dung")
-    private String maNguoiDung;
+    @SerializedName("_id")
+    private String id;
 
     @SerializedName("ho_ten")
     private String hoTen;
@@ -21,12 +21,12 @@ public class RegisterResponse {
     @SerializedName("chuoi_ngay_hoc")
     private int chuoiNgayHoc;
 
-    public String getMaNguoiDung() {
-        return maNguoiDung;
+    public String getId() {
+        return id;
     }
 
-    public void setMaNguoiDung(String maNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getHoTen() {

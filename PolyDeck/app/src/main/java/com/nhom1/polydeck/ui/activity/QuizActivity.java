@@ -51,7 +51,7 @@ public class QuizActivity extends AppCompatActivity {
 
         api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(this);
-        if (sm.getUserData() != null) userId = sm.getUserData().getMaNguoiDung();
+        if (sm.getUserData() != null) userId = sm.getUserData().getId();
 
         tvQuestion = findViewById(R.id.tv_question);
         tvProgress = findViewById(R.id.tv_progress);

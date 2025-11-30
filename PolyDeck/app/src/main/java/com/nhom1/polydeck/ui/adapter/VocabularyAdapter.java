@@ -44,7 +44,7 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
         this.vocabList = vocabList;
         this.context = context;
         SessionManager sm = new SessionManager(context);
-        this.userId = sm.getUserData() != null ? sm.getUserData().getMaNguoiDung() : null;
+        this.userId = sm.getUserData() != null ? sm.getUserData().getId() : null;
         this.apiService = RetrofitClient.getApiService();
         initTts();
         loadFavorites();

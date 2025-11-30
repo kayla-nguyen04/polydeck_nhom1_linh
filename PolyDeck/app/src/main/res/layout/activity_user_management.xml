@@ -23,7 +23,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_refresh"
-            android:tint="#3B82F6"
+            app:tint="#3B82F6"
             android:padding="6dp"
             android:contentDescription="Refresh" />
     </androidx.appcompat.widget.Toolbar>

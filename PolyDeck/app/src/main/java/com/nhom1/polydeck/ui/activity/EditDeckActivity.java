@@ -1,6 +1,5 @@
 package com.nhom1.polydeck.ui.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,13 +7,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -55,7 +54,7 @@ public class EditDeckActivity extends AppCompatActivity {
     private String deckId;
     private BoTu currentDeck;
     private Uri newImageUri;
-    private List<BoTu> existingDecks = new ArrayList<>();
+    private final List<BoTu> existingDecks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +81,9 @@ public class EditDeckActivity extends AppCompatActivity {
     }
     
     private void loadExistingDecks() {
-        apiService.getAllChuDe().enqueue(new Callback<List<BoTu>>() {
+        apiService.getAllChuDe().enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<List<BoTu>> call, Response<List<BoTu>> response) {
+            public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     existingDecks.clear();
                     existingDecks.addAll(response.body());
@@ -92,7 +91,7 @@ public class EditDeckActivity extends AppCompatActivity {
             }
             
             @Override
-            public void onFailure(Call<List<BoTu>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<BoTu>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed to load existing decks: " + t.getMessage());
             }
         });
@@ -121,14 +120,16 @@ public class EditDeckActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void fetchDeckDetails() {
-        apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
+        apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+            public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     currentDeck = response.body();
                     populateDeckData(currentDeck);
@@ -138,7 +139,7 @@ public class EditDeckActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<BoTu> call, Throwable t) {
+            public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                 Log.e(TAG, "API Error: " + t.getMessage());
             }
         });
@@ -177,7 +178,7 @@ public class EditDeckActivity extends AppCompatActivity {
 
     private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST); // Deprecated but still needed for compatibility
     }
 
      @Override
@@ -212,7 +213,7 @@ public class EditDeckActivity extends AppCompatActivity {
         
         // Disable button to prevent multiple clicks
         btnSaveChangesDeck.setEnabled(false);
-        btnSaveChangesDeck.setText("Đang xử lý...");
+        btnSaveChangesDeck.setText(getString(R.string.processing));
         
         // If image is selected, upload it first
         if (newImageUri != null) {
@@ -230,9 +231,9 @@ public class EditDeckActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "Updating deck with ID: " + deckId + ", Name: " + newDeckName + ", Icon: " + updateDeck.getLinkAnhIcon());
-        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<BoTu>() {
+        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+            public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     BoTu result = response.body();
                     Log.d(TAG, "Update response - ID: " + result.getId() + ", Name: " + result.getTenChuDe() + ", Icon: " + result.getLinkAnhIcon());
@@ -240,14 +241,15 @@ public class EditDeckActivity extends AppCompatActivity {
                     finish();
                 } else {
                     String errorMessage = "Cập nhật thất bại";
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorBody = response.errorBody().string();
-                            Log.e(TAG, "Update failed - Error body: " + errorBody);
+                    okhttp3.ResponseBody errorBody = response.errorBody();
+                    if (errorBody != null) {
+                        try {
+                            String errorBodyString = errorBody.string();
+                            Log.e(TAG, "Update failed - Error body: " + errorBodyString);
                             // Check if error is about duplicate name
-                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
-                                errorBody.toLowerCase().contains("already exists") ||
-                                errorBody.toLowerCase().contains("duplicate") ||
+                            if (errorBodyString.toLowerCase().contains("đã tồn tại") || 
+                                errorBodyString.toLowerCase().contains("already exists") ||
+                                errorBodyString.toLowerCase().contains("duplicate") ||
                                 response.code() == 409) {
                                 errorMessage = "Tên bộ từ \"" + newDeckName + "\" đã tồn tại. Vui lòng chọn tên khác.";
                                 etEditDeckName.setError("Tên đã tồn tại");
@@ -255,9 +257,11 @@ public class EditDeckActivity extends AppCompatActivity {
                             } else {
                                 errorMessage = "Cập nhật thất bại: " + response.code();
                             }
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error reading error body", e);
+                        } finally {
+                            errorBody.close();
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error reading error body", e);
                     }
                     Toast.makeText(EditDeckActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                     resetButton();
@@ -265,7 +269,7 @@ public class EditDeckActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<BoTu> call, Throwable t) {
+            public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                  Log.e(TAG, "API Error: " + t.getMessage(), t);
                  Log.e(TAG, "Request URL: " + call.request().url());
                  Toast.makeText(EditDeckActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -275,7 +279,7 @@ public class EditDeckActivity extends AppCompatActivity {
     }
 
     private void uploadDeckWithImage(String deckName) {
-        btnSaveChangesDeck.setText("Đang tải lên...");
+        btnSaveChangesDeck.setText(getString(R.string.uploading));
         btnSaveChangesDeck.setEnabled(false);
 
         File file = createTempFileFromUri(newImageUri);
@@ -285,16 +289,17 @@ public class EditDeckActivity extends AppCompatActivity {
             return;
         }
 
-        RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(newImageUri)), file);
+        String mimeType = getContentResolver().getType(newImageUri);
+        MediaType mediaType = mimeType != null ? MediaType.parse(mimeType) : MediaType.parse("image/*");
+        RequestBody requestFile = RequestBody.create(mediaType, file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        RequestBody id = RequestBody.create(MediaType.parse("multipart/form-data"), deckId);
         RequestBody tenChuDe = RequestBody.create(MediaType.parse("multipart/form-data"), deckName);
 
         Log.d(TAG, "Updating deck with image - ID: " + deckId + ", Name: " + deckName);
-        apiService.updateChuDeWithImage(id, body, tenChuDe).enqueue(new Callback<BoTu>() {
+        apiService.updateChuDeWithImage(deckId, body, tenChuDe).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+            public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     BoTu updatedDeck = response.body();
                     Log.d(TAG, "Update response - ID: " + updatedDeck.getId() + ", Name: " + updatedDeck.getTenChuDe() + ", Icon: " + updatedDeck.getLinkAnhIcon());
@@ -309,9 +314,9 @@ public class EditDeckActivity extends AppCompatActivity {
                         } else {
                             // Image uploaded but link not returned, fetch again to verify
                             Log.w(TAG, "Image uploaded but link_anh_icon is null in response, fetching deck again...");
-                            apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
+                            apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
                                 @Override
-                                public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+                                public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         BoTu fetched = response.body();
                                         Log.d(TAG, "Fetched deck after upload - Icon: " + fetched.getLinkAnhIcon());
@@ -322,7 +327,7 @@ public class EditDeckActivity extends AppCompatActivity {
                                 }
                                 
                                 @Override
-                                public void onFailure(Call<BoTu> call, Throwable t) {
+                                public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                                     Log.e(TAG, "Failed to fetch deck after upload", t);
                                 }
                             });
@@ -338,9 +343,9 @@ public class EditDeckActivity extends AppCompatActivity {
                         // If image link is not in response, try to fetch the new deck to get it
                         if (imageLink == null || imageLink.isEmpty()) {
                             Log.w(TAG, "Image link not in response, fetching new deck to get link...");
-                            apiService.getChuDeDetail(updatedDeck.getId()).enqueue(new Callback<BoTu>() {
+                            apiService.getChuDeDetail(updatedDeck.getId()).enqueue(new Callback<>() {
                                 @Override
-                                public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+                                public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         BoTu fetchedDeck = response.body();
                                         String fetchedLink = fetchedDeck.getLinkAnhIcon();
@@ -359,7 +364,7 @@ public class EditDeckActivity extends AppCompatActivity {
                                 }
                                 
                                 @Override
-                                public void onFailure(Call<BoTu> call, Throwable t) {
+                                public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                                     Log.e(TAG, "Error fetching new deck: " + t.getMessage());
                                     Toast.makeText(EditDeckActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                                     resetButton();
@@ -373,14 +378,15 @@ public class EditDeckActivity extends AppCompatActivity {
                     }
                 } else {
                     String errorMessage = "Cập nhật thất bại";
-                    try {
-                        if (response.errorBody() != null) {
-                            String errorBody = response.errorBody().string();
-                            Log.e(TAG, "Update with image failed - Error body: " + errorBody);
+                    okhttp3.ResponseBody errorBody = response.errorBody();
+                    if (errorBody != null) {
+                        try {
+                            String errorBodyString = errorBody.string();
+                            Log.e(TAG, "Update with image failed - Error body: " + errorBodyString);
                             // Check if error is about duplicate name
-                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
-                                errorBody.toLowerCase().contains("already exists") ||
-                                errorBody.toLowerCase().contains("duplicate") ||
+                            if (errorBodyString.toLowerCase().contains("đã tồn tại") ||
+                                errorBodyString.toLowerCase().contains("already exists") ||
+                                errorBodyString.toLowerCase().contains("duplicate") ||
                                 response.code() == 409) {
                                 errorMessage = "Tên bộ từ \"" + deckName + "\" đã tồn tại. Vui lòng chọn tên khác.";
                                 etEditDeckName.setError("Tên đã tồn tại");
@@ -388,9 +394,11 @@ public class EditDeckActivity extends AppCompatActivity {
                             } else {
                                 errorMessage = "Cập nhật thất bại: " + response.code();
                             }
+                        } catch (IOException e) {
+                            Log.e(TAG, "Error reading error body", e);
+                        } finally {
+                            errorBody.close();
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error reading error body", e);
                     }
                     Toast.makeText(EditDeckActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
@@ -398,7 +406,7 @@ public class EditDeckActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<BoTu> call, Throwable t) {
+            public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                 Log.e(TAG, "Upload image failed: " + t.getMessage(), t);
                 Log.e(TAG, "Request URL: " + call.request().url());
                 Toast.makeText(EditDeckActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -422,9 +430,9 @@ public class EditDeckActivity extends AppCompatActivity {
         
         Log.d(TAG, "Updating deck with image link: " + imageLink);
         Log.d(TAG, "Update payload - ID: " + deckId + ", Name: " + deckName + ", Icon: " + imageLink);
-        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<BoTu>() {
+        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+            public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     BoTu result = response.body();
                     Log.d(TAG, "Update successful - ID: " + result.getId() + ", Name: " + result.getTenChuDe() + ", Icon: " + result.getLinkAnhIcon());
@@ -432,9 +440,9 @@ public class EditDeckActivity extends AppCompatActivity {
                     // Verify icon was saved - if not, fetch again
                     if (result.getLinkAnhIcon() == null || result.getLinkAnhIcon().isEmpty()) {
                         Log.w(TAG, "Icon not in update response, fetching deck again...");
-                        apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
+                        apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
                             @Override
-                            public void onResponse(Call<BoTu> call, Response<BoTu> response) {
+                            public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                 if (response.isSuccessful() && response.body() != null) {
                                     BoTu fetched = response.body();
                                     Log.d(TAG, "Fetched deck after update - Icon: " + fetched.getLinkAnhIcon());
@@ -442,7 +450,7 @@ public class EditDeckActivity extends AppCompatActivity {
                             }
                             
                             @Override
-                            public void onFailure(Call<BoTu> call, Throwable t) {
+                            public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                                 Log.e(TAG, "Failed to fetch deck after update", t);
                             }
                         });
@@ -450,14 +458,14 @@ public class EditDeckActivity extends AppCompatActivity {
                     
                     // Delete the accidentally created deck
                     if (newDeckIdToDelete != null && !newDeckIdToDelete.isEmpty()) {
-                        apiService.deleteChuDe(newDeckIdToDelete).enqueue(new Callback<Void>() {
+                        apiService.deleteChuDe(newDeckIdToDelete).enqueue(new Callback<>() {
                             @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
+                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                 Log.d(TAG, "Deleted accidentally created deck: " + newDeckIdToDelete);
                             }
                             
                             @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                                 Log.w(TAG, "Failed to delete accidentally created deck: " + newDeckIdToDelete);
                             }
                         });
@@ -473,7 +481,7 @@ public class EditDeckActivity extends AppCompatActivity {
             }
             
             @Override
-            public void onFailure(Call<BoTu> call, Throwable t) {
+            public void onFailure(@NonNull Call<BoTu> call, @NonNull Throwable t) {
                 Log.e(TAG, "Failed to update deck with image link: " + t.getMessage());
                 Toast.makeText(EditDeckActivity.this, "Lỗi khi cập nhật: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 resetButton();
@@ -500,14 +508,14 @@ public class EditDeckActivity extends AppCompatActivity {
             inputStream.close();
             return tempFile;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error creating temp file from URI", e);
             return null;
         }
     }
 
     private String getFileName(Uri uri) {
         String result = null;
-        if (uri.getScheme().equals("content")) {
+        if (uri.getScheme() != null && uri.getScheme().equals("content")) {
             try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
@@ -518,13 +526,17 @@ public class EditDeckActivity extends AppCompatActivity {
             }
         }
         if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
+            String path = uri.getPath();
+            if (path != null) {
+                int cut = path.lastIndexOf('/');
+                if (cut != -1) {
+                    result = path.substring(cut + 1);
+                } else {
+                    result = path;
+                }
             }
         }
-        return result;
+        return result != null ? result : "image.jpg";
     }
 
     private String getFileExtension(String fileName) {
@@ -536,7 +548,7 @@ public class EditDeckActivity extends AppCompatActivity {
     }
 
     private void resetButton() {
-        btnSaveChangesDeck.setText("Lưu thay đổi");
+        btnSaveChangesDeck.setText(getString(R.string.save_changes));
         btnSaveChangesDeck.setEnabled(true);
     }
 }

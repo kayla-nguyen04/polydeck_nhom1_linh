@@ -37,7 +37,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
         api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(this);
-        if (sm.getUserData() != null) userId = sm.getUserData().getMaNguoiDung();
+        if (sm.getUserData() != null) userId = sm.getUserData().getId();
 
         ListView listView = findViewById(R.id.lv_notifications);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles);

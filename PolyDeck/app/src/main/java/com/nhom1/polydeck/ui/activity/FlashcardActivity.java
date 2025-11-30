@@ -80,7 +80,7 @@ public class FlashcardActivity extends AppCompatActivity {
         deckName = getIntent().getStringExtra(EXTRA_DECK_NAME);
         reviewUnknownOnly = getIntent().getBooleanExtra(EXTRA_REVIEW_UNKNOWN_ONLY, false);
         SessionManager sm = new SessionManager(this);
-        if (sm.getUserData() != null) userId = sm.getUserData().getMaNguoiDung();
+        if (sm.getUserData() != null) userId = sm.getUserData().getId();
         learningStatusManager = new LearningStatusManager(this);
 
         bindViews();

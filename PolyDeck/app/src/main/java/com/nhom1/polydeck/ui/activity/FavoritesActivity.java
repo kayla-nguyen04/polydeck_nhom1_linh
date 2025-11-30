@@ -41,7 +41,7 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
 
         APIService api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(this);
-        userId = sm.getUserData() != null ? sm.getUserData().getMaNguoiDung() : null;
+        userId = sm.getUserData() != null ? sm.getUserData().getId() : null;
         if (userId == null) { finish(); return; }
 
         // Back button

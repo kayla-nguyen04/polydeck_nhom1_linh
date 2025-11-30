@@ -46,9 +46,6 @@ const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const mat_khau_hash = await bcrypt.hash(mat_khau, salt);
 
-    // Tạo mã người dùng (dùng timestamp + random để đảm bảo unique)
-    const ma_nguoi_dung = `USER_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-
     // Tạo token xác thực email
     const emailVerificationToken = crypto.randomBytes(32).toString('hex');
     const emailVerificationExpire = new Date();
@@ -56,7 +53,6 @@ const register = async (req, res) => {
 
     // Tạo người dùng mới (chưa kích hoạt)
     const newUser = new NguoiDung({
-      ma_nguoi_dung,
       ho_ten,
       email: email.toLowerCase(),
       mat_khau_hash,
@@ -89,7 +85,7 @@ const register = async (req, res) => {
       success: true,
       message: 'Đăng ký thành công. Vui lòng kiểm tra email để kích hoạt tài khoản.',
       data: {
-        ma_nguoi_dung: newUser.ma_nguoi_dung,
+        _id: newUser._id,
         ho_ten: newUser.ho_ten,
         email: newUser.email,
         cap_do: newUser.cap_do,
@@ -168,7 +164,7 @@ const login = async (req, res) => {
       success: true,
       message: 'Đăng nhập thành công',
       data: {
-        ma_nguoi_dung: user.ma_nguoi_dung,
+        _id: user._id,
         ho_ten: user.ho_ten,
         email: user.email,
         cap_do: user.cap_do,
@@ -484,14 +480,12 @@ const googleLogin = async (req, res) => {
       await user.save();
     } else {
       // Tạo user mới - Google đã xác thực email nên tự động kích hoạt
-      const ma_nguoi_dung = `USER_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
       user = new NguoiDung({
-        ma_nguoi_dung,
         ho_ten: name,
         email: email.toLowerCase(),
         google_id: google_id,
         link_anh_dai_dien: picture,
-        // Không set mat_khau_hash vì đăng nhập bằng Google không cần password
+        mat_khau_hash: null, // Đăng nhập bằng Google không cần password
         cap_do: 1,
         diem_tich_luy: 0,
         chuoi_ngay_hoc: 0,
@@ -507,7 +501,7 @@ const googleLogin = async (req, res) => {
       success: true,
       message: 'Đăng nhập Google thành công',
       data: {
-        ma_nguoi_dung: user.ma_nguoi_dung,
+        _id: user._id,
         ho_ten: user.ho_ten,
         email: user.email,
         cap_do: user.cap_do,

@@ -6,9 +6,16 @@ const luaChonSchema = new mongoose.Schema({
 }, { _id: false });
 
 const cauHoiSchema = new mongoose.Schema({
-  ma_cau_hoi: { type: String, required: true, unique: true, trim: true },
-  ma_quiz: { type: String, required: true, trim: true },
-  ma_chu_de: { type: String, required: true, trim: true },
+  ma_quiz: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'BaiQuiz', 
+    required: true 
+  },
+  ma_chu_de: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'ChuDe', 
+    required: true 
+  },
   noi_dung_cau_hoi: { type: String, required: true, trim: true },
   dap_an_lua_chon: { type: [luaChonSchema], default: [] },
   dap_an_dung: { type: String, required: true, trim: true }

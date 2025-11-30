@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
                         // Gọi API lấy tiến độ học cho chủ đề đầu tiên
                         SessionManager sm = new SessionManager(requireContext());
                         LoginResponse user = sm.getUserData();
-                        String userId = user != null ? user.getMaNguoiDung() : null;
+                        String userId = user != null ? user.getId() : null;
 
                         if (userId == null) {
                             // Chưa đăng nhập: chỉ hiển thị tổng số từ

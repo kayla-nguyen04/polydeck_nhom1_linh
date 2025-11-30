@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const chuDeSchema = new mongoose.Schema({
-  ma_chu_de: { type: String, required: true, unique: true, trim: true },
   ten_chu_de: { type: String, required: true, trim: true },
   link_anh_icon: { type: String, default: null },
   so_luong_tu: { type: Number, default: 0, min: 0 },

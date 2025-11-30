@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const lichSuLamBaiSchema = new mongoose.Schema({
-  ma_lich_su: { type: String, required: true, unique: true, trim: true },
   ma_nguoi_dung: {
       type: Schema.Types.ObjectId, 
       ref: 'NguoiDung', 

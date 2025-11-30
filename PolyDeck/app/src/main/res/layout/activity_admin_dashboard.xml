@@ -73,7 +73,7 @@
             <!-- Card 1: Tổng người dùng -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
                 app:cardCornerRadius="16dp"
@@ -84,7 +84,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@drawable/gradient_purple_pink"
-                    android:padding="16dp">
+                    android:paddingTop="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -134,14 +137,17 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_users_label"
                         android:textColor="#E0E0E0"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Card 2: Bộ từ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
                 app:cardCornerRadius="16dp"
@@ -152,7 +158,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@drawable/gradient_teal"
-                    android:padding="16dp">
+                    android:paddingTop="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -201,14 +210,17 @@
                         android:layout_height="wrap_content"
                         android:text="@string/decks_label"
                         android:textColor="#E0E0E0"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Card 3: Người dùng hoạt động -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
                 app:cardCornerRadius="16dp"
@@ -219,7 +231,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@drawable/gradient_orange"
-                    android:padding="16dp">
+                    android:paddingTop="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -268,14 +283,17 @@
                         android:layout_height="wrap_content"
                         android:text="@string/active_users_label"
                         android:textColor="#E0E0E0"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Card 4: Tổng từ vựng -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="6dp"
                 app:cardCornerRadius="16dp"
@@ -286,7 +304,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@drawable/gradient_red"
-                    android:padding="16dp">
+                    android:paddingTop="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -335,7 +356,10 @@
                         android:layout_height="wrap_content"
                         android:text="@string/total_words_label"
                         android:textColor="#E0E0E0"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </GridLayout>

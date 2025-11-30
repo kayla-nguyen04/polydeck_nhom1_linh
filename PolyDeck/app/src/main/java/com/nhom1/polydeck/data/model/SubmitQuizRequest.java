@@ -13,9 +13,9 @@ public class SubmitQuizRequest {
         }
     }
 
-    public String ma_nguoi_dung;
-    public String ma_quiz;
-    public String ma_chu_de;
+    public String ma_nguoi_dung; // _id của user
+    public String ma_quiz; // _id của quiz
+    public String ma_chu_de; // _id của chủ đề (ObjectId ref)
     public int thoi_gian_lam_bai;
     public List<Answer> answers;
 }

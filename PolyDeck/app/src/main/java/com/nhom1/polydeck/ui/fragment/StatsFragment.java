@@ -72,7 +72,7 @@ public class StatsFragment extends Fragment {
         
         // Lấy thông tin user để có streak và XP chính xác
         LoginResponse user = sm.getUserData();
-        String userId = user != null ? user.getMaNguoiDung() : null;
+        String userId = user != null ? user.getId() : null;
         if (userId == null) return;
 
         // Cập nhật Streak và XP từ user data

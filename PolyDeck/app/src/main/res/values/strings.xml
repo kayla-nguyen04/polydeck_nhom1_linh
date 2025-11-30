@@ -40,4 +40,9 @@
     <string name="continue_with_google">Tiếp tục với Google</string>
     <string name="no_account">Chưa có tài khoản?</string>
     <string name="register">Đăng ký</string>
+    
+    <!-- Edit Deck Activity -->
+    <string name="processing">Đang xử lý…</string>
+    <string name="uploading">Đang tải lên…</string>
+    <string name="save_changes">Lưu thay đổi</string>
 </resources>

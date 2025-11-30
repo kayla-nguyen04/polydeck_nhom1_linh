@@ -13,7 +13,7 @@ router.get('/stats', async (req, res) => {
         const tongTuVung = await TuVung.countDocuments();
 
         const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        const nguoiDungMoi = await NguoiDung.countDocuments({ ngay_tao: { $gte: oneDayAgo } });
+        const nguoiDungMoi = await NguoiDung.countDocuments({ createdAt: { $gte: oneDayAgo } });
 
         res.json({
             tongNguoiDung,
@@ -35,7 +35,6 @@ router.post('/thong-bao', async (req, res) => {
     }
 
     const thongBao = new ThongBao({
-        ma_thong_bao: `TB_${Date.now()}`, 
         tieu_de: tieu_de,
         noi_dung: noi_dung,
     });

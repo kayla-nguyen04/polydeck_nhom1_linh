@@ -12,7 +12,7 @@ const getQuizByTopic = async (req, res) => {
         const { ma_chu_de } = req.params;
 
         // Tìm một bài quiz trong database có mã chủ đề tương ứng
-        const quiz = await BaiQuiz.findOne({ ma_chu_de });
+        const quiz = await BaiQuiz.findOne({ ma_chu_de: ma_chu_de }); // ma_chu_de từ params là ObjectId string
 
         if (!quiz || quiz.questions.length === 0) {
             return res.status(404).json({ message: 'Không tìm thấy bài quiz cho chủ đề này.' });
@@ -76,9 +76,9 @@ const submitQuiz = async (req, res) => {
 
         // Tạo một bản ghi lịch sử mới
         const newHistory = new LichSuLamBai({
-            ma_nguoi_dung,
-            ma_quiz,
-            ma_chu_de: correctQuiz.ma_chu_de,
+            ma_nguoi_dung: ma_nguoi_dung,
+            ma_quiz: ma_quiz,
+            ma_chu_de: correctQuiz.ma_chu_de, // ma_chu_de là ObjectId ref
             diem_so: Math.round(finalScore),
             so_cau_dung: score,
             tong_so_cau: totalQuestions,
@@ -87,7 +87,7 @@ const submitQuiz = async (req, res) => {
 
         // Cập nhật điểm tích lũy cho người dùng
         // Ví dụ: cộng thêm số điểm đạt được vào điểm tích lũy
-        await NguoiDung.updateOne({ ma_nguoi_dung }, { $inc: { diem_tich_luy: Math.round(finalScore) } });
+        await NguoiDung.updateOne({ _id: ma_nguoi_dung }, { $inc: { diem_tich_luy: Math.round(finalScore) } });
 
         // Trả về kết quả cho người dùng
         res.status(200).json({
@@ -110,7 +110,7 @@ const getHistoryByUser = async (req, res) => {
         const { ma_nguoi_dung } = req.params;
 
         // Tìm tất cả lịch sử làm bài của người dùng và sắp xếp theo ngày mới nhất
-        const history = await LichSuLamBai.find({ ma_nguoi_dung })
+        const history = await LichSuLamBai.find({ ma_nguoi_dung: ma_nguoi_dung })
             .populate({
                 path: 'ma_chu_de', // Lấy thông tin từ bảng ChuDe
                 select: 'ten_chu_de link_anh_icon' // Chỉ lấy tên và ảnh của chủ đề
@@ -125,6 +125,9 @@ const getHistoryByUser = async (req, res) => {
     }
 };
 
-
+// Register routes
+router.get('/by-topic/:ma_chu_de', getQuizByTopic);
+router.post('/submit', submitQuiz);
+router.get('/history/:ma_nguoi_dung', getHistoryByUser);
 
 module.exports = router;

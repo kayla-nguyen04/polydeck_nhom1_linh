@@ -60,7 +60,7 @@ public class EditProfileActivity extends AppCompatActivity {
         SessionManager sm = new SessionManager(this);
         LoginResponse user = sm.getUserData();
         if (user != null) {
-            userId = user.getMaNguoiDung();
+            userId = user.getId();
         }
 
         ImageButton btnBack = findViewById(R.id.btn_back);

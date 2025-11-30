@@ -1,6 +1,5 @@
 package com.nhom1.polydeck.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +43,13 @@ public class AdminPanelActivity extends AppCompatActivity {
         fetchAdminStats();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh stats khi quay lại màn hình (sau khi thêm bộ từ/từ vựng)
+        fetchAdminStats();
+    }
+
     private void initViews() {
         tvTotalUsersStat = findViewById(R.id.tvTotalUsersStat);
         tvTotalDecksStat = findViewById(R.id.tvTotalDecksStat);
@@ -71,9 +77,8 @@ public class AdminPanelActivity extends AppCompatActivity {
         menuSendNotification.setOnClickListener(v -> 
             startActivity(new Intent(this, SendNotificationActivity.class)));
 
-        menuSupportRequests.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng đang được phát triển", Toast.LENGTH_SHORT).show();
-        });
+        menuSupportRequests.setOnClickListener(v -> 
+            Toast.makeText(this, "Chức năng đang được phát triển", Toast.LENGTH_SHORT).show());
 
         btnLogout.setOnClickListener(v -> showLogoutDialog());
     }
@@ -97,7 +102,7 @@ public class AdminPanelActivity extends AppCompatActivity {
     }
 
     private void fetchAdminStats() {
-        apiService.getAdminStats().enqueue(new Callback<AdminStats>() {
+        apiService.getAdminStats().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<AdminStats> call, @NonNull Response<AdminStats> response) {
                 if (response.isSuccessful() && response.body() != null) {

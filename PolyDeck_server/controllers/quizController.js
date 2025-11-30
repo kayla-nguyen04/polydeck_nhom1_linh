@@ -7,7 +7,7 @@ const ChuDe = require('../models/ChuDe');
 const getQuizByTopic = async (req, res) => {
     try {
         const { ma_chu_de } = req.params;
-        const quiz = await BaiQuiz.findOne({ ma_chu_de });
+        const quiz = await BaiQuiz.findOne({ ma_chu_de: ma_chu_de }); // ma_chu_de từ params là ObjectId string
 
         if (!quiz || quiz.questions.length === 0) {
             return res.status(404).json({ message: 'Không tìm thấy bài quiz cho chủ đề này.' });
@@ -47,15 +47,15 @@ const submitQuiz = async (req, res) => {
         });
         const finalScore = (score / totalQuestions) * 100;
         const newHistory = new LichSuLamBai({
-            ma_nguoi_dung,
-            ma_quiz,
-            ma_chu_de: correctQuiz.ma_chu_de,
+            ma_nguoi_dung: ma_nguoi_dung,
+            ma_quiz: ma_quiz,
+            ma_chu_de: correctQuiz.ma_chu_de, // ma_chu_de là ObjectId ref
             diem_so: Math.round(finalScore),
             so_cau_dung: score,
             tong_so_cau: totalQuestions,
         });
         await newHistory.save();
-        await NguoiDung.updateOne({ ma_nguoi_dung }, { $inc: { diem_tich_luy: Math.round(finalScore) } });
+        await NguoiDung.updateOne({ _id: ma_nguoi_dung }, { $inc: { diem_tich_luy: Math.round(finalScore) } });
         res.status(200).json({
             message: 'Nộp bài thành công!',
             diem_so: Math.round(finalScore),
@@ -72,7 +72,7 @@ const submitQuiz = async (req, res) => {
 const getHistoryByUser = async (req, res) => {
     try {
         const { ma_nguoi_dung } = req.params;
-        const history = await LichSuLamBai.find({ ma_nguoi_dung })
+        const history = await LichSuLamBai.find({ ma_nguoi_dung: ma_nguoi_dung })
             .populate({
                 path: 'ma_chu_de',
                 select: 'ten_chu_de link_anh_icon'

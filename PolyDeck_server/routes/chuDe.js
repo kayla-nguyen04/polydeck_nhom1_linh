@@ -14,10 +14,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const resolveChuDeFilter = (identifier = '') => {
-    if (Types.ObjectId.isValid(identifier)) {
-        return { _id: identifier };
-    }
-    return { ma_chu_de: identifier };
+    return { _id: identifier };
 };
 
 
@@ -71,7 +68,6 @@ router.post('/chude_with_image', upload.single('file'), async (req, res) => {
         const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         
         const newChuDe = new ChuDe({
-            ma_chu_de: `CD_${Date.now()}`,
             ten_chu_de: ten_chu_de,
             link_anh_icon: fileUrl,
         });
@@ -84,10 +80,18 @@ router.post('/chude_with_image', upload.single('file'), async (req, res) => {
     }
 });
 
-// PUT: Cập nhật chủ đề
-router.put('/:id', async (req, res) => {
+// PUT: Cập nhật chủ đề (với file ảnh)
+router.put('/:id', upload.single('file'), async (req, res) => {
     try {
-        const updatedChuDe = await ChuDe.findOneAndUpdate(resolveChuDeFilter(req.params.id), req.body, { new: true });
+        const updateData = { ...req.body };
+        
+        // Nếu có file ảnh mới, cập nhật link_anh_icon
+        if (req.file) {
+            const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+            updateData.link_anh_icon = fileUrl;
+        }
+        
+        const updatedChuDe = await ChuDe.findOneAndUpdate(resolveChuDeFilter(req.params.id), updateData, { new: true });
         if (!updatedChuDe) return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
         res.json(updatedChuDe);
     } catch (err) {
@@ -119,11 +123,8 @@ router.post('/:chuDeId/them-tu-vung', async (req, res) => {
             return res.status(400).json({ message: 'Từ tiếng Anh và nghĩa tiếng Việt là bắt buộc.' });
         }
 
-        const maChuDe = chuDe.ma_chu_de || chuDe._id.toString();
-
         const tuVung = new TuVung({
-            ma_tu_vung: `TV_${Date.now()}`,
-            ma_chu_de: maChuDe,
+            ma_chu_de: chuDe._id,
             tu_tieng_anh,
             phien_am,
             nghia_tieng_viet,
@@ -147,8 +148,7 @@ router.get('/:chuDeId/tuvung', async (req, res) => {
         if (!chuDe) {
             return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
         }
-        const maChuDe = chuDe.ma_chu_de || req.params.chuDeId;
-        const vocabList = await TuVung.find({ ma_chu_de: maChuDe });
+        const vocabList = await TuVung.find({ ma_chu_de: chuDe._id });
         res.json(vocabList);
     } catch (err) {
         console.error('Lỗi khi lấy danh sách từ vựng:', err);
@@ -180,18 +180,16 @@ router.get('/:chuDeId/progress', async (req, res) => {
             });
         }
 
-        const maChuDe = chuDe.ma_chu_de || chuDeId;
-
         // Tổng số từ trong chủ đề (ưu tiên field so_luong_tu, fallback đếm thực tế)
         let totalWords = typeof chuDe.so_luong_tu === 'number' ? chuDe.so_luong_tu : 0;
         if (!totalWords || totalWords <= 0) {
-            totalWords = await TuVung.countDocuments({ ma_chu_de: maChuDe });
+            totalWords = await TuVung.countDocuments({ ma_chu_de: chuDe._id });
         }
 
         // Số từ đã học (trạng thái 'da_nho') cho user + chủ đề này
         const learnedWords = await TienDoHocTap.countDocuments({
             ma_nguoi_dung: userId,
-            ma_chu_de: maChuDe,
+            ma_chu_de: chuDe._id,
             trang_thai_hoc: 'da_nho'
         });
 
@@ -226,7 +224,6 @@ router.post('/:chuDeId/import-vocab', async (req, res) => {
             return res.status(400).json({ message: 'Danh sách từ vựng không hợp lệ' });
         }
 
-        const maChuDe = chuDe.ma_chu_de || chuDe._id.toString();
         let successCount = 0;
         let failCount = 0;
 
@@ -240,8 +237,7 @@ router.post('/:chuDeId/import-vocab', async (req, res) => {
                 }
 
                 const tuVung = new TuVung({
-                    ma_tu_vung: `TV_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-                    ma_chu_de: maChuDe,
+                    ma_chu_de: chuDe._id,
                     tu_tieng_anh: tu_tieng_anh.trim(),
                     phien_am: phien_am ? phien_am.trim() : null,
                     nghia_tieng_viet: nghia_tieng_viet.trim(),

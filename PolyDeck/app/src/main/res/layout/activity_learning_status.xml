@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9FAFB">
+
+    <!-- Header -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/gradient_header_rounded"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@android:color/white"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Tabs -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/tab_unknown"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Chưa nhớ"
+            android:textColor="#F44336"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#E0E0E0"/>
+
+        <TextView
+            android:id="@+id/tab_known"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Đã nhớ"
+            android:textColor="#9E9E9E"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+    <!-- List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_words"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false"/>
+
+    <!-- Empty state -->
+    <LinearLayout
+        android:id="@+id/empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Không có từ nào"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#9E9E9E"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hãy học flashcard để lưu trạng thái"
+            android:textSize="14sp"
+            android:textColor="#9E9E9E"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>
+

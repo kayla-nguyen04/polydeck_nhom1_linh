@@ -8,7 +8,6 @@ const { execSync } = require('child_process');
 
 const app = express();
 
-// Simple request logger to help debug requests coming from mobile
 app.use((req, res, next) => {
   try {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
@@ -37,7 +36,6 @@ app.use('/quiz', require('./routes/quiz'));
 
 
 
-// Debug/info endpoint: returns machine LAN IPs to help mobile testing
 app.get('/api/info', (req, res) => {
   try {
     const os = require('os');
@@ -62,7 +60,6 @@ app.use('/api/thongbao', require('./routes/thongBao'));
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 
-// Try to start server on DEFAULT_PORT, if it's in use try next ports up to a limit
 const startServer = async (port = DEFAULT_PORT, maxAttempts = 10) => {
   try {
     await connectDB();
@@ -88,14 +85,11 @@ const startServer = async (port = DEFAULT_PORT, maxAttempts = 10) => {
         })
         .on('error', (err) => {
           if (err.code === 'EADDRINUSE' && attemptsLeft > 0) {
-            // If initial requested port (DEFAULT_PORT) is in use, try to free it on Windows by
-            // finding the PID and killing it. This helps ensure the server runs on port 3000.
             if (p === DEFAULT_PORT) {
               try {
                 console.warn(`Port ${p} is in use. Attempting to find and kill owning process...`);
                 const cmd = `netstat -ano | findstr :${p}`;
                 const out = execSync(cmd, { encoding: 'utf8' });
-                // Parse PID from output (last column)
                 const lines = out.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
                 for (const line of lines) {
                   const parts = line.split(/\s+/);

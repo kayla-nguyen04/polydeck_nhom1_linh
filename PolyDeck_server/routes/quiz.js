@@ -6,7 +6,6 @@ const LichSuLamBai = require('../models/LichSuLamBai');
 const NguoiDung = require('../models/NguoiDung');
 const ChuDe = require('../models/ChuDe');
 
-// Helper function to create ApiResponse format
 const createApiResponse = (success, message, data = null) => {
     return {
         success,
@@ -15,7 +14,6 @@ const createApiResponse = (success, message, data = null) => {
     };
 };
 
-// ======= Tạo quiz =======
 const createQuiz = async (req, res) => {
     try {
         const { ma_chu_de, questions } = req.body;

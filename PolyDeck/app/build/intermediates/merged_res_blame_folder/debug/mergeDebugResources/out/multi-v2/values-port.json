@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.nhom1.polydeck.app-mergeDebugResources-43:/values-port/values-port.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\LINH\\.gradle\\caches\\9.0-milestone-1\\transforms\\0d8eebf95bebb3b7553c06544abf17ee\\transformed\\appcompat-1.7.1\\res\\values-port\\values-port.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "55",
+                        "endOffsets": "106"
+                    }
+                }
+            ]
+        }
+    ]
+}

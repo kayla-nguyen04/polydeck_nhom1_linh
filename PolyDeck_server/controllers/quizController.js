@@ -11,7 +11,6 @@ const createQuiz = async (req, res) => {
             return res.status(400).json({ message: 'Dữ liệu quiz không hợp lệ.' });
         }
 
-        // Xóa quiz cũ của chủ đề này nếu có
         await BaiQuiz.deleteMany({ ma_chu_de: ma_chu_de });
 
         // Tạo một bài quiz mới dựa trên model BaiQuiz

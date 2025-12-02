@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.nhom1.polydeck.app-mergeDebugResources-43:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\LINH\\.gradle\\caches\\9.0-milestone-1\\transforms\\ecc69882329a7525b8d857317bb6dbf1\\transformed\\material-1.13.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "63",
+                        "endOffsets": "114"
+                    }
+                }
+            ]
+        }
+    ]
+}

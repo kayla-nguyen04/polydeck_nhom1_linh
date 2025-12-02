@@ -1,0 +1,818 @@
+[
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_settings.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_rank_badge_white.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_rank_badge_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_outline_purple.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_outline_purple.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_lock.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_lock.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_create_quiz.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_create_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_user.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_user.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_red.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_red.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_purple.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_purple.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image31.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image31.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_more_vert.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_more_vert.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_edittext.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_edittext.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_excel.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_excel.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_dotted_border.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_dotted_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_language.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_language.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_violet.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_violet.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_deck.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_deck.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_badge_published.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_badge_published.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_topics.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_topics.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_deck.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_deck.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_delete.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_delete.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_favorite_filled.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_favorite_filled.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image32.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image32.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_fragment_home.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_profile.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_flashcard_done.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_flashcard_done.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_dark_mode.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_dark_mode.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_manage_decks.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_manage_decks.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_quiz_list.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_quiz_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_logout.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_logout.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_deck_icon_orange.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_deck_icon_orange.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_header_orange.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_header_orange.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_topic_detail.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_topic_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_vocab_chip_learned_bg.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\vocab_chip_learned_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_edit_profile.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_edit_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_admin_avatar_placeholder.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_admin_avatar_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_outline_gray.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_outline_gray.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_settings.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_search_edit_text.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_search_edit_text.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_check.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_check.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_bottom_nav_rounded.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_bottom_nav_rounded.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_history.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_history.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\menu_bottom_menu.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\menu\\bottom_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_user_management.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_user_management.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_btn_rounded_outline.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\btn_rounded_outline.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_upload_file.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_upload_file.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_header_rounded.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_header_rounded.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_arrow_right.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_arrow_right.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\color_bottom_nav_tint.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\color\\bottom_nav_tint.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_purple_pink.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_purple_pink.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_deck_icon_container.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_deck_icon_container.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_deck_food.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_deck_food.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_stats_card.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_stats_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_create_quiz.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_create_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_search.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_heart_filled.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_heart_filled.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_outline_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_outline_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_add_deck.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_add_deck.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_quiz_option.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_quiz_option.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_delete.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_delete.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_edit_deck.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_edit_deck.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_red.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_red.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_book.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_book.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_user_detail.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_user_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_dialog_flashcard_mode.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\dialog_flashcard_mode.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_google.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_google.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_profile.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_header_rounded.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_header_rounded.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_stats.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_stats.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_btn_rounded_solid.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\btn_rounded_solid.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_circle_purple.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\circle_purple.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_progress_xp_drawable.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\progress_xp_drawable.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_quiz_question.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_quiz_question.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_more.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_more.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_icon_book.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_icon_book.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_fragment_topics.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\fragment_topics.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_leaderboard_row.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_leaderboard_row.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_active.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_active.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_badge_white.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_badge_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image60.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image60.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_left_accent_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_left_accent_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_circle_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\circle_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_heart_outline.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_heart_outline.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_fragment_stats.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\fragment_stats.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_add.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_add.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_volume.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_volume.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_deck_management.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_deck_management.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_deck_animals.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_deck_animals.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_upload_button.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_upload_button.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_edit.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_edit.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_admin_panel.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_admin_panel.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_vocabulary.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_vocabulary.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_sound.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_sound.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_refresh.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_refresh.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_icon_book_orange.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_icon_book_orange.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_input.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_input.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_login_primary.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_login_primary.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_spinner.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_spinner.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_eye_on.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_eye_on.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_gradient.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_gradient.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_quiz_admin.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_quiz_admin.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-anydpi\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_orange.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_orange.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_forgot_password.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_forgot_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_support.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_support.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_support.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_support.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_send_notification.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_send_notification.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_flashcard.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_flashcard.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_view.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_view.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_header_solid.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_header_solid.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_change_password.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_change_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_arrow_back.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_arrow_back.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_eye_off.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_eye_off.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_create_deck.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_create_deck.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_default_deck_icon.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_default_deck_icon.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_icon_soft.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_icon_soft.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image39.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image39.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_learning_status.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_learning_status.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_fragment_profile.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\fragment_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_quiz.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_pink.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_pink.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_add.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_add.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_circle_white_border.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\circle_white_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_vocabulary_list.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_vocabulary_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_rounded_bg.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\rounded_bg.xml"
+    },
+    {
+        "merged": "com.nhom1.polydeck.app-debug-45:/layout_activity_quiz_management.xml.flat",
+        "source": "com.nhom1.polydeck.app-main-47:/layout/activity_quiz_management.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_trophy.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_trophy.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_card_white.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_card_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_search_translucent.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_search_translucent.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_outline_red.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_outline_red.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_blue.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_blue.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_favorite_word.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_favorite_word.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_notification.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_notification.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_outline_blue.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_outline_blue.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_quiz_result.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_quiz_result.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_search.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_search.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_favorites.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_favorites.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_admin_dashboard.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_admin_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_blue.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_blue.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_google.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_google.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_option_selector.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_option_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\menu_main_menu.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\menu\\main_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_score_pill_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_score_pill_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_category_tag.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_category_tag.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_deck_sports.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_deck_sports.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_notifications.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_notifications.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_fire.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_fire.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_excel_icon.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_excel_icon.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_card_rounded_20.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_card_rounded_20.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_avatar_placeholder.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_avatar_placeholder.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_status_active.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_status_active.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_close.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_close.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_logo.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_logo.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_vocabulary.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_vocabulary.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_color_selector_teal.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\color_selector_teal.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_deck_white.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_deck_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_circle_surface.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_circle_surface.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_deck_icon.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_deck_icon.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_bookmark.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_bookmark.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_home.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_add_vocabulary.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_add_vocabulary.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_back.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_back.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_teal.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_teal.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_circle_blue.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\circle_blue.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_gradient_purple.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\gradient_purple.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_icon_purple.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_icon_purple.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_leaderboard.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_leaderboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_button_edit.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_button_edit.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image48.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image48.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_favorite_border.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_favorite_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_quiz_list.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_quiz_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_learning_status.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_learning_status.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_abbreviation.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_abbreviation.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_rank_circle.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_rank_circle.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_favorites_stats.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_favorites_stats.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_welcome_activity.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\welcome_activity.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_save.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_save.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_image30.png.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\image30.png"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_status_banned.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_status_banned.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_users.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_users.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_status_blocked.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_status_blocked.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\layout_item_deck_user.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\layout\\item_deck_user.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_quiz.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_quiz.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_icon_book_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_icon_book_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_manage_users.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_manage_users.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_deck_icon_green.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_deck_icon_green.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_bg_stats_tile.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\bg_stats_tile.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-debug-45:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\LINH\\.gradle\\daemon\\9.0-milestone-1\\com.nhom1.polydeck.app-main-47:\\mipmap-anydpi\\ic_launcher.xml"
+    }
+]

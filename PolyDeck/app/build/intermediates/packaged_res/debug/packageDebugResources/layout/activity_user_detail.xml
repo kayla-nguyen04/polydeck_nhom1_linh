@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9FAFB"
+    tools:context=".ui.activity.UserDetailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_user_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Chi tiết người dùng" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Avatar Section -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivDetailAvatar"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/circle_purple" />
+
+            <TextView
+                android:id="@+id/tvDetailUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:textColor="#1F2937"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Nguyễn Văn A" />
+
+            <!-- User Info Fields -->
+            <TextView
+                style="@style/UserDetailLabel"
+                android:text="Họ và tên" />
+            <EditText
+                android:id="@+id/etDetailFullName"
+                style="@style/UserDetailEditText"
+                tools:text="Nguyễn Văn A"/>
+
+            <TextView
+                style="@style/UserDetailLabel"
+                android:text="Email" />
+            <EditText
+                android:id="@+id/etDetailEmail"
+                style="@style/UserDetailEditText"
+                tools:text="nguyenvana@email.com"/>
+            
+            <TextView
+                style="@style/UserDetailLabel"
+                android:text="Level" />
+            <EditText
+                android:id="@+id/etDetailLevel"
+                style="@style/UserDetailEditText"
+                android:inputType="number"
+                tools:text="5"/>
+
+            <TextView
+                style="@style/UserDetailLabel"
+                android:text="XP" />
+            <EditText
+                android:id="@+id/etDetailXp"
+                style="@style/UserDetailEditText"
+                android:inputType="number"
+                tools:text="1250"/>
+
+            <TextView
+                style="@style/UserDetailLabel"
+                android:text="Ngày tham gia" />
+            <EditText
+                android:id="@+id/etDetailJoinDate"
+                style="@style/UserDetailEditText"
+                android:enabled="false"
+                tools:text="10/10/2024"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSaveChanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lưu thay đổi"
+        android:layout_margin="16dp"/>
+
+</LinearLayout>

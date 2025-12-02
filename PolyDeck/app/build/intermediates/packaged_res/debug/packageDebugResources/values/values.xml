@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="admin_card_1">#EDE9FE</color>
+    <color name="admin_card_2">#DBEAFE</color>
+    <color name="admin_card_3">#D1FAE5</color>
+    <color name="admin_card_4">#FEE2E2</color>
+    <color name="black">#FF000000</color>
+    <color name="blue">@color/blue_500</color>
+    <color name="blue_500">#2563EB</color>
+    <color name="gray_100">#F3F4F6</color>
+    <color name="gray_200">#E5E7EB</color>
+    <color name="gray_400">#9CA3AF</color>
+    <color name="gray_50">#F9FAFB</color>
+    <color name="gray_800">#1F2937</color>
+    <color name="gray_900">#111827</color>
+    <color name="gray_background">@color/gray_100</color>
+    <color name="gray_dark">@color/gray_800</color>
+    <color name="gray_light">@color/gray_200</color>
+    <color name="gray_medium">@color/gray_400</color>
+    <color name="purple">@color/purple_500</color>
+    <color name="purple_500">#6D28D9</color>
+    <color name="purple_700">#5B21B6</color>
+    <color name="red_error">#DC2626</color>
+    <color name="status_active_bg">#D1FAE5</color>
+    <color name="status_active_text">#065F46</color>
+    <color name="status_banned_bg">#FEE2E2</color>
+    <color name="status_banned_text">#991B1B</color>
+    <color name="surface">@color/white</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <string name="active_users_label">Người dùng hoạt động</string>
+    <string name="admin_panel_subtitle">Quản lý hệ thống PolyDeck</string>
+    <string name="admin_panel_title">Admin Panel</string>
+    <string name="app_logo">PolyDeck Logo</string>
+    <string name="app_name">PolyDeck</string>
+    <string name="back">Quay lại</string>
+    <string name="blocked_label">Bị khóa</string>
+    <string name="button_block">Khóa</string>
+    <string name="button_detail">Chi tiết</string>
+    <string name="continue_with_google">Tiếp tục với Google</string>
+    <string name="decks_label">Bộ từ</string>
+    <string name="email_hint">example@email.com</string>
+    <string name="email_label">Email</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="login_button">Đăng nhập</string>
+    <string name="login_title">Đăng nhập vào tài khoản của bạn</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="management_section_title">Quản lý</string>
+    <string name="menu_create_quiz">Tạo Quiz</string>
+    <string name="menu_decks">Bộ từ</string>
+    <string name="menu_notifications">Thông báo</string>
+    <string name="menu_support">Hỗ trợ</string>
+    <string name="menu_users">Người dùng</string>
+    <string name="no_account">Chưa có tài khoản?</string>
+    <string name="or_separator">hoặc</string>
+    <string name="password_label">Mật khẩu</string>
+    <string name="processing">Đang xử lý…</string>
+    <string name="register">Đăng ký</string>
+    <string name="save_changes">Lưu thay đổi</string>
+    <string name="search_user_hint">Tìm kiếm người dùng...</string>
+    <string name="search_users_hint">Tìm kiếm người dùng...</string>
+    <string name="status_active">Hoạt động</string>
+    <string name="status_banned">Bị khóa</string>
+    <string name="total_label">Tổng</string>
+    <string name="total_users_label">Tổng người dùng</string>
+    <string name="total_words_label">Tổng từ vựng</string>
+    <string name="uploading">Đang tải lên…</string>
+    <string name="user_management_title">Quản lý người dùng</string>
+    <style name="AdminMenuCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+    <style name="AdminMenuCard.Content" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="AdminMenuCard.Icon" parent="">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:tint">#4C1D95</item> 
+    </style>
+    <style name="AdminMenuCard.Text" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">#1F2937</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AdminStatCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:minHeight">150dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+    <style name="AdminStatCard.Content" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:gravity">start|top</item>
+        <item name="android:minHeight">150dp</item>
+    </style>
+    <style name="AdminStatCard.Growth" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:alpha">0.8</item>
+    </style>
+    <style name="AdminStatCard.Label" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="AdminStatCard.Value" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="AnswerEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+    <style name="AnswerOptionLayout" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+    <style name="AnswerRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton"> 
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        
+    </style>
+    <style name="Theme.PolyDeck" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <item name="colorSecondary">@color/blue_500</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        
+        <item name="android:windowBackground">@color/gray_100</item> 
+        <item name="colorSurface">@color/white</item> 
+        
+        
+        <item name="colorOnSurface">@color/gray_900</item> 
+        <item name="android:textColorPrimary">@color/gray_900</item>
+        <item name="android:textColorSecondary">@color/gray_400</item>
+        
+        
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+    </style>
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+    <style name="UserDetailEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_search_edit_text</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">#1F2937</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="UserDetailLabel" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textColor">#6B7280</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+</resources>

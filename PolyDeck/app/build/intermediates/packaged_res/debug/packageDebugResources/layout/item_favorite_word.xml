@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:background="#FFFFFF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icon & Word Info -->
+        <LinearLayout
+            android:id="@+id/leftContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/rightActions"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Icon Book -->
+            <ImageView
+                android:id="@+id/iconBook"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_book"
+                android:background="@drawable/bg_icon_book"
+                android:padding="12dp"
+                android:tint="#FFFFFF"/>
+
+            <!-- Word Details -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <!-- Word + Speaker -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvWord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Beautiful"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#111827"/>
+
+                    <ImageView
+                        android:id="@+id/btnSpeak"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_volume"
+                        android:tint="#3B82F6"/>
+                </LinearLayout>
+
+                <!-- Pronunciation -->
+                <TextView
+                    android:id="@+id/tvPronunciation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="/ˈbjuː.tɪ.fəl/"
+                    android:textSize="13sp"
+                    android:textColor="#6B7280"/>
+
+                <!-- Meaning -->
+                <TextView
+                    android:id="@+id/tvMeaning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Đẹp, xinh đẹp"
+                    android:textSize="14sp"
+                    android:textColor="#111827"/>
+
+                <!-- Example -->
+                <TextView
+                    android:id="@+id/tvExample"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="&quot;What a beautiful day!&quot;"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    android:textColor="#9CA3AF"/>
+
+                <!-- Category Tag -->
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_category_tag"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="Basic English"
+                    android:textSize="11sp"
+                    android:textColor="#6B7280"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Right Actions -->
+        <LinearLayout
+            android:id="@+id/rightActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Heart Icon -->
+            <ImageView
+                android:id="@+id/btnFavorite"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_heart_filled"
+                android:tint="#EF4444"
+                android:padding="6dp"/>
+
+            <!-- Delete Icon -->
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_delete"
+                android:tint="#D1D5DB"
+                android:padding="6dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

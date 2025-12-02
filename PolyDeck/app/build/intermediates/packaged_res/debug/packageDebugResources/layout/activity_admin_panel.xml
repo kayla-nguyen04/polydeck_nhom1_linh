@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground"
+    tools:context=".ui.activity.AdminPanelActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Admin Panel"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnLogout"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_logout"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ProgressBar
+                android:id="@+id/statsProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <!-- Stats Grid -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:useDefaultMargins="true">
+
+                <androidx.cardview.widget.CardView style="@style/AdminStatCard" app:cardBackgroundColor="@color/admin_card_1">
+                    <LinearLayout style="@style/AdminStatCard.Content">
+                        <TextView style="@style/AdminStatCard.Value" android:id="@+id/tvTotalUsers" android:text="-"/>
+                        <TextView style="@style/AdminStatCard.Label" android:text="Người dùng"/>
+                        <TextView style="@style/AdminStatCard.Growth" android:id="@+id/tvUserGrowth" android:text=""/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView style="@style/AdminStatCard" app:cardBackgroundColor="@color/admin_card_2">
+                    <LinearLayout style="@style/AdminStatCard.Content">
+                        <TextView style="@style/AdminStatCard.Value" android:id="@+id/tvTotalDecks" android:text="-"/>
+                        <TextView style="@style/AdminStatCard.Label" android:text="Bộ từ"/>
+                        <TextView style="@style/AdminStatCard.Growth" android:id="@+id/tvDeckGrowth" android:text=""/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                 <androidx.cardview.widget.CardView style="@style/AdminStatCard" app:cardBackgroundColor="@color/admin_card_3">
+                    <LinearLayout style="@style/AdminStatCard.Content">
+                        <TextView style="@style/AdminStatCard.Value" android:id="@+id/tvTotalQuizzes" android:text="-"/>
+                        <TextView style="@style/AdminStatCard.Label" android:text="Quiz"/>
+                        <TextView style="@style/AdminStatCard.Growth" android:id="@+id/tvQuizGrowth" android:text=""/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                 <androidx.cardview.widget.CardView style="@style/AdminStatCard" app:cardBackgroundColor="@color/admin_card_4">
+                    <LinearLayout style="@style/AdminStatCard.Content">
+                        <TextView style="@style/AdminStatCard.Value" android:id="@+id/tvTotalWords" android:text="-"/>
+                        <TextView style="@style/AdminStatCard.Label" android:text="Tổng số từ"/>
+                        <TextView style="@style/AdminStatCard.Growth" android:id="@+id/tvWordGrowth" android:text=""/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </GridLayout>
+
+            <!-- Management Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Quản lý"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:useDefaultMargins="true">
+
+                <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/cardUserManagement">
+                    <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_manage_users"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Người dùng"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/cardDeckManagement">
+                     <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_manage_decks"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Bộ từ"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/cardQuizManagement">
+                     <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_quiz_list"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Quản lý Quiz"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/cardNotification">
+                     <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_notification"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Thông báo"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                 <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/cardSettings">
+                     <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_support"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Hỗ trợ"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

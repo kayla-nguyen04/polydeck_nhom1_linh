@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_active"
+        android:tint="#22C55E"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã học xong!"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bạn đã hoàn thành 5 từ vựng..."
+        android:textColor="@color/gray_medium"
+        android:gravity="center"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btn_quiz_now"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Làm bài kiểm tra ngay"
+        android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/btn_back_list"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Quay lại danh sách"
+        android:layout_marginTop="12dp"/>
+</LinearLayout>
+
+

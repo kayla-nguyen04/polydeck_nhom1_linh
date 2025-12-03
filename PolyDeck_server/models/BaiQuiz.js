@@ -23,6 +23,7 @@ const questionSchema = new Schema({
     answers: [answerSchema] // Một câu hỏi có một mảng các câu trả lời
 }, { _id: false });
 
+// --- Định nghĩa cấu- trúc chính cho Bài Quiz ---
 const baiQuizSchema = new Schema({
   ma_chu_de: { 
     type: Schema.Types.ObjectId, 

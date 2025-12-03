@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Question Number and Content -->
+        <TextView
+            android:id="@+id/tvQuestionNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Câu 1"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#3B82F6"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvQuestionContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nội dung câu hỏi?"
+            android:textSize="16sp"
+            android:textColor="#111827"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Answers -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvAnswer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="12dp"
+                android:background="@drawable/bg_answer_option"
+                android:text="A. Đáp án 1"
+                android:textSize="14sp"
+                android:textColor="#111827"/>
+
+            <TextView
+                android:id="@+id/tvAnswer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="12dp"
+                android:background="@drawable/bg_answer_option"
+                android:text="B. Đáp án 2"
+                android:textSize="14sp"
+                android:textColor="#111827"/>
+
+            <TextView
+                android:id="@+id/tvAnswer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="12dp"
+                android:background="@drawable/bg_answer_option"
+                android:text="C. Đáp án 3"
+                android:textSize="14sp"
+                android:textColor="#111827"/>
+
+            <TextView
+                android:id="@+id/tvAnswer4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:background="@drawable/bg_answer_option"
+                android:text="D. Đáp án 4"
+                android:textSize="14sp"
+                android:textColor="#111827"/>
+
+        </LinearLayout>
+
+        <!-- Correct Answer Indicator -->
+        <TextView
+            android:id="@+id/tvCorrectAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_badge_published"
+            android:text="Đáp án đúng: A"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#10B981"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+
+
+

@@ -84,6 +84,10 @@ public class DeckManagementActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         rvDecks.setLayoutManager(new LinearLayoutManager(this));
         deckAdapter = new DeckAdapter(this, new ArrayList<>());
+        deckAdapter.setOnDeckDeletedListener(() -> {
+            // Refresh data when deck is deleted
+            fetchDecks();
+        });
         rvDecks.setAdapter(deckAdapter);
     }
 

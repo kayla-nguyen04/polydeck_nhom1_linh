@@ -50,6 +50,7 @@ public class AddDeckActivity extends AppCompatActivity {
     private EditText etDeckName;
     private TextView btnSelectImage;
     private ImageView ivIconPreview;
+    private View containerImagePreview;
     private Button btnCreateDeck;
 
     private Uri imageUri;
@@ -67,6 +68,7 @@ public class AddDeckActivity extends AppCompatActivity {
         etDeckName = findViewById(R.id.etDeckName);
         btnSelectImage = findViewById(R.id.btnSelectImage);
         ivIconPreview = findViewById(R.id.ivIconPreview);
+        containerImagePreview = findViewById(R.id.containerImagePreview);
         btnCreateDeck = findViewById(R.id.btnCreateDeck);
 
         setSupportActionBar(toolbar);
@@ -74,6 +76,7 @@ public class AddDeckActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         btnSelectImage.setOnClickListener(v -> openFileChooser());
+        ivIconPreview.setOnClickListener(v -> openFileChooser());
         btnCreateDeck.setOnClickListener(v -> createDeckWithImage());
         
         // Load existing decks to check for duplicates
@@ -117,7 +120,7 @@ public class AddDeckActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             ivIconPreview.setImageURI(imageUri);
-            ivIconPreview.setVisibility(View.VISIBLE);
+            containerImagePreview.setVisibility(View.VISIBLE);
             btnSelectImage.setVisibility(View.GONE);
         }
     }

@@ -3,6 +3,7 @@ package com.nhom1.polydeck.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ public class AdminPanelActivity extends AppCompatActivity {
     private static final String TAG = "AdminPanelActivity";
 
     private TextView tvTotalUsersStat, tvTotalDecksStat, tvNewUsersStat, tvTotalVocabStat;
-    private CardView menuUserManagement, menuDeckManagement, menuCreateQuiz, menuSendNotification, menuSupportRequests;
+    private CardView menuUserManagement, menuDeckManagement, menuCreateQuiz, menuSendNotification, menuSupportRequests, menuQuizManagement;
     private ImageView btnLogout;
     private APIService apiService;
 
@@ -61,6 +62,7 @@ public class AdminPanelActivity extends AppCompatActivity {
         menuCreateQuiz = findViewById(R.id.menuCreateQuiz);
         menuSendNotification = findViewById(R.id.menuSendNotification);
         menuSupportRequests = findViewById(R.id.menuSupportRequests);
+        menuQuizManagement = findViewById(R.id.menuQuizManagement);
         btnLogout = findViewById(R.id.btnLogout);
     }
 
@@ -72,13 +74,16 @@ public class AdminPanelActivity extends AppCompatActivity {
             startActivity(new Intent(this, DeckManagementActivity.class)));
 
         menuCreateQuiz.setOnClickListener(v -> 
-            startActivity(new Intent(this, CreateQuizActivity.class)));
+            startActivity(new Intent(this, QuizManagementActivity.class)));
 
         menuSendNotification.setOnClickListener(v -> 
             startActivity(new Intent(this, SendNotificationActivity.class)));
 
-        menuSupportRequests.setOnClickListener(v -> 
-            Toast.makeText(this, "Chức năng đang được phát triển", Toast.LENGTH_SHORT).show());
+        // Support requests removed - users now contact via Gmail
+        menuSupportRequests.setVisibility(View.GONE);
+
+        menuQuizManagement.setOnClickListener(v -> 
+            startActivity(new Intent(this, QuizManagementActivity.class)));
 
         btnLogout.setOnClickListener(v -> showLogoutDialog());
     }
@@ -102,7 +107,7 @@ public class AdminPanelActivity extends AppCompatActivity {
     }
 
     private void fetchAdminStats() {
-        apiService.getAdminStats().enqueue(new Callback<>() {
+        apiService.getAdminStats().enqueue(new Callback<AdminStats>() {
             @Override
             public void onResponse(@NonNull Call<AdminStats> call, @NonNull Response<AdminStats> response) {
                 if (response.isSuccessful() && response.body() != null) {

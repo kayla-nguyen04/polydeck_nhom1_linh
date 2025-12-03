@@ -1,15 +1,47 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+# ---------------------------------------------------------------- #
+# 1. OUTPUT FILES & BUILD ARTIFACTS (Bắt buộc phải bỏ qua)
+# ---------------------------------------------------------------- #
 /build
-/captures
-.externalNativeBuild
-.cxx
+PolyDeck/build/
+PolyDeck/app/build/
+**/build/
+/captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# ---------------------------------------------------------------- #
+# 2. IDE CONFIGURATION (Thư mục cấu hình của Android Studio)
+# ---------------------------------------------------------------- #
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+*.iml
+
+# ---------------------------------------------------------------- #
+# 3. GRADLE & BUILD SYSTEM
+# ---------------------------------------------------------------- #
+.gradle/
+.externalNativeBuild/
+.cxx/
+
+# ---------------------------------------------------------------- #
+# 4. ENVIRONMENT & OS FILES
+# ---------------------------------------------------------------- #
+.DS_Store
 local.properties
+PolyDeck/local.properties
+
+# ---------------------------------------------------------------- #
+# 5. SERVER FILES
+# ---------------------------------------------------------------- #
+PolyDeck_server/node_modules/
+PolyDeck_server/public/uploads/
+PolyDeck_server/scripts/drop-database.js
+PolyDeck_server/.env

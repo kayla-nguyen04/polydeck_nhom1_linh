@@ -255,7 +255,8 @@ public class AddVocabularyActivity extends AppCompatActivity {
                 }
 
                 if (!vocabList.isEmpty()) {
-                    runOnUiThread(() -> uploadVocabList(vocabList));
+                    // Filter out duplicates before uploading
+                    runOnUiThread(() -> filterAndUploadVocabList(vocabList));
                 } else {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Không tìm thấy dữ liệu hợp lệ trong tệp Excel.", Toast.LENGTH_LONG).show();
@@ -324,16 +325,103 @@ public class AddVocabularyActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadVocabList(List<TuVung> vocabList) {
+    private void filterAndUploadVocabList(List<TuVung> vocabList) {
+        // Filter out duplicates
+        List<TuVung> newVocabList = new ArrayList<>();
+        List<String> duplicateWords = new ArrayList<>();
+        
+        for (TuVung vocab : vocabList) {
+            String englishWord = vocab.getTuTiengAnh();
+            if (englishWord != null && !englishWord.trim().isEmpty()) {
+                if (isVocabularyDuplicate(englishWord)) {
+                    duplicateWords.add(englishWord);
+                } else {
+                    newVocabList.add(vocab);
+                }
+            }
+        }
+        
+        // Check for duplicates within the import list itself
+        List<String> seenInImport = new ArrayList<>();
+        List<TuVung> finalVocabList = new ArrayList<>();
+        List<String> duplicateInFile = new ArrayList<>();
+        
+        for (TuVung vocab : newVocabList) {
+            String englishWord = vocab.getTuTiengAnh();
+            if (englishWord != null) {
+                String lowerWord = englishWord.trim().toLowerCase();
+                if (seenInImport.contains(lowerWord)) {
+                    duplicateInFile.add(englishWord);
+                } else {
+                    seenInImport.add(lowerWord);
+                    finalVocabList.add(vocab);
+                }
+            }
+        }
+        
+        int totalCount = vocabList.size();
+        int duplicateCount = duplicateWords.size() + duplicateInFile.size();
+        int newCount = finalVocabList.size();
+        
+        if (finalVocabList.isEmpty()) {
+            String message;
+            if (duplicateCount > 0) {
+                message = "Tất cả " + totalCount + " từ vựng đã tồn tại trong bộ từ này. Không có từ vựng mới để import.";
+            } else {
+                message = "Không có từ vựng hợp lệ để import.";
+            }
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        // Show warning if there are duplicates
+        if (duplicateCount > 0) {
+            String duplicateMessage = "Có " + duplicateCount + " từ vựng trùng (đã bỏ qua). ";
+            if (duplicateWords.size() > 0) {
+                duplicateMessage += duplicateWords.size() + " từ đã tồn tại trong bộ từ. ";
+            }
+            if (duplicateInFile.size() > 0) {
+                duplicateMessage += duplicateInFile.size() + " từ trùng trong file Excel. ";
+            }
+            duplicateMessage += "Sẽ import " + newCount + " từ vựng mới.";
+            Toast.makeText(this, duplicateMessage, Toast.LENGTH_LONG).show();
+        }
+        
+        // Upload only new vocabulary
+        uploadVocabList(finalVocabList, newCount, duplicateCount);
+    }
+    
+    private void uploadVocabList(List<TuVung> vocabList, int newCount, int duplicateCount) {
         apiService.importVocab(deckId, vocabList).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 // showLoading(false);
                 if (response.isSuccessful()) {
-                    Toast.makeText(AddVocabularyActivity.this, "Đã import thành công " + vocabList.size() + " từ vựng!", Toast.LENGTH_LONG).show();
+                    // Reload existing vocabulary list to update it
+                    loadExistingVocabulary();
+                    
+                    String message = "Đã import thành công " + newCount + " từ vựng!";
+                    if (duplicateCount > 0) {
+                        message += " (Đã bỏ qua " + duplicateCount + " từ trùng)";
+                    }
+                    Toast.makeText(AddVocabularyActivity.this, message, Toast.LENGTH_LONG).show();
                     finish(); // Close activity after successful import
                 } else {
-                    Toast.makeText(AddVocabularyActivity.this, "Import thất bại", Toast.LENGTH_SHORT).show();
+                    String errorMessage = "Import thất bại";
+                    try {
+                        if (response.errorBody() != null) {
+                            String errorBody = response.errorBody().string();
+                            Log.e(TAG, "Import vocab failed - Error body: " + errorBody);
+                            if (errorBody.toLowerCase().contains("đã tồn tại") || 
+                                errorBody.toLowerCase().contains("already exists") ||
+                                errorBody.toLowerCase().contains("duplicate")) {
+                                errorMessage = "Một số từ vựng đã tồn tại. Vui lòng kiểm tra lại.";
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error reading error body", e);
+                    }
+                    Toast.makeText(AddVocabularyActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                 }
             }
 

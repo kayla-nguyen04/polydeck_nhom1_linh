@@ -21,6 +21,9 @@ public class User {
     @SerializedName("diem_tich_luy")
     private int xp;
 
+    @SerializedName("chuoi_ngay_hoc")
+    private int chuoiNgayHoc;
+
     @SerializedName("ngay_tao")
     private String ngayThamGia;
 
@@ -46,6 +49,9 @@ public class User {
 
     public int getXp() { return xp; }
     public void setXp(int xp) { this.xp = xp; }
+
+    public int getChuoiNgayHoc() { return chuoiNgayHoc; }
+    public void setChuoiNgayHoc(int chuoiNgayHoc) { this.chuoiNgayHoc = chuoiNgayHoc; }
 
     public String getNgayThamGia() { return ngayThamGia; }
     public void setNgayThamGia(String ngayThamGia) { this.ngayThamGia = ngayThamGia; }

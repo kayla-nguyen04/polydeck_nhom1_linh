@@ -81,7 +81,7 @@ public class EditDeckActivity extends AppCompatActivity {
     }
     
     private void loadExistingDecks() {
-        apiService.getAllChuDe().enqueue(new Callback<>() {
+        apiService.getAllChuDe().enqueue(new Callback<List<BoTu>>() {
             @Override
             public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -127,7 +127,7 @@ public class EditDeckActivity extends AppCompatActivity {
     }
 
     private void fetchDeckDetails() {
-        apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
+        apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
             @Override
             public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -231,7 +231,7 @@ public class EditDeckActivity extends AppCompatActivity {
         }
 
         Log.d(TAG, "Updating deck with ID: " + deckId + ", Name: " + newDeckName + ", Icon: " + updateDeck.getLinkAnhIcon());
-        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<>() {
+        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<BoTu>() {
             @Override
             public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -294,10 +294,12 @@ public class EditDeckActivity extends AppCompatActivity {
         RequestBody requestFile = RequestBody.create(mediaType, file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        RequestBody tenChuDe = RequestBody.create(MediaType.parse("multipart/form-data"), deckName);
+        // Tạo RequestBody cho id và ten_chu_de
+        RequestBody idRequestBody = RequestBody.create(MediaType.parse("text/plain"), deckId);
+        RequestBody tenChuDe = RequestBody.create(MediaType.parse("text/plain"), deckName);
 
         Log.d(TAG, "Updating deck with image - ID: " + deckId + ", Name: " + deckName);
-        apiService.updateChuDeWithImage(deckId, body, tenChuDe).enqueue(new Callback<>() {
+        apiService.updateChuDeWithImage(idRequestBody, body, tenChuDe).enqueue(new Callback<BoTu>() {
             @Override
             public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -314,7 +316,7 @@ public class EditDeckActivity extends AppCompatActivity {
                         } else {
                             // Image uploaded but link not returned, fetch again to verify
                             Log.w(TAG, "Image uploaded but link_anh_icon is null in response, fetching deck again...");
-                            apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
+                            apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
                                 @Override
                                 public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                     if (response.isSuccessful() && response.body() != null) {
@@ -343,7 +345,7 @@ public class EditDeckActivity extends AppCompatActivity {
                         // If image link is not in response, try to fetch the new deck to get it
                         if (imageLink == null || imageLink.isEmpty()) {
                             Log.w(TAG, "Image link not in response, fetching new deck to get link...");
-                            apiService.getChuDeDetail(updatedDeck.getId()).enqueue(new Callback<>() {
+                            apiService.getChuDeDetail(updatedDeck.getId()).enqueue(new Callback<BoTu>() {
                                 @Override
                                 public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                     if (response.isSuccessful() && response.body() != null) {
@@ -430,7 +432,7 @@ public class EditDeckActivity extends AppCompatActivity {
         
         Log.d(TAG, "Updating deck with image link: " + imageLink);
         Log.d(TAG, "Update payload - ID: " + deckId + ", Name: " + deckName + ", Icon: " + imageLink);
-        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<>() {
+        apiService.updateChuDe(deckId, updateDeck).enqueue(new Callback<BoTu>() {
             @Override
             public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -440,7 +442,7 @@ public class EditDeckActivity extends AppCompatActivity {
                     // Verify icon was saved - if not, fetch again
                     if (result.getLinkAnhIcon() == null || result.getLinkAnhIcon().isEmpty()) {
                         Log.w(TAG, "Icon not in update response, fetching deck again...");
-                        apiService.getChuDeDetail(deckId).enqueue(new Callback<>() {
+                        apiService.getChuDeDetail(deckId).enqueue(new Callback<BoTu>() {
                             @Override
                             public void onResponse(@NonNull Call<BoTu> call, @NonNull Response<BoTu> response) {
                                 if (response.isSuccessful() && response.body() != null) {
@@ -458,7 +460,7 @@ public class EditDeckActivity extends AppCompatActivity {
                     
                     // Delete the accidentally created deck
                     if (newDeckIdToDelete != null && !newDeckIdToDelete.isEmpty()) {
-                        apiService.deleteChuDe(newDeckIdToDelete).enqueue(new Callback<>() {
+                        apiService.deleteChuDe(newDeckIdToDelete).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                 Log.d(TAG, "Deleted accidentally created deck: " + newDeckIdToDelete);

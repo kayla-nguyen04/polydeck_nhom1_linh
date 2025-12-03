@@ -200,12 +200,17 @@
             android:gravity="center_vertical">
             
             <TextView
+                android:id="@+id/tv_danh_sach_tu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Danh sách từ"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:padding="8dp"/>
             
             <TextView
                 android:id="@+id/tv_unknown_count"
@@ -231,6 +236,22 @@
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/edtSearchVocab"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="12dp"
+            android:hint="Tìm kiếm từ vựng..."
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="@drawable/bg_search_edit_text"
+            android:inputType="text"
+            android:textSize="14sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_preview_vocab"

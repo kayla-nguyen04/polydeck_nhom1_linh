@@ -6,14 +6,9 @@ const luaChonSchema = new mongoose.Schema({
 }, { _id: false });
 
 const cauHoiSchema = new mongoose.Schema({
-  ma_quiz: { 
+  quiz_id: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'BaiQuiz', 
-    required: true 
-  },
-  ma_chu_de: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'ChuDe', 
     required: true 
   },
   noi_dung_cau_hoi: { type: String, required: true, trim: true },
@@ -24,8 +19,7 @@ const cauHoiSchema = new mongoose.Schema({
   collection: 'cau_hoi'
 });
 
-cauHoiSchema.index({ ma_quiz: 1 });
-cauHoiSchema.index({ ma_chu_de: 1 });
+cauHoiSchema.index({ quiz_id: 1 });
 
 module.exports = mongoose.model('CauHoi', cauHoiSchema);
 

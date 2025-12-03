@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header: Icon + Title + Badge -->
+        <!-- Header: Icon + Title + Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,20 +56,6 @@
                     android:textColor="#9CA3AF"/>
             </LinearLayout>
 
-            <!-- Published Badge -->
-            <TextView
-                android:id="@+id/badgePublished"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đã xuất bản"
-                android:textSize="11sp"
-                android:textStyle="bold"
-                android:textColor="#10B981"
-                android:background="@drawable/bg_badge_published"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"/>
         </LinearLayout>
 
         <!-- Action Buttons -->

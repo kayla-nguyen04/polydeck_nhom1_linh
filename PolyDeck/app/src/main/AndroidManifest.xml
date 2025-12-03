@@ -44,25 +44,28 @@
         <activity android:name=".ui.activity.SupportActivity" android:exported="false" />
 
         <!-- User & Deck Management -->
-        <activity android:name=".ui.activity.UserManagementActivity" />
-        <activity android:name=".ui.activity.UserDetailActivity" />
-        <activity android:name=".ui.activity.DeckManagementActivity" />
-        <activity android:name=".ui.activity.AddDeckActivity" />
-        <activity android:name=".ui.activity.EditDeckActivity" />
-        <activity android:name=".ui.activity.AddVocabularyActivity" />
-        <activity android:name=".ui.activity.CreateQuizActivity" />
-        <activity android:name=".ui.activity.SendNotificationActivity" />
-        <activity android:name=".ui.activity.VocabularyListActivity" />
+        <activity android:name=".ui.activity.UserManagementActivity" android:exported="false" />
+        <activity android:name=".ui.activity.UserDetailActivity" android:exported="false" />
+        <activity android:name=".ui.activity.DeckManagementActivity" android:exported="false" />
+        <activity android:name=".ui.activity.AddDeckActivity" android:exported="false" />
+        <activity android:name=".ui.activity.EditDeckActivity" android:exported="false" />
+        <activity android:name=".ui.activity.AddVocabularyActivity" android:exported="false" />
+        <activity android:name=".ui.activity.CreateQuizActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizManagementActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizListActivity" android:exported="false" />
+        <activity android:name=".ui.activity.ViewQuizActivity" android:exported="false" />
+        <activity android:name=".ui.activity.SendNotificationActivity" android:exported="false" />
+        <activity android:name=".ui.activity.VocabularyListActivity" android:exported="false" />
 
         <!-- Newly added user UI activities -->
-        <activity android:name=".ui.activity.TopicDetailActivity" />
-        <activity android:name=".ui.activity.NotificationsActivity" />
-        <activity android:name=".ui.activity.QuizActivity" />
-        <activity android:name=".ui.activity.QuizResultActivity" />
-        <activity android:name=".ui.activity.FlashcardActivity" />
-        <activity android:name=".ui.activity.FlashcardDoneActivity" />
-        <activity android:name=".ui.activity.FavoritesActivity" />
-        <activity android:name=".ui.activity.LearningStatusActivity" />
+        <activity android:name=".ui.activity.TopicDetailActivity" android:exported="false" />
+        <activity android:name=".ui.activity.NotificationsActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizResultActivity" android:exported="false" />
+        <activity android:name=".ui.activity.FlashcardActivity" android:exported="false" />
+        <activity android:name=".ui.activity.FlashcardDoneActivity" android:exported="false" />
+        <activity android:name=".ui.activity.FavoritesActivity" android:exported="false" />
+        <activity android:name=".ui.activity.LearningStatusActivity" android:exported="false" />
 
     </application>
 

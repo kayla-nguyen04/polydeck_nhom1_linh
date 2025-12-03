@@ -40,6 +40,7 @@ public class StatsFragment extends Fragment {
     private HistoryAdapter adapter;
     private TextView tvStreak, tvXp, tvWords, tvAccuracy;
     private TextView tvWeeklyWords, tvWeeklyQuizzes, tvWeeklyDays, tvWeeklyXp;
+    private boolean isVisibleToUser = false;
 
     @Nullable
     @Override
@@ -66,21 +67,80 @@ public class StatsFragment extends Fragment {
         adapter = new HistoryAdapter();
         rv.setAdapter(adapter);
 
+        loadStats();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Refresh stats khi quay lại fragment
+        if (isVisibleToUser) {
+            loadStats();
+        }
+    }
+    
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        this.isVisibleToUser = isVisibleToUser;
+        // Refresh stats khi fragment được hiển thị
+        if (isVisibleToUser && isResumed()) {
+            loadStats();
+        }
+    }
+    
+    private void loadStats() {
         APIService api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(requireContext());
         LearningStatusManager learningStatusManager = new LearningStatusManager(requireContext());
         
-        // Lấy thông tin user để có streak và XP chính xác
+        // Lấy thông tin user để có userId
         LoginResponse user = sm.getUserData();
         String userId = user != null ? user.getId() : null;
-        if (userId == null) return;
+        if (userId == null) {
+            // Set default values nếu không có user
+            if (tvStreak != null) tvStreak.setText("0 ngày");
+            if (tvXp != null) tvXp.setText("0");
+            if (tvWords != null) tvWords.setText("0");
+            if (tvAccuracy != null) tvAccuracy.setText("0%");
+            if (tvWeeklyWords != null) tvWeeklyWords.setText("0");
+            if (tvWeeklyQuizzes != null) tvWeeklyQuizzes.setText("0");
+            if (tvWeeklyDays != null) tvWeeklyDays.setText("0/7");
+            if (tvWeeklyXp != null) tvWeeklyXp.setText("0");
+            return;
+        }
 
-        // Cập nhật Streak và XP từ user data
-        int userStreak = user != null ? user.getChuoiNgayHoc() : 0;
-        int userXp = user != null ? user.getDiemTichLuy() : 0;
-        
-        if (tvStreak != null) tvStreak.setText(userStreak + " ngày");
-        if (tvXp != null) tvXp.setText(String.valueOf(userXp));
+        // Refresh user data từ server để có thông tin mới nhất về streak và XP
+        api.getUserDetail(userId).enqueue(new Callback<com.nhom1.polydeck.data.model.User>() {
+            @Override
+            public void onResponse(Call<com.nhom1.polydeck.data.model.User> call, Response<com.nhom1.polydeck.data.model.User> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
+                    com.nhom1.polydeck.data.model.User userData = response.body();
+                    // Cập nhật Streak và XP từ server
+                    int userStreak = userData.getChuoiNgayHoc();
+                    int userXp = userData.getXp();
+                    
+                    if (tvStreak != null) tvStreak.setText(userStreak + " ngày");
+                    if (tvXp != null) tvXp.setText(String.valueOf(userXp));
+                } else {
+                    // Fallback: dùng data từ session nếu không lấy được từ server
+                    int userStreak = user != null ? user.getChuoiNgayHoc() : 0;
+                    int userXp = user != null ? user.getDiemTichLuy() : 0;
+                    if (tvStreak != null) tvStreak.setText(userStreak + " ngày");
+                    if (tvXp != null) tvXp.setText(String.valueOf(userXp));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.nhom1.polydeck.data.model.User> call, Throwable t) {
+                // Fallback: dùng data từ session nếu lỗi
+                int userStreak = user != null ? user.getChuoiNgayHoc() : 0;
+                int userXp = user != null ? user.getDiemTichLuy() : 0;
+                if (tvStreak != null) tvStreak.setText(userStreak + " ngày");
+                if (tvXp != null) tvXp.setText(String.valueOf(userXp));
+            }
+        });
 
         api.getQuizHistory(userId).enqueue(new Callback<ApiResponse<List<LichSuLamBai>>>() {
             @Override public void onResponse(Call<ApiResponse<List<LichSuLamBai>>> call, Response<ApiResponse<List<LichSuLamBai>>> response) {

@@ -55,7 +55,7 @@ app.get('/api/info', (req, res) => {
 });
 // app.use('/api/tuvung', require('./routes/tuVung'));      
 app.use('/api/quizzes', require('./routes/quiz'));        
-// app.use('/api/hotro', require('./routes/hoTro'));         
+app.use('/api/hotro', require('./routes/hoTro'));         
 app.use('/api/thongbao', require('./routes/thongBao'));   
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;

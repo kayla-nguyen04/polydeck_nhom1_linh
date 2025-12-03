@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="12dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp">
 
@@ -16,45 +13,107 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvQuizDeckName"
-            android:layout_width="wrap_content"
+        <!-- Header: Icon + Title + Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnSurface"
-            tools:text="Chủ đề: Animals" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvQuizInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="?android:attr/textColorSecondary"
-            tools:text="15 câu hỏi • Ngày tạo: 02/12/2025" />
+            <!-- Icon -->
+            <ImageView
+                android:id="@+id/quizIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_quiz"
+                app:tint="#8B5CF6"
+                android:contentDescription="Quiz icon"/>
 
+            <!-- Title + Info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvQuizDeckName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quiz: Chủ đề"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#111827"/>
+
+                <TextView
+                    android:id="@+id/tvQuizInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="15 câu • Thuộc Bộ: CNTT • 01/10/2024"
+                    android:textSize="12sp"
+                    android:textColor="#9CA3AF"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
-            <Button
+            <!-- View Button -->
+            <TextView
                 android:id="@+id/btnViewQuiz"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:layout_weight="1"
-                android:text="Xem/Sửa"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_button_view"
+                android:gravity="center"
+                android:text="👁 Xem"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#3B82F6"
+                android:clickable="true"
+                android:focusable="true"/>
 
-            <Button
+            <!-- Edit Button -->
+            <TextView
+                android:id="@+id/btnEditQuiz"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="6dp"
+                android:background="@drawable/bg_button_edit"
+                android:gravity="center"
+                android:text="✏ Sửa"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#7C3AED"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <!-- Delete Button -->
+            <TextView
                 android:id="@+id/btnDeleteQuiz"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Xóa"
-                android:textColor="@color/red_error" />
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_button_delete"
+                android:gravity="center"
+                android:text="🗑 Xóa"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#EF4444"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -33,7 +33,6 @@ import retrofit2.Response;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    // FIX: Add callback interface
     public interface OnUserStatusChangedListener {
         void onStatusChanged();
     }
@@ -47,10 +46,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         this.context = context;
         this.userList = userList;
         this.apiService = RetrofitClient.getApiService();
-        // Try to cast context to listener
-        if (context instanceof OnUserStatusChangedListener) {
-            this.statusChangedListener = (OnUserStatusChangedListener) context;
-        }
+    }
+    
+    public void setOnUserStatusChangedListener(OnUserStatusChangedListener listener) {
+        this.statusChangedListener = listener;
     }
 
     @NonNull

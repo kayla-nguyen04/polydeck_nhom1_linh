@@ -1,4 +1,5 @@
 const BaiQuiz = require('../models/BaiQuiz');
+const CauHoi = require('../models/CauHoi');
 const LichSuLamBai = require('../models/LichSuLamBai');
 const NguoiDung = require('../models/NguoiDung');
 const ChuDe = require('../models/ChuDe');
@@ -11,6 +12,12 @@ const createQuiz = async (req, res) => {
             return res.status(400).json({ message: 'Dữ liệu quiz không hợp lệ.' });
         }
 
+        // Xóa quiz cũ và câu hỏi cũ
+        const oldQuiz = await BaiQuiz.findOne({ ma_chu_de: ma_chu_de });
+        if (oldQuiz) {
+            // Xóa tất cả câu hỏi cũ liên quan đến quiz này
+            await CauHoi.deleteMany({ quiz_id: oldQuiz._id });
+        }
         await BaiQuiz.deleteMany({ ma_chu_de: ma_chu_de });
 
         // Tạo một bài quiz mới dựa trên model BaiQuiz
@@ -21,7 +28,43 @@ const createQuiz = async (req, res) => {
 
         await newQuiz.save();
 
-        res.status(201).json({ message: 'Tạo quiz thành công!', data: newQuiz });
+        // Lưu từng câu hỏi vào collection cau_hoi
+        const savedQuestions = [];
+        for (let i = 0; i < questions.length; i++) {
+            const question = questions[i];
+            
+            // Tìm đáp án đúng
+            const correctAnswer = question.answers.find(answer => answer.isCorrect);
+            if (!correctAnswer) {
+                console.warn(`Câu hỏi ${i + 1} không có đáp án đúng, bỏ qua.`);
+                continue;
+            }
+
+            // Chuyển đổi answers sang format dap_an_lua_chon
+            const dapAnLuaChon = question.answers.map((answer, idx) => ({
+                ma_lua_chon: `LC${idx + 1}`,
+                noi_dung: answer.answerText
+            }));
+
+            // Tạo câu hỏi mới trong collection cau_hoi
+            const newCauHoi = new CauHoi({
+                quiz_id: newQuiz._id,
+                noi_dung_cau_hoi: question.questionText,
+                dap_an_lua_chon: dapAnLuaChon,
+                dap_an_dung: correctAnswer.answerText
+            });
+
+            await newCauHoi.save();
+            savedQuestions.push(newCauHoi);
+        }
+
+        console.log(`Đã lưu ${savedQuestions.length} câu hỏi vào collection cau_hoi`);
+
+        res.status(201).json({ 
+            message: 'Tạo quiz thành công!', 
+            data: newQuiz,
+            questionsSaved: savedQuestions.length 
+        });
 
     } catch (error) {
         console.error('Lỗi khi tạo quiz:', error);

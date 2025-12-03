@@ -31,11 +31,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1/5"
+            android:text="Từ 1/5"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            android:letterSpacing="0.05" />
 
         <ImageButton
             android:id="@+id/btn_fav"

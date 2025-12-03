@@ -35,18 +35,15 @@ public class SendNotificationActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
 
         // Initialize Views
-        toolbar = findViewById(R.id.toolbar_send_notification);
         etNotificationTitle = findViewById(R.id.etNotificationTitle);
         etNotificationContent = findViewById(R.id.etNotificationContent);
         btnSendNotification = findViewById(R.id.btnSendNotification);
-
-        // Setup Toolbar
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        
+        // Setup Back Button
+        android.widget.ImageButton btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> onBackPressed());
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         // Set Listener
         btnSendNotification.setOnClickListener(v -> sendNotification());

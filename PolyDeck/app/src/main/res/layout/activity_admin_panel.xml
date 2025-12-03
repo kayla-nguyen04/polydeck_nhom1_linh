@@ -135,6 +135,13 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                 <androidx.cardview.widget.CardView style="@style/AdminMenuCard" android:id="@+id/menuQuizManagement">
+                     <LinearLayout style="@style/AdminMenuCard.Content">
+                        <ImageView style="@style/AdminMenuCard.Icon" android:src="@drawable/ic_quiz"/>
+                        <TextView style="@style/AdminMenuCard.Text" android:text="Quản lý Quiz"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
             </GridLayout>
 
         </LinearLayout>

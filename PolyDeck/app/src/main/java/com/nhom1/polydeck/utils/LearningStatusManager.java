@@ -17,6 +17,7 @@ public class LearningStatusManager {
     private static final String PREF_NAME = "PolyDeckLearningStatus";
     private static final String KEY_UNKNOWN_WORDS = "unknown_words_";
     private static final String KEY_KNOWN_WORDS = "known_words_";
+    private static final String KEY_FLASHCARD_PROGRESS = "flashcard_progress_";
     
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -159,6 +160,59 @@ public class LearningStatusManager {
         Type type = new TypeToken<HashSet<String>>(){}.getType();
         Set<String> set = gson.fromJson(json, type);
         return set != null ? set : new HashSet<>();
+    }
+
+    /**
+     * Lưu tiến độ học flashcard (index hiện tại)
+     */
+    public void saveFlashcardProgress(String deckId, int index, boolean reviewUnknownOnly) {
+        if (userId == null || deckId == null) return;
+        String key = KEY_FLASHCARD_PROGRESS + deckId + "_" + userId;
+        FlashcardProgress progress = new FlashcardProgress(index, reviewUnknownOnly);
+        String json = gson.toJson(progress);
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    /**
+     * Lấy tiến độ học flashcard đã lưu
+     * @return FlashcardProgress hoặc null nếu chưa có
+     */
+    public FlashcardProgress getFlashcardProgress(String deckId) {
+        if (userId == null || deckId == null) return null;
+        String key = KEY_FLASHCARD_PROGRESS + deckId + "_" + userId;
+        String json = pref.getString(key, null);
+        if (json == null) return null;
+        try {
+            return gson.fromJson(json, FlashcardProgress.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Xóa tiến độ học flashcard
+     */
+    public void clearFlashcardProgress(String deckId) {
+        if (userId == null || deckId == null) return;
+        String key = KEY_FLASHCARD_PROGRESS + deckId + "_" + userId;
+        editor.remove(key);
+        editor.apply();
+    }
+
+    /**
+     * Class để lưu tiến độ học flashcard
+     */
+    public static class FlashcardProgress {
+        public int index;
+        public boolean reviewUnknownOnly;
+
+        public FlashcardProgress() {}
+
+        public FlashcardProgress(int index, boolean reviewUnknownOnly) {
+            this.index = index;
+            this.reviewUnknownOnly = reviewUnknownOnly;
+        }
     }
 }
 

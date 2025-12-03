@@ -20,6 +20,7 @@
 	<color name="status_active_text">#065F46</color>
 	<color name="status_banned_bg">#FEE2E2</color>
 	<color name="status_banned_text">#991B1B</color>
+	<color name="red_error">#DC2626</color>
 
 	<!-- Optional semantic aliases for future use -->
 	<color name="primary">#6D28D9</color>

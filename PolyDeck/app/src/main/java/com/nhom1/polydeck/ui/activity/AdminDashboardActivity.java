@@ -118,6 +118,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        cardQuiz.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, QuizManagementActivity.class);
+            startActivity(intent);
+        });
+
+        cardNotification.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, SendNotificationActivity.class);
+            startActivity(intent);
+        });
+
+        // Support requests removed - users now contact via Gmail
+        cardSupport.setVisibility(View.GONE);
 
         btnLogout.setOnClickListener(v -> {
             showLogoutDialog();

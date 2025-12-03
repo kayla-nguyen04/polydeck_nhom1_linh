@@ -38,24 +38,45 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
     private final String userId;
     private final APIService apiService;
     private final Set<String> favoriteIds = new HashSet<>();
+    private final boolean isAdmin;
     private TextToSpeech tts;
+    private boolean ttsReady = false;
 
     public VocabularyAdapter(List<TuVung> vocabList, Context context) {
         this.vocabList = vocabList;
         this.context = context;
         SessionManager sm = new SessionManager(context);
         this.userId = sm.getUserData() != null ? sm.getUserData().getId() : null;
+        String vaiTro = sm.getVaiTro();
+        this.isAdmin = vaiTro != null && vaiTro.equals("admin");
         this.apiService = RetrofitClient.getApiService();
         initTts();
-        loadFavorites();
+        if (!isAdmin) {
+            loadFavorites();
+        }
     }
     
     private void initTts() {
-        tts = new TextToSpeech(context, status -> {
-            if (status == TextToSpeech.SUCCESS) {
-                tts.setLanguage(Locale.US);
-            }
-        });
+        try {
+            tts = new TextToSpeech(context, status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = tts.setLanguage(Locale.US);
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("VocabularyAdapter", "TTS Language not supported or missing data");
+                        ttsReady = false;
+                    } else {
+                        ttsReady = true;
+                        Log.d("VocabularyAdapter", "TTS initialized successfully");
+                    }
+                } else {
+                    Log.e("VocabularyAdapter", "TTS initialization failed - status: " + status);
+                    ttsReady = false;
+                }
+            });
+        } catch (Exception e) {
+            Log.e("VocabularyAdapter", "Error initializing TTS", e);
+            ttsReady = false;
+        }
     }
 
     private void loadFavorites() {
@@ -111,39 +132,78 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
             }
         }
 
-        // Update favorite icon
-        boolean isFavorite = vocab.getId() != null && favoriteIds.contains(vocab.getId());
-        holder.btnFavorite.setImageResource(isFavorite ? R.drawable.ic_favorite_filled : R.drawable.ic_heart_outline);
-        if (isFavorite) {
-            holder.btnFavorite.setColorFilter(0xFFEF4444); // Red color
+        // Update favorite icon - Ẩn nút tim nếu là admin
+        if (isAdmin) {
+            holder.btnFavorite.setVisibility(View.GONE);
         } else {
-            holder.btnFavorite.setColorFilter(context.getResources().getColor(R.color.gray_medium, null));
+            holder.btnFavorite.setVisibility(View.VISIBLE);
+            boolean isFavorite = vocab.getId() != null && favoriteIds.contains(vocab.getId());
+            holder.btnFavorite.setImageResource(isFavorite ? R.drawable.ic_favorite_filled : R.drawable.ic_heart_outline);
+            if (isFavorite) {
+                holder.btnFavorite.setColorFilter(0xFFEF4444); // Red color
+            } else {
+                holder.btnFavorite.setColorFilter(context.getResources().getColor(R.color.gray_medium, null));
+            }
         }
 
         // Speaker button click
         holder.btnSpeak.setOnClickListener(v -> {
-            if (vocab.getTuTiengAnh() != null && !vocab.getTuTiengAnh().trim().isEmpty()) {
-                if (tts != null) {
-                    tts.speak(vocab.getTuTiengAnh(), TextToSpeech.QUEUE_FLUSH, null, "word");
-                }
-            }
-        });
-
-        // Favorite button click
-        holder.btnFavorite.setOnClickListener(v -> {
-            if (userId == null) {
-                Toast.makeText(context, "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+            String word = vocab.getTuTiengAnh();
+            if (word == null || word.trim().isEmpty()) {
+                Toast.makeText(context, "Không có từ để phát âm", Toast.LENGTH_SHORT).show();
                 return;
             }
             
-            if (isFavorite) {
-                // Remove favorite
-                removeFavorite(vocab.getId(), position);
-            } else {
-                // Add favorite
-                addFavorite(vocab.getId(), position);
+            // Kiểm tra TTS có sẵn sàng không
+            if (tts == null) {
+                Log.d("VocabularyAdapter", "TTS is null, reinitializing...");
+                initTts();
+                Toast.makeText(context, "Đang khởi tạo phát âm...", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            if (!ttsReady) {
+                Toast.makeText(context, "Phát âm chưa sẵn sàng. Vui lòng thử lại sau.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            
+            try {
+                // Dừng phát âm hiện tại nếu có
+                tts.stop();
+                // Phát âm từ mới
+                int result = tts.speak(word.trim(), TextToSpeech.QUEUE_FLUSH, null, "word");
+                if (result == TextToSpeech.ERROR) {
+                    Log.e("VocabularyAdapter", "TTS speak error");
+                    Toast.makeText(context, "Lỗi phát âm", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("VocabularyAdapter", "Speaking: " + word);
+                }
+            } catch (Exception e) {
+                Log.e("VocabularyAdapter", "Error speaking word", e);
+                Toast.makeText(context, "Lỗi khi phát âm: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Favorite button click - Chỉ xử lý nếu không phải admin
+        if (!isAdmin) {
+            holder.btnFavorite.setOnClickListener(v -> {
+                if (userId == null) {
+                    Toast.makeText(context, "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                boolean isFavorite = vocab.getId() != null && favoriteIds.contains(vocab.getId());
+                if (isFavorite) {
+                    // Remove favorite
+                    removeFavorite(vocab.getId(), position);
+                } else {
+                    // Add favorite
+                    addFavorite(vocab.getId(), position);
+                }
+            });
+        } else {
+            holder.btnFavorite.setOnClickListener(null);
+        }
     }
 
     private void addFavorite(String tuVungId, int position) {

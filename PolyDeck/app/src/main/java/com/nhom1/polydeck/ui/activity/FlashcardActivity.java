@@ -45,6 +45,7 @@ public class FlashcardActivity extends AppCompatActivity {
     public static final String EXTRA_DECK_ID = "EXTRA_DECK_ID";
     public static final String EXTRA_DECK_NAME = "EXTRA_DECK_NAME";
     public static final String EXTRA_REVIEW_UNKNOWN_ONLY = "EXTRA_REVIEW_UNKNOWN_ONLY";
+    public static final String EXTRA_RESUME_INDEX = "EXTRA_RESUME_INDEX";
 
     private APIService api;
     private List<TuVung> cards = new ArrayList<>();
@@ -79,13 +80,14 @@ public class FlashcardActivity extends AppCompatActivity {
         deckId = getIntent().getStringExtra(EXTRA_DECK_ID);
         deckName = getIntent().getStringExtra(EXTRA_DECK_NAME);
         reviewUnknownOnly = getIntent().getBooleanExtra(EXTRA_REVIEW_UNKNOWN_ONLY, false);
+        int resumeIndex = getIntent().getIntExtra(EXTRA_RESUME_INDEX, -1);
         SessionManager sm = new SessionManager(this);
         if (sm.getUserData() != null) userId = sm.getUserData().getId();
         learningStatusManager = new LearningStatusManager(this);
 
         bindViews();
         initTts();
-        loadCards();
+        loadCards(resumeIndex);
         loadFavorites();
     }
 
@@ -290,7 +292,7 @@ public class FlashcardActivity extends AppCompatActivity {
     
     // Không dùng audio URL nữa - chỉ dùng TTS
 
-    private void loadCards() {
+    private void loadCards(int resumeIndex) {
         api.getTuVungByBoTu(deckId).enqueue(new Callback<List<TuVung>>() {
             @Override public void onResponse(@NonNull Call<List<TuVung>> call, @NonNull Response<List<TuVung>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -318,7 +320,12 @@ public class FlashcardActivity extends AppCompatActivity {
                     // Xáo trộn danh sách từ vựng để học ngẫu nhiên
                     Collections.shuffle(cards);
                     
-                    index = 0;
+                    // Nếu có resumeIndex, tiếp tục từ vị trí đó
+                    if (resumeIndex >= 0 && resumeIndex < cards.size()) {
+                        index = resumeIndex;
+                    } else {
+                        index = 0;
+                    }
                     showMeaning = false;
                     render();
                     
@@ -439,9 +446,11 @@ public class FlashcardActivity extends AppCompatActivity {
 
     private void render() {
         int total = Math.max(1, cards.size());
-        tvProgress.setText((Math.min(index + 1, total)) + "/" + total);
+        int current = Math.min(index + 1, total);
+        // Hiển thị "Từ 1/5" thay vì chỉ "1/5"
+        tvProgress.setText("Từ " + current + "/" + total);
         barProgress.setMax(total);
-        barProgress.setProgress(Math.min(index + 1, total));
+        barProgress.setProgress(current);
 
         TuVung c = getCurrent();
         if (c == null) return;
@@ -477,14 +486,27 @@ public class FlashcardActivity extends AppCompatActivity {
     private void next() {
         showMeaning = false;
         index++;
+        // Lưu tiến độ mỗi khi chuyển từ
+        learningStatusManager.saveFlashcardProgress(deckId, index, reviewUnknownOnly);
+        
         if (index >= cards.size()) {
-            // Done
+            // Done - Xóa tiến độ đã lưu khi hoàn thành
+            learningStatusManager.clearFlashcardProgress(deckId);
             FlashcardDoneActivity.start(this, deckId, deckName, known, unknown, cards.size());
             finish();
             return;
         }
         render();
         // Không preload audio nữa vì chỉ dùng TTS
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Lưu tiến độ khi người dùng thoát
+        if (deckId != null && !cards.isEmpty() && index < cards.size()) {
+            learningStatusManager.saveFlashcardProgress(deckId, index, reviewUnknownOnly);
+        }
     }
 
     @Override

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardQuestion"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:visibility="gone">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,67 +16,220 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Question Text -->
+        <TextView
+            android:id="@+id/tvQuestionNumber"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tvQuestionNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Câu 1"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:id="@+id/btnDeleteQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_delete"
-                app:tint="#EF4444" />
-        </LinearLayout>
+            android:text="Câu hỏi 1"
+            android:textColor="#1F2937"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Câu hỏi (ví dụ: What does...)">
+            android:hint="Ví dụ: What does 'Cat' mean in Vietnamese?"
+            app:hintTextColor="#9CA3AF"
+            app:boxStrokeColor="#E5E7EB">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etQuestionText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:maxLines="4"
+                android:textColor="#1F2937"
+                android:textSize="14sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Answers -->
+        <!-- Answers Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đáp án (chọn 1 đáp án đúng)"
+            android:textColor="#1F2937"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"/>
+
         <RadioGroup
             android:id="@+id/rgAnswers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_height="wrap_content">
 
-            <LinearLayout style="@style/AnswerOptionLayout">
-                <RadioButton android:id="@+id/rbAnswer1" style="@style/AnswerRadioButton"/>
-                <EditText android:id="@+id/etAnswer1" style="@style/AnswerEditText" android:hint="Đáp án 1"/>
+            <!-- Answer A -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#F9FAFB">
+
+                <RadioButton
+                    android:id="@+id/rbAnswer1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#10B981"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp"
+                    android:minWidth="24dp"/>
+
+                <EditText
+                    android:id="@+id/etAnswer1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Đáp án A"
+                    android:background="@android:color/transparent"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="0dp"
+                    android:minHeight="0dp"/>
             </LinearLayout>
 
-            <LinearLayout style="@style/AnswerOptionLayout">
-                <RadioButton android:id="@+id/rbAnswer2" style="@style/AnswerRadioButton"/>
-                <EditText android:id="@+id/etAnswer2" style="@style/AnswerEditText" android:hint="Đáp án 2"/>
+            <!-- Answer B -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#F9FAFB">
+
+                <RadioButton
+                    android:id="@+id/rbAnswer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#10B981"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="B"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp"
+                    android:minWidth="24dp"/>
+
+                <EditText
+                    android:id="@+id/etAnswer2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Đáp án B"
+                    android:background="@android:color/transparent"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="0dp"
+                    android:minHeight="0dp"/>
             </LinearLayout>
 
-            <LinearLayout style="@style/AnswerOptionLayout">
-                <RadioButton android:id="@+id/rbAnswer3" style="@style/AnswerRadioButton"/>
-                <EditText android:id="@+id/etAnswer3" style="@style/AnswerEditText" android:hint="Đáp án 3 (tùy chọn)"/>
+            <!-- Answer C -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#F9FAFB">
+
+                <RadioButton
+                    android:id="@+id/rbAnswer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#10B981"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="C"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp"
+                    android:minWidth="24dp"/>
+
+                <EditText
+                    android:id="@+id/etAnswer3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Đáp án C"
+                    android:background="@android:color/transparent"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="0dp"
+                    android:minHeight="0dp"/>
             </LinearLayout>
 
-            <LinearLayout style="@style/AnswerOptionLayout">
-                <RadioButton android:id="@+id/rbAnswer4" style="@style/AnswerRadioButton"/>
-                <EditText android:id="@+id/etAnswer4" style="@style/AnswerEditText" android:hint="Đáp án 4 (tùy chọn)"/>
+            <!-- Answer D -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:backgroundTint="#F9FAFB">
+
+                <RadioButton
+                    android:id="@+id/rbAnswer4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#10B981"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="D"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp"
+                    android:minWidth="24dp"/>
+
+                <EditText
+                    android:id="@+id/etAnswer4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Đáp án D"
+                    android:background="@android:color/transparent"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="0dp"
+                    android:minHeight="0dp"/>
             </LinearLayout>
 
         </RadioGroup>

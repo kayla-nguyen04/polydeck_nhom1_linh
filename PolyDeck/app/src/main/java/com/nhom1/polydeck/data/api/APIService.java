@@ -2,6 +2,7 @@ package com.nhom1.polydeck.data.api;
 
 import com.nhom1.polydeck.data.model.AdminStats;
 import com.nhom1.polydeck.data.model.ApiResponse;
+import com.nhom1.polydeck.data.model.BaiQuiz;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.data.model.ChangePasswordRequest;
 import com.nhom1.polydeck.data.model.ForgotPasswordRequest;
@@ -20,6 +21,7 @@ import com.nhom1.polydeck.data.model.ThongBao;
 import com.nhom1.polydeck.data.model.TuVung;
 import com.nhom1.polydeck.data.model.User;
 import com.nhom1.polydeck.data.model.FavoriteRequest;
+import com.nhom1.polydeck.data.model.YeuCauHoTro;
 import com.nhom1.polydeck.data.model.DeckProgress;
 
 import java.util.List;
@@ -55,8 +57,8 @@ public interface APIService {
     Call<Void> createSystemNotification(@Body ThongBao thongBao);
 
     // ============= NOTIFICATIONS =============
-    @GET("api/thongbao")
-    Call<ApiResponse<List<ThongBao>>> getThongBao(@Query("userId") String userId);
+    @GET("api/thongbao/{userId}")
+    Call<ApiResponse<List<ThongBao>>> getThongBao(@Path("userId") String userId);
 
     @POST("api/thongbao/{id}/read")
     Call<ApiResponse<Void>> markThongBaoRead(@Path("id") String thongBaoId, @Body ReadRequest request);
@@ -110,18 +112,14 @@ public interface APIService {
     Call<BoTu> createChuDeWithImage(@Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @Multipart
-    @PUT("api/chude/{id}")
-    Call<BoTu> updateChuDeWithImage(@Path("id") String id, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
+    @POST("api/chude/chude_with_image")
+    Call<BoTu> updateChuDeWithImage(@Part("id") RequestBody id, @Part MultipartBody.Part file, @Part("ten_chu_de") RequestBody tenChuDe);
 
     @PUT("api/chude/{id}")
     Call<BoTu> updateChuDe(@Path("id") String chuDeId, @Body BoTu boTu);
 
     @DELETE("api/chude/{id}")
     Call<Void> deleteChuDe(@Path("id") String chuDeId);
-
-    // Tiến độ học tập cho 1 chủ đề của 1 người dùng
-    @GET("api/chude/{id}/progress")
-    Call<ApiResponse<DeckProgress>> getDeckProgress(@Path("id") String chuDeId, @Query("userId") String userId);
 
     // ============= VOCABULARY MANAGEMENT =============
     @POST("api/chude/{chuDeId}/them-tu-vung")
@@ -133,17 +131,40 @@ public interface APIService {
     @POST("api/chude/{chuDeId}/import-vocab")
     Call<Void> importVocab(@Path("chuDeId") String chuDeId, @Body List<TuVung> vocabList);
 
+    // Tiến độ học tập cho 1 chủ đề của 1 người dùng
+    @GET("api/chude/{id}/progress")
+    Call<ApiResponse<DeckProgress>> getDeckProgress(@Path("id") String chuDeId, @Query("userId") String userId);
+
     // ============= QUIZ MANAGEMENT =============
+    @GET("api/quizzes")
+    Call<List<BaiQuiz>> getAllQuizzes();
+
+    @GET("api/quizzes/{id}")
+    Call<BaiQuiz> getQuizById(@Path("id") String quizId);
+
     @POST("api/quizzes")
-    Call<Quiz> createQuiz(@Body Quiz quiz);
+    Call<ApiResponse<Quiz>> createQuiz(@Body Quiz quiz);
+
+    @DELETE("api/quizzes/{id}")
+    Call<Void> deleteQuiz(@Path("id") String quizId);
 
     @GET("api/quizzes/by-topic/{chuDeId}")
     Call<ApiResponse<QuizBundle>> getQuizByTopic(@Path("chuDeId") String deckId);
 
-    @POST("api/quizzes/submit")
+    @POST("api/quiz/submit")
     Call<ApiResponse<QuizResult>> submitQuiz(@Body SubmitQuizRequest request);
 
     // FIX: Added the missing getQuizHistory method
-    @GET("api/quizzes/history/{userId}")
+    @GET("api/quiz/history/{userId}")
     Call<ApiResponse<List<LichSuLamBai>>> getQuizHistory(@Path("userId") String userId);
+
+    // ============= SUPPORT REQUESTS =============
+    @GET("api/hotro")
+    Call<List<YeuCauHoTro>> getAllSupportRequests();
+
+    @POST("api/hotro")
+    Call<ApiResponse<YeuCauHoTro>> createSupportRequest(@Body YeuCauHoTro request);
+
+    @DELETE("api/hotro/{id}")
+    Call<Void> deleteSupportRequest(@Path("id") String requestId);
 }

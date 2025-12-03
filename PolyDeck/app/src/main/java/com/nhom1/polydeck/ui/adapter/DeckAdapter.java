@@ -20,12 +20,15 @@ import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.BoTu;
+import com.nhom1.polydeck.data.model.TuVung;
 import com.nhom1.polydeck.ui.activity.EditDeckActivity;
 import com.nhom1.polydeck.ui.activity.VocabularyListActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,11 +40,21 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     private Context context;
     private APIService apiService;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private OnDeckDeletedListener onDeckDeletedListener; // Callback for when deck is deleted
+    private Map<String, Integer> vocabCountCache = new HashMap<>(); // Cache số từ vựng
+
+    public interface OnDeckDeletedListener {
+        void onDeckDeleted();
+    }
 
     public DeckAdapter(Context context, List<BoTu> deckList) {
         this.context = context;
         this.deckList = deckList;
         this.apiService = RetrofitClient.getApiService();
+    }
+    
+    public void setOnDeckDeletedListener(OnDeckDeletedListener listener) {
+        this.onDeckDeletedListener = listener;
     }
 
     @NonNull
@@ -58,11 +71,27 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
         holder.tvDeckName.setText(deck.getTenChuDe());
 
-        String stats = String.format(Locale.getDefault(), "%d từ • %d người dùng • %s",
-                deck.getSoLuongQuiz(),
-                deck.getSoNguoiDung(),
-                deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
-        holder.tvDeckInfo.setText(stats);
+        // Lấy số từ vựng từ cache hoặc load từ API
+        String deckId = deck.getId();
+        if (deckId != null) {
+            if (vocabCountCache.containsKey(deckId)) {
+                // Đã có trong cache
+                int vocabCount = vocabCountCache.get(deckId);
+                String stats = String.format(Locale.getDefault(), "%d từ • %s",
+                        vocabCount,
+                        deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
+                holder.tvDeckInfo.setText(stats);
+            } else {
+                // Chưa có, hiển thị "Đang tải..." và load từ API
+                holder.tvDeckInfo.setText("Đang tải... • " + (deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A"));
+                loadVocabCount(deckId, holder);
+            }
+        } else {
+            // Không có ID, hiển thị 0
+            String stats = String.format(Locale.getDefault(), "0 từ • %s",
+                    deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
+            holder.tvDeckInfo.setText(stats);
+        }
 
         // Load deck icon
         String iconUrl = deck.getLinkAnhIcon();
@@ -147,6 +176,11 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                     deckList.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, deckList.size());
+                    
+                    // Notify activity to refresh data (update stats and fullDeckList)
+                    if (onDeckDeletedListener != null) {
+                        onDeckDeletedListener.onDeckDeleted();
+                    }
                 } else {
                     Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
                 }
@@ -166,7 +200,61 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     public void updateData(List<BoTu> newList) {
         this.deckList = newList;
+        // Xóa cache khi cập nhật danh sách mới
+        vocabCountCache.clear();
         notifyDataSetChanged();
+    }
+    
+    private void loadVocabCount(String deckId, DeckViewHolder holder) {
+        apiService.getTuVungByBoTu(deckId).enqueue(new Callback<List<TuVung>>() {
+            @Override
+            public void onResponse(Call<List<TuVung>> call, Response<List<TuVung>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    int vocabCount = response.body().size();
+                    // Lưu vào cache
+                    vocabCountCache.put(deckId, vocabCount);
+                    
+                    // Cập nhật lại view holder nếu vẫn ở cùng vị trí
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && position < deckList.size()) {
+                        BoTu deck = deckList.get(position);
+                        if (deck != null && deck.getId().equals(deckId)) {
+                            String stats = String.format(Locale.getDefault(), "%d từ • %s",
+                                    vocabCount,
+                                    deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
+                            holder.tvDeckInfo.setText(stats);
+                        }
+                    }
+                } else {
+                    // Lỗi, hiển thị 0
+                    vocabCountCache.put(deckId, 0);
+                    int position = holder.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && position < deckList.size()) {
+                        BoTu deck = deckList.get(position);
+                        if (deck != null && deck.getId().equals(deckId)) {
+                            String stats = String.format(Locale.getDefault(), "0 từ • %s",
+                                    deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
+                            holder.tvDeckInfo.setText(stats);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TuVung>> call, Throwable t) {
+                // Lỗi, hiển thị 0
+                vocabCountCache.put(deckId, 0);
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < deckList.size()) {
+                    BoTu deck = deckList.get(position);
+                    if (deck != null && deck.getId().equals(deckId)) {
+                        String stats = String.format(Locale.getDefault(), "0 từ • %s",
+                                deck.getNgayTao() != null ? sdf.format(deck.getNgayTao()) : "N/A");
+                        holder.tvDeckInfo.setText(stats);
+                    }
+                }
+            }
+        });
     }
     
     private String buildImageUrl(String iconUrl) {

@@ -84,6 +84,10 @@ public class UserManagementActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
         userAdapter = new UserAdapter(this, new ArrayList<>());
+        userAdapter.setOnUserStatusChangedListener(() -> {
+            // Refresh data when user status is changed (block/unblock)
+            fetchUsers();
+        });
         rvUsers.setAdapter(userAdapter);
     }
 

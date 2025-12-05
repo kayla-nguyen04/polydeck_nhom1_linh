@@ -152,11 +152,11 @@ public interface APIService {
     @GET("api/quizzes/by-topic/{chuDeId}")
     Call<ApiResponse<QuizBundle>> getQuizByTopic(@Path("chuDeId") String deckId);
 
-    @POST("api/quiz/submit")
+    @POST("api/quizzes/submit")
     Call<ApiResponse<QuizResult>> submitQuiz(@Body SubmitQuizRequest request);
 
     // FIX: Added the missing getQuizHistory method
-    @GET("api/quiz/history/{userId}")
+    @GET("api/quizzes/history/{userId}")
     Call<ApiResponse<List<LichSuLamBai>>> getQuizHistory(@Path("userId") String userId);
 
     // ============= SUPPORT REQUESTS =============

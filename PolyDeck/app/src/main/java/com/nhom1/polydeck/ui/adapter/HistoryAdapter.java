@@ -49,7 +49,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
         
         // FIX: Use getter methods to access private fields
         String topicId = it.getMaChuDe();
-        String topicName = topicId != null ? topicNameMap.get(topicId) : null;
+        String topicName = it.getTenChuDe();
+        if (topicName == null && topicId != null) {
+            topicName = topicNameMap.get(topicId);
+        }
         h.tvTopic.setText("Chủ đề: " + (topicName != null ? topicName : (topicId != null ? topicId : "-")));
         h.tvScore.setText(it.getDiemSo() + "%");
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
+import android.widget.Toast;
 import com.nhom1.polydeck.data.model.ApiResponse;
 import com.nhom1.polydeck.data.model.LichSuLamBai;
 import com.nhom1.polydeck.data.model.BoTu;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -177,20 +179,51 @@ public class StatsFragment extends Fragment {
                         public void onResponse(Call<List<BoTu>> call, Response<List<BoTu>> response) {
                             if (!isAdded()) return;
                             if (response.isSuccessful() && response.body() != null) {
-                                // Tính từ đã học từ flashcard (từ đã nhớ)
-                                int wordsFromFlashcard = 0;
-                                for (BoTu deck : response.body()) {
-                                    if (deck.getId() != null) {
-                                        wordsFromFlashcard += learningStatusManager.getKnownCount(deck.getId());
-                                    }
+                                // Lấy số từ đã học từ server cho mỗi deck (DeckProgress.learnedWords)
+                                List<BoTu> decks = response.body();
+                                if (decks.isEmpty()) {
+                                    if (tvWords != null) tvWords.setText(String.valueOf(finalWordsFromQuiz));
+                                    calculateWeeklyStats(finalList, learningStatusManager, decks);
+                                    return;
                                 }
-                                
-                                // Tổng từ đã học = từ quiz + từ flashcard
-                                int totalWordsLearned = finalWordsFromQuiz + wordsFromFlashcard;
-                                if (tvWords != null) tvWords.setText(String.valueOf(totalWordsLearned));
-                                
+
+                                AtomicInteger remaining = new AtomicInteger(decks.size());
+                                AtomicInteger learnedFromDecks = new AtomicInteger(0);
+
+                                for (BoTu deck : decks) {
+                                    if (deck.getId() == null) {
+                                        if (remaining.decrementAndGet() == 0) {
+                                            int totalWordsLearned = finalWordsFromQuiz + learnedFromDecks.get();
+                                            if (tvWords != null) tvWords.setText(String.valueOf(totalWordsLearned));
+                                            calculateWeeklyStats(finalList, learningStatusManager, decks);
+                                        }
+                                        continue;
+                                    }
+                                    api.getDeckProgress(deck.getId(), userId).enqueue(new Callback<ApiResponse<com.nhom1.polydeck.data.model.DeckProgress>>() {
+                                        @Override
+                                        public void onResponse(Call<ApiResponse<com.nhom1.polydeck.data.model.DeckProgress>> call, Response<ApiResponse<com.nhom1.polydeck.data.model.DeckProgress>> res) {
+                                            if (res.isSuccessful() && res.body() != null && res.body().isSuccess() && res.body().getData() != null) {
+                                                learnedFromDecks.addAndGet(Math.max(0, res.body().getData().getLearnedWords()));
+                                            }
+                                            if (remaining.decrementAndGet() == 0) {
+                                                int totalWordsLearned = finalWordsFromQuiz + learnedFromDecks.get();
+                                                if (tvWords != null) tvWords.setText(String.valueOf(totalWordsLearned));
+                                                calculateWeeklyStats(finalList, learningStatusManager, decks);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ApiResponse<com.nhom1.polydeck.data.model.DeckProgress>> call, Throwable t) {
+                                            if (remaining.decrementAndGet() == 0) {
+                                                int totalWordsLearned = finalWordsFromQuiz + learnedFromDecks.get();
+                                                if (tvWords != null) tvWords.setText(String.valueOf(totalWordsLearned));
+                                                calculateWeeklyStats(finalList, learningStatusManager, decks);
+                                            }
+                                        }
+                                    });
+                                }
+
                                 // Calculate weekly stats với tất cả deck
-                                calculateWeeklyStats(finalList, learningStatusManager, response.body());
                             } else {
                                 // Nếu không lấy được deck, chỉ tính từ quiz
                                 if (tvWords != null) tvWords.setText(String.valueOf(finalWordsFromQuiz));
@@ -223,9 +256,14 @@ public class StatsFragment extends Fragment {
                             @Override public void onFailure(Call<BoTu> call, Throwable t) { }
                         });
                     }
+                } else {
+                    Toast.makeText(requireContext(), "Không tải được lịch sử: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
-            @Override public void onFailure(Call<ApiResponse<List<LichSuLamBai>>> call, Throwable t) { }
+            @Override public void onFailure(Call<ApiResponse<List<LichSuLamBai>>> call, Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), "Lỗi lịch sử: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
     
@@ -286,3 +324,4 @@ public class StatsFragment extends Fragment {
         if (tvWeeklyXp != null) tvWeeklyXp.setText(String.valueOf(weeklyXp));
     }
 }
+

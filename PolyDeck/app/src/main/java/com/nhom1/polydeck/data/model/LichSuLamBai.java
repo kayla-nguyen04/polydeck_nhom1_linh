@@ -2,6 +2,7 @@ package com.nhom1.polydeck.data.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
+import java.util.Map;
 
 public class LichSuLamBai {
 
@@ -11,8 +12,9 @@ public class LichSuLamBai {
     @SerializedName("ma_nguoi_dung")
     private String maNguoiDung;
 
+    // Server may return either a String id or an embedded object { _id, ten_chu_de, link_anh_icon }
     @SerializedName("ma_chu_de")
-    private String maChuDe;
+    private Object maChuDe;
 
     // FIX: Changed field name and added getter/setter to match server response and fragment usage
     @SerializedName("diem_so")
@@ -45,11 +47,21 @@ public class LichSuLamBai {
     }
 
     public String getMaChuDe() {
-        return maChuDe;
+        if (maChuDe == null) return null;
+        if (maChuDe instanceof String) return (String) maChuDe;
+        if (maChuDe instanceof Map) {
+            Object id = ((Map<?, ?>) maChuDe).get("_id");
+            return id != null ? String.valueOf(id) : null;
+        }
+        return null;
     }
 
-    public void setMaChuDe(String maChuDe) {
-        this.maChuDe = maChuDe;
+    public String getTenChuDe() {
+        if (maChuDe instanceof Map) {
+            Object ten = ((Map<?, ?>) maChuDe).get("ten_chu_de");
+            return ten != null ? String.valueOf(ten) : null;
+        }
+        return null;
     }
 
     public int getDiemSo() {

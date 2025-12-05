@@ -280,7 +280,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="0/7"
-                                android:textColor="@android:color/white"
+                                android:textColor="#111827"
                                 android:textSize="20sp"
                                 android:textStyle="bold"/>
                         </LinearLayout>

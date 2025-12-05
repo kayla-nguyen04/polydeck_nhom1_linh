@@ -45,3 +45,4 @@ PolyDeck_server/node_modules/
 PolyDeck_server/public/uploads/
 PolyDeck_server/scripts/drop-database.js
 PolyDeck_server/.env
+env.properties 

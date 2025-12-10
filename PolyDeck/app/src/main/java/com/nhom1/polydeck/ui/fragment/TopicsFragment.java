@@ -64,6 +64,24 @@ public class TopicsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Refresh deck list when returning to this fragment (e.g., after deleting a deck)
+        // If there's a search query, reload all to show updated list
+        if (edtSearch != null && edtSearch.getText() != null) {
+            String query = edtSearch.getText().toString().trim();
+            if (query.isEmpty()) {
+                loadAll();
+            } else {
+                // Reload all first, then reapply search if needed
+                loadAll();
+            }
+        } else {
+            loadAll();
+        }
+    }
+
     private void loadAll() {
         apiService.getAllChuDe().enqueue(new Callback<List<BoTu>>() {
             @Override

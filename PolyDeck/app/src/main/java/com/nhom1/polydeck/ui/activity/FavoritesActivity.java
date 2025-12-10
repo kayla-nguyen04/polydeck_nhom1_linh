@@ -65,6 +65,20 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
         tts = new TextToSpeech(this, this);
 
         // Load favorites
+        loadFavoritesWithToast();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh favorites list when returning to this activity (e.g., after deleting a deck)
+        if (userId != null) {
+            loadFavorites();
+        }
+    }
+
+    private void loadFavoritesWithToast() {
+        APIService api = RetrofitClient.getApiService();
         api.getUserFavorites(userId).enqueue(new Callback<ApiResponse<List<TuVung>>>() {
             @Override public void onResponse(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Response<ApiResponse<List<TuVung>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -95,6 +109,30 @@ public class FavoritesActivity extends AppCompatActivity implements TextToSpeech
             @Override public void onFailure(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(FavoritesActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadFavorites() {
+        APIService api = RetrofitClient.getApiService();
+        api.getUserFavorites(userId).enqueue(new Callback<ApiResponse<List<TuVung>>>() {
+            @Override public void onResponse(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Response<ApiResponse<List<TuVung>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        List<TuVung> data = response.body().getData();
+                        if (data != null) {
+                            adapter.updateData(data);
+                            adapter.setTextToSpeech(tts);
+                            updateTotalWords();
+                        } else {
+                            adapter.updateData(new ArrayList<>());
+                            updateTotalWords();
+                        }
+                    }
+                }
+            }
+            @Override public void onFailure(@NonNull Call<ApiResponse<List<TuVung>>> call, @NonNull Throwable t) {
+                // Silent fail on refresh
             }
         });
     }

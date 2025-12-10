@@ -1,6 +1,8 @@
 package com.nhom1.polydeck.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,19 +15,86 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nhom1.polydeck.R;
+import com.nhom1.polydeck.data.api.APIService;
+import com.nhom1.polydeck.data.api.RetrofitClient;
+import com.nhom1.polydeck.data.model.LoginResponse;
+import com.nhom1.polydeck.data.model.User;
 import com.nhom1.polydeck.ui.fragment.HomeFragment;
 import com.nhom1.polydeck.ui.fragment.ProfileFragment;
 import com.nhom1.polydeck.ui.fragment.StatsFragment;
 import com.nhom1.polydeck.ui.fragment.TopicsFragment;
+import com.nhom1.polydeck.utils.SessionManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    private SessionManager sessionManager;
+    private APIService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         
+        sessionManager = new SessionManager(this);
+        apiService = RetrofitClient.getApiService();
+        
+        // Kiểm tra user có còn tồn tại trong database không
+        verifyUserAndProceed();
+    }
+
+    private void verifyUserAndProceed() {
+        LoginResponse userData = sessionManager.getUserData();
+        if (userData == null || userData.getId() == null) {
+            // Không có thông tin user, chuyển đến đăng nhập
+            sessionManager.logout();
+            goToLogin();
+            return;
+        }
+
+        // Kiểm tra user có còn tồn tại trong database không
+        apiService.getUserDetail(userData.getId()).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User userFromDB = response.body();
+                    String vaiTroInDB = userFromDB.getVaiTro();
+                    String vaiTroInSession = sessionManager.getVaiTro();
+                    
+                    // Kiểm tra vai trò có thay đổi không
+                    if (vaiTroInDB != null && vaiTroInSession != null && !vaiTroInDB.equals(vaiTroInSession)) {
+                        // Vai trò đã thay đổi trong database - logout để user đăng nhập lại
+                        Log.w("MainActivity", "Vai trò đã thay đổi trong database (từ '" + vaiTroInSession + "' sang '" + vaiTroInDB + "'), tự động logout");
+                        sessionManager.logout();
+                        goToLogin();
+                        return;
+                    }
+                    
+                    // User còn tồn tại và vai trò không thay đổi - tiếp tục load UI
+                    setupUI();
+                } else {
+                    // User không còn tồn tại - logout và chuyển đến đăng nhập
+                    Log.w("MainActivity", "User không còn tồn tại trong database, tự động logout");
+                    sessionManager.logout();
+                    goToLogin();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // Lỗi mạng - vẫn cho phép vào app (có thể là lỗi tạm thời)
+                Log.w("MainActivity", "Lỗi khi kiểm tra user: " + t.getMessage() + ", vẫn cho phép vào app");
+                setupUI();
+            }
+        });
+    }
+
+    private void setupUI() {
         View mainView = findViewById(R.id.main);
         if (mainView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
@@ -64,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
             });
             bottomNav.setSelectedItemId(R.id.nav_home);
         }
+    }
+
+    private void goToLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void switchFragment(Fragment fragment) {

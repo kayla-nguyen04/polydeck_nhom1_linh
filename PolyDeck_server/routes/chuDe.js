@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const { Types } = require('mongoose');
+const mongoose = require('mongoose');
 const ChuDe = require('../models/ChuDe'); 
 const TuVung = require('../models/TuVung'); 
 const TienDoHocTap = require('../models/TienDoHocTap'); // dùng cho tiến độ học
@@ -102,10 +102,35 @@ router.put('/:id', upload.single('file'), async (req, res) => {
 // DELETE: Xóa chủ đề
 router.delete('/:id', async (req, res) => {
     try {
-        const deletedChuDe = await ChuDe.findOneAndDelete(resolveChuDeFilter(req.params.id));
-        if (!deletedChuDe) return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
-        res.json({ message: 'Đã xóa chủ đề' });
+        const chuDeId = req.params.id;
+        
+        // Tìm chủ đề trước để đảm bảo nó tồn tại
+        const chuDe = await ChuDe.findOne(resolveChuDeFilter(chuDeId));
+        if (!chuDe) {
+            return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
+        }
+        
+        // Xóa tất cả từ vựng liên quan trước
+        const deleteVocabResult = await TuVung.deleteMany({ ma_chu_de: chuDe._id });
+        console.log(`Đã xóa ${deleteVocabResult.deletedCount} từ vựng của chủ đề ${chuDeId}`);
+        
+        // Xóa tiến độ học tập liên quan (nếu có)
+        try {
+            await TienDoHocTap.deleteMany({ ma_chu_de: chuDe._id });
+            console.log(`Đã xóa tiến độ học tập của chủ đề ${chuDeId}`);
+        } catch (tienDoErr) {
+            console.warn('Lỗi khi xóa tiến độ học tập (có thể không tồn tại):', tienDoErr.message);
+        }
+        
+        // Sau đó xóa chủ đề
+        const deletedChuDe = await ChuDe.findOneAndDelete(resolveChuDeFilter(chuDeId));
+        
+        res.json({ 
+            message: 'Đã xóa chủ đề và tất cả từ vựng',
+            deletedVocabCount: deleteVocabResult.deletedCount
+        });
     } catch (err) {
+        console.error('Lỗi khi xóa chủ đề:', err);
         res.status(500).json({ message: err.message });
     }
 });
@@ -180,18 +205,28 @@ router.get('/:chuDeId/progress', async (req, res) => {
             });
         }
 
-        // Tổng số từ trong chủ đề (ưu tiên field so_luong_tu, fallback đếm thực tế)
-        let totalWords = typeof chuDe.so_luong_tu === 'number' ? chuDe.so_luong_tu : 0;
-        if (!totalWords || totalWords <= 0) {
-            totalWords = await TuVung.countDocuments({ ma_chu_de: chuDe._id });
+        // Validate userId
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'userId không hợp lệ',
+                data: null
+            });
         }
 
+        // Tổng số từ trong chủ đề - luôn đếm thực tế từ TuVung để đảm bảo chính xác
+        // (không dùng so_luong_tu vì có thể bị lệch khi import/xóa từ)
+        const totalWords = await TuVung.countDocuments({ ma_chu_de: chuDe._id });
+
         // Số từ đã học (trạng thái 'da_nho') cho user + chủ đề này
+        // Convert userId sang ObjectId để match với dữ liệu đã lưu
         const learnedWords = await TienDoHocTap.countDocuments({
-            ma_nguoi_dung: userId,
+            ma_nguoi_dung: new mongoose.Types.ObjectId(userId),
             ma_chu_de: chuDe._id,
             trang_thai_hoc: 'da_nho'
         });
+
+        console.log(`[GET /progress] chuDeId: ${chuDeId}, userId: ${userId}, totalWords: ${totalWords}, learnedWords: ${learnedWords}`);
 
         return res.json({
             success: true,
@@ -206,6 +241,112 @@ router.get('/:chuDeId/progress', async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Lỗi server',
+            data: null
+        });
+    }
+});
+
+// POST: Cập nhật tiến độ học tập cho một từ vựng
+// URL: /api/chude/:chuDeId/progress
+router.post('/:chuDeId/progress', async (req, res) => {
+    try {
+        const { chuDeId } = req.params;
+        const { userId, tuVungId, trangThaiHoc } = req.body; // trangThaiHoc: 'chua_hoc', 'dang_hoc', 'da_nho'
+
+        console.log(`[POST /progress] Request body:`, { chuDeId, userId, tuVungId, trangThaiHoc });
+
+        if (!userId || !tuVungId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu userId hoặc tuVungId',
+                data: null
+            });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(tuVungId) || !mongoose.Types.ObjectId.isValid(chuDeId)) {
+            console.error(`[POST /progress] Invalid ObjectId - userId: ${userId}, tuVungId: ${tuVungId}, chuDeId: ${chuDeId}`);
+            return res.status(400).json({
+                success: false,
+                message: 'ID không hợp lệ',
+                data: null
+            });
+        }
+
+        // Kiểm tra ChuDe có tồn tại không
+        const chuDe = await ChuDe.findById(chuDeId);
+        if (!chuDe) {
+            console.error(`[POST /progress] ChuDe not found: ${chuDeId}`);
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy chủ đề',
+                data: null
+            });
+        }
+
+        // Kiểm tra TuVung có tồn tại không
+        const tuVung = await TuVung.findById(tuVungId);
+        if (!tuVung) {
+            console.error(`[POST /progress] TuVung not found: ${tuVungId}`);
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy từ vựng',
+                data: null
+            });
+        }
+
+        // Kiểm tra TuVung có thuộc ChuDe này không
+        if (tuVung.ma_chu_de.toString() !== chuDe._id.toString()) {
+            console.error(`[POST /progress] TuVung ${tuVungId} không thuộc ChuDe ${chuDeId}. TuVung.ma_chu_de: ${tuVung.ma_chu_de}, ChuDe._id: ${chuDe._id}`);
+            return res.status(400).json({
+                success: false,
+                message: 'Từ vựng không thuộc chủ đề này',
+                data: null
+            });
+        }
+
+        const validStatus = ['chua_hoc', 'dang_hoc', 'da_nho'];
+        const status = validStatus.includes(trangThaiHoc) ? trangThaiHoc : 'da_nho'; // Default: da_nho
+
+        // Tìm hoặc tạo tiến độ học tập
+        // Sử dụng ObjectId để đảm bảo type đúng
+        const tienDo = await TienDoHocTap.findOneAndUpdate(
+            {
+                ma_nguoi_dung: new mongoose.Types.ObjectId(userId),
+                ma_tu_vung: new mongoose.Types.ObjectId(tuVungId),
+                ma_chu_de: new mongoose.Types.ObjectId(chuDeId)
+            },
+            {
+                ma_nguoi_dung: new mongoose.Types.ObjectId(userId),
+                ma_tu_vung: new mongoose.Types.ObjectId(tuVungId),
+                ma_chu_de: new mongoose.Types.ObjectId(chuDeId),
+                trang_thai_hoc: status,
+                lan_cuoi_hoc: new Date()
+            },
+            {
+                upsert: true,
+                new: true,
+                runValidators: true
+            }
+        );
+
+        console.log(`[POST /progress] ✅ Updated progress - chuDeId: ${chuDeId}, userId: ${userId}, tuVungId: ${tuVungId}, status: ${status}`);
+        console.log(`[POST /progress] TienDo saved with ID:`, tienDo ? tienDo._id : 'null');
+
+        return res.json({
+            success: true,
+            message: 'Cập nhật tiến độ học tập thành công',
+            data: null
+        });
+    } catch (err) {
+        console.error('❌ Lỗi khi cập nhật tiến độ học tập:', err);
+        console.error('Error details:', {
+            name: err.name,
+            message: err.message,
+            stack: err.stack
+        });
+        return res.status(500).json({
+            success: false,
+            message: err.message || 'Lỗi server',
             data: null
         });
     }

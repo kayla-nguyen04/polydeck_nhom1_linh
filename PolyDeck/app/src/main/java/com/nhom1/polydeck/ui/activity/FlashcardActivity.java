@@ -26,7 +26,9 @@ import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.ApiResponse;
 import com.nhom1.polydeck.data.model.FavoriteRequest;
 import com.nhom1.polydeck.data.model.TuVung;
+import com.nhom1.polydeck.data.model.UpdateProgressRequest;
 import com.nhom1.polydeck.utils.LearningStatusManager;
+import com.nhom1.polydeck.utils.SettingsHelper;
 import com.nhom1.polydeck.utils.SessionManager;
 
 import java.util.ArrayList;
@@ -70,10 +72,18 @@ public class FlashcardActivity extends AppCompatActivity {
     private final Set<String> favoriteIds = new HashSet<>();
     private LearningStatusManager learningStatusManager;
     private boolean reviewUnknownOnly = false;
+    private boolean streakUpdated = false; // Flag để đảm bảo chỉ tăng streak 1 lần mỗi session
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Đảm bảo status bar không che nội dung
+        View decorView = getWindow().getDecorView();
+        int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        decorView.setSystemUiVisibility(flags);
+        getWindow().setStatusBarColor(android.graphics.Color.TRANSPARENT);
+        
         setContentView(R.layout.activity_flashcard);
 
         api = RetrofitClient.getApiService();
@@ -172,6 +182,8 @@ public class FlashcardActivity extends AppCompatActivity {
             TuVung current = getCurrent();
             if (current != null && current.getId() != null) {
                 learningStatusManager.markAsKnown(deckId, current.getId());
+                // Đồng bộ lên server
+                syncWordProgressToServer(deckId, current.getId(), "da_nho");
                 Toast.makeText(this, "Đã lưu: Đã nhớ", Toast.LENGTH_SHORT).show();
             }
             known++;
@@ -329,6 +341,12 @@ public class FlashcardActivity extends AppCompatActivity {
                     showMeaning = false;
                     render();
                     
+                    // Tăng streak ngay khi bắt đầu học (chỉ cần bấm vào học là được)
+                    if (!streakUpdated && userId != null) {
+                        updateStreak();
+                        streakUpdated = true;
+                    }
+                    
                     // Không preload audio nữa vì chỉ dùng TTS
                 } else {
                     Toast.makeText(FlashcardActivity.this, "Không tải được thẻ từ", Toast.LENGTH_SHORT).show();
@@ -364,15 +382,72 @@ public class FlashcardActivity extends AppCompatActivity {
 
     private void addFavorite() {
         TuVung c = getCurrent();
-        if (c == null || userId == null) return;
+        if (c == null || userId == null || c.getId() == null) return;
+        
+        // Kiểm tra xem đã là favorite chưa
+        boolean isCurrentlyFavorite = favoriteIds.contains(c.getId());
+        
+        if (isCurrentlyFavorite) {
+            // Đã là favorite, bỏ yêu thích
+            removeFavorite(c.getId());
+            return;
+        }
+        
+        // Optimistic update: Update UI ngay lập tức
+        favoriteIds.add(c.getId());
+        animateHeart();
+        updateFavIcon();
+        
+        // Gọi API để lưu lên server
         api.addFavorite(userId, new FavoriteRequest(c.getId())).enqueue(new Callback<ApiResponse<Void>>() {
             @Override public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
-                if (c.getId() != null) favoriteIds.add(c.getId());
-                animateHeart();
-                updateFavIcon();
-                Toast.makeText(FlashcardActivity.this, "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // API thành công, UI đã được update rồi
+                    Toast.makeText(FlashcardActivity.this, "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    // API thất bại, revert lại UI
+                    favoriteIds.remove(c.getId());
+                    updateFavIcon();
+                    String errorMsg = response.body() != null ? response.body().getMessage() : "Lỗi server";
+                    Toast.makeText(FlashcardActivity.this, "Không thể thêm yêu thích: " + errorMsg, Toast.LENGTH_SHORT).show();
+                }
             }
-            @Override public void onFailure(Call<ApiResponse<Void>> call, Throwable t) { }
+            @Override public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                // API lỗi, revert lại UI
+                favoriteIds.remove(c.getId());
+                updateFavIcon();
+                Toast.makeText(FlashcardActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void removeFavorite(String tuVungId) {
+        if (tuVungId == null || userId == null) return;
+        
+        // Optimistic update: Update UI ngay lập tức
+        favoriteIds.remove(tuVungId);
+        updateFavIcon();
+        
+        // Gọi API để xóa khỏi server
+        api.removeFavorite(userId, tuVungId).enqueue(new Callback<ApiResponse<Void>>() {
+            @Override public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // API thành công, UI đã được update rồi
+                    Toast.makeText(FlashcardActivity.this, "Đã bỏ yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    // API thất bại, revert lại UI
+                    favoriteIds.add(tuVungId);
+                    updateFavIcon();
+                    String errorMsg = response.body() != null ? response.body().getMessage() : "Lỗi server";
+                    Toast.makeText(FlashcardActivity.this, "Không thể bỏ yêu thích: " + errorMsg, Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                // API lỗi, revert lại UI
+                favoriteIds.add(tuVungId);
+                updateFavIcon();
+                Toast.makeText(FlashcardActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -516,6 +591,82 @@ public class FlashcardActivity extends AppCompatActivity {
             tts.shutdown();
         }
         super.onDestroy();
+    }
+
+    private void syncWordProgressToServer(String deckId, String tuVungId, String trangThaiHoc) {
+        SessionManager sessionManager = new SessionManager(this);
+        com.nhom1.polydeck.data.model.LoginResponse user = sessionManager.getUserData();
+        
+        if (user == null || user.getId() == null || deckId == null || tuVungId == null) {
+            Log.w("FlashcardActivity", "Cannot sync progress - missing data: userId=" + (user != null ? user.getId() : "null") + ", deckId=" + deckId + ", tuVungId=" + tuVungId);
+            return;
+        }
+
+        UpdateProgressRequest request = new UpdateProgressRequest(user.getId(), tuVungId, trangThaiHoc);
+        Log.d("FlashcardActivity", "🔄 Syncing progress - deckId: " + deckId + ", tuVungId: " + tuVungId + ", userId: " + user.getId() + ", trangThai: " + trangThaiHoc);
+        
+        api.updateWordProgress(deckId, request).enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Log.d("FlashcardActivity", "✅ Đã đồng bộ tiến độ học tập lên server: " + tuVungId);
+                } else {
+                    String errorMsg = "Unknown";
+                    if (response.body() != null) {
+                        errorMsg = response.body().getMessage();
+                    }
+                    Log.w("FlashcardActivity", "❌ Không thể đồng bộ tiến độ học tập - Code: " + response.code() + ", Message: " + errorMsg);
+                    if (response.errorBody() != null) {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            Log.e("FlashcardActivity", "Error body: " + errorBody);
+                        } catch (Exception e) {
+                            Log.e("FlashcardActivity", "Cannot read error body", e);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                Log.e("FlashcardActivity", "❌ Lỗi khi đồng bộ tiến độ học tập: ", t);
+                Log.e("FlashcardActivity", "Request details - deckId: " + deckId + ", tuVungId: " + tuVungId + ", trangThai: " + trangThaiHoc);
+            }
+        });
+    }
+
+    private void updateStreak() {
+        if (userId == null) {
+            Log.w("FlashcardActivity", "Không có userId, không thể cập nhật streak");
+            return;
+        }
+
+        Log.d("FlashcardActivity", "🔄 Calling updateStreak API for userId: " + userId);
+        api.updateStreak(userId).enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Log.d("FlashcardActivity", "✅ Cập nhật streak thành công - Response: " + response.body().getMessage());
+                } else {
+                    String errorMsg = "Unknown";
+                    if (response.body() != null) {
+                        errorMsg = response.body().getMessage();
+                    } else if (response.errorBody() != null) {
+                        try {
+                            errorMsg = response.errorBody().string();
+                        } catch (Exception e) {
+                            errorMsg = "Error body read failed";
+                        }
+                    }
+                    Log.w("FlashcardActivity", "❌ Cập nhật streak thất bại - Code: " + response.code() + ", Message: " + errorMsg);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                Log.e("FlashcardActivity", "❌ Lỗi khi cập nhật streak: ", t);
+            }
+        });
     }
 }
 

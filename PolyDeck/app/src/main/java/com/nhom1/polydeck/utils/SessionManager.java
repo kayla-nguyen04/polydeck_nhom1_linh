@@ -77,6 +77,23 @@ public class SessionManager {
     public String getPassword() {
         return pref.getString(KEY_PASSWORD, null);
     }
+
+    // Refresh user data từ User object (sau khi làm quiz, cập nhật profile, etc.)
+    public void refreshUserData(com.nhom1.polydeck.data.model.User user) {
+        LoginResponse currentUser = getUserData();
+        if (currentUser != null && user != null) {
+            // Cập nhật các thông tin từ User object
+            currentUser.setHoTen(user.getHoTen());
+            currentUser.setEmail(user.getEmail());
+            currentUser.setDiemTichLuy(user.getXp());
+            currentUser.setChuoiNgayHoc(user.getChuoiNgayHoc());
+            currentUser.setCapDo(user.getLevel());
+            currentUser.setLinkAnhDaiDien(user.getLinkAnhDaiDien());
+            currentUser.setVaiTro(user.getVaiTro());
+            // Lưu lại session đã cập nhật
+            saveUserSession(currentUser);
+        }
+    }
 }
 
 

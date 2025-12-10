@@ -1,20 +1,22 @@
 package com.nhom1.polydeck.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.ApiResponse;
-import com.nhom1.polydeck.data.model.ReadRequest;
 import com.nhom1.polydeck.data.model.ThongBao;
 import com.nhom1.polydeck.utils.SessionManager;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,15 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(this);
         if (sm.getUserData() != null) userId = sm.getUserData().getId();
@@ -43,7 +54,13 @@ public class NotificationsActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> markAsRead(data.get(position)));
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            ThongBao notification = data.get(position);
+            // Mở màn hình chi tiết
+            Intent intent = new Intent(NotificationsActivity.this, NotificationDetailActivity.class);
+            intent.putExtra(NotificationDetailActivity.EXTRA_NOTIFICATION, (Serializable) notification);
+            startActivity(intent);
+        });
 
         loadNotifications();
     }
@@ -65,15 +82,5 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
-    private void markAsRead(ThongBao tb) {
-        if (tb.getId() == null || userId == null) return;
-        api.markThongBaoRead(tb.getId(), new ReadRequest(userId)).enqueue(new Callback<ApiResponse<Void>>() {
-            @Override public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
-                // Sau khi đánh dấu, có thể đổi màu item hoặc reload
-                Toast.makeText(NotificationsActivity.this, "Đã đánh dấu đã đọc", Toast.LENGTH_SHORT).show();
-            }
-            @Override public void onFailure(Call<ApiResponse<Void>> call, Throwable t) { }
-        });
-    }
 }
 

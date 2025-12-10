@@ -460,7 +460,7 @@ public class EditDeckActivity extends AppCompatActivity {
                     
                     // Delete the accidentally created deck
                     if (newDeckIdToDelete != null && !newDeckIdToDelete.isEmpty()) {
-                        apiService.deleteChuDe(newDeckIdToDelete).enqueue(new Callback<Void>() {
+                        apiService.deleteChuDe(newDeckIdToDelete, null).enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                 Log.d(TAG, "Deleted accidentally created deck: " + newDeckIdToDelete);

@@ -17,6 +17,7 @@ public class QuizBundle {
         @SerializedName("ma_cau_hoi") public String maCauHoi;
         @SerializedName("noi_dung_cau_hoi") public String noiDung;
         @SerializedName("dap_an_lua_chon") public List<Option> options;
+        @SerializedName("dap_an_dung") public String dapAnDung; // Đáp án đúng (có thể là text hoặc ma_lua_chon)
     }
 
     @SerializedName("quiz") public QuizInfo quiz;

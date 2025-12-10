@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +33,8 @@ import retrofit2.Response;
 public class DeckManagementActivity extends AppCompatActivity {
 
     private static final String TAG = "DeckManagementActivity";
+    private static final int REQUEST_CODE_ADD_DECK = 1001;
+    private static final int REQUEST_CODE_VOCAB_LIST = 2002;
 
     private ImageView btnBack;
     private EditText etSearchDeck;
@@ -55,7 +59,7 @@ public class DeckManagementActivity extends AppCompatActivity {
 
         btnAddDeck.setOnClickListener(v -> {
             Intent intent = new Intent(DeckManagementActivity.this, AddDeckActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_ADD_DECK);
         });
         
         btnBack.setOnClickListener(v -> onBackPressed());
@@ -68,6 +72,39 @@ public class DeckManagementActivity extends AppCompatActivity {
         fetchDecks();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Refresh deck list when returning from AddDeckActivity (after creating a new deck)
+        if (requestCode == REQUEST_CODE_ADD_DECK) {
+            fetchDecks();
+            // Set result to notify AdminDashboardActivity to refresh stats
+            setResult(RESULT_OK);
+        } else if (requestCode == REQUEST_CODE_VOCAB_LIST) {
+            // Vocabulary was added/changed, refresh deck list to update vocab counts
+            fetchDecks();
+            // Set result to notify AdminDashboardActivity to refresh stats
+            setResult(RESULT_OK);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Set result when going back to refresh stats in AdminDashboardActivity
+        // Luôn set result để đảm bảo AdminDashboardActivity refresh stats
+        Log.d(TAG, "onBackPressed: Setting result OK and finishing");
+        setResult(RESULT_OK);
+        finish();
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Đảm bảo set result trước khi pause để AdminDashboardActivity có thể nhận được
+        Log.d(TAG, "onPause: Setting result OK");
+        setResult(RESULT_OK);
+    }
+
     private void initViews(){
         btnBack = findViewById(R.id.btnBack);
         etSearchDeck = findViewById(R.id.inputSearch);
@@ -75,6 +112,14 @@ public class DeckManagementActivity extends AppCompatActivity {
         btnAddDeck = findViewById(R.id.btnAddDeck);
         tvTotalDecks = findViewById(R.id.tvTotalDecks);
         tvPublishedDecks = findViewById(R.id.tvPublishedDecks);
+        
+        // Xử lý window insets cho RecyclerView
+        ViewCompat.setOnApplyWindowInsetsListener(rvDecks, (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
+                        Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
+            return insets;
+        });
     }
 
     private void setupToolbar(){
@@ -87,6 +132,8 @@ public class DeckManagementActivity extends AppCompatActivity {
         deckAdapter.setOnDeckDeletedListener(() -> {
             // Refresh data when deck is deleted
             fetchDecks();
+            // Set result to notify AdminDashboardActivity to refresh stats
+            setResult(RESULT_OK);
         });
         rvDecks.setAdapter(deckAdapter);
     }

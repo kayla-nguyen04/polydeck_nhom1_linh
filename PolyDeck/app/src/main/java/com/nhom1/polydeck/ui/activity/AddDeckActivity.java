@@ -44,6 +44,7 @@ import retrofit2.Response;
 public class AddDeckActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int REQUEST_CODE_ADD_VOCAB = 2001;
     private static final String TAG = "AddDeckActivity";
 
     private Toolbar toolbar;
@@ -122,6 +123,11 @@ public class AddDeckActivity extends AppCompatActivity {
             ivIconPreview.setImageURI(imageUri);
             containerImagePreview.setVisibility(View.VISIBLE);
             btnSelectImage.setVisibility(View.GONE);
+        } else if (requestCode == REQUEST_CODE_ADD_VOCAB) {
+            // Vocabulary was added, propagate result to DeckManagementActivity
+            // Set result để DeckManagementActivity biết có thay đổi
+            setResult(RESULT_OK);
+            finish();
         }
     }
 
@@ -166,10 +172,12 @@ public class AddDeckActivity extends AppCompatActivity {
             public void onResponse(Call<BoTu> call, Response<BoTu> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AddDeckActivity.this, "Tạo bộ từ thành công!", Toast.LENGTH_SHORT).show();
+                    // Set result ngay khi tạo bộ từ thành công để DeckManagementActivity biết có thay đổi
+                    setResult(RESULT_OK);
+                    // Open AddVocabularyActivity with startActivityForResult to track when vocabulary is added
                     Intent intent = new Intent(AddDeckActivity.this, AddVocabularyActivity.class);
                     intent.putExtra("DECK_ID", response.body().getId());
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, REQUEST_CODE_ADD_VOCAB);
                 } else {
                     String errorMessage = "Tạo bộ từ thất bại";
                     try {

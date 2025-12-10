@@ -522,9 +522,9 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Hỗ trợ -->
+            <!-- Thống kê -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardSupport"
+                android:id="@+id/cardStatistics"
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_columnWeight="1"
@@ -542,20 +542,21 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/ic_support"
-                        app:tint="#EF4444"
-                        android:contentDescription="@string/menu_support"/>
+                        android:src="@drawable/ic_stats"
+                        app:tint="#EC4899"
+                        android:contentDescription="@string/menu_statistics"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/menu_support"
+                        android:text="@string/menu_statistics"
                         android:textColor="#1F2937"
                         android:textSize="13sp"
                         android:textAlignment="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </GridLayout>
     </LinearLayout>
 </ScrollView>

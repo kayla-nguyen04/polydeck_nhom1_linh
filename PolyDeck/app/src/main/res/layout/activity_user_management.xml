@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F9FAFB"
+    android:fitsSystemWindows="true"
     tools:context=".ui.activity.UserManagementActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,17 +16,6 @@
         android:background="@android:color/white"
         app:title="@string/user_management_title"
         app:navigationIcon="@drawable/ic_arrow_back">
-        
-        <ImageView
-            android:id="@+id/btnRefresh"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_refresh"
-            app:tint="#3B82F6"
-            android:padding="6dp"
-            android:contentDescription="Refresh" />
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
@@ -75,6 +65,7 @@
         android:layout_height="match_parent"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:clipToPadding="false"
         tools:listitem="@layout/item_user" />
 
 </LinearLayout>

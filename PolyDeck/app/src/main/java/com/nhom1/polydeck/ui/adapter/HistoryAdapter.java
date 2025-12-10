@@ -23,6 +23,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
     private final List<LichSuLamBai> items = new ArrayList<>();
     private final SimpleDateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private final Map<String, String> topicNameMap = new HashMap<>();
+    private OnItemClickListener onItemClickListener;
+    
+    public interface OnItemClickListener {
+        void onItemClick(LichSuLamBai history);
+    }
+    
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
 
     public void setItems(List<LichSuLamBai> list) {
         items.clear();
@@ -54,7 +63,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
             topicName = topicNameMap.get(topicId);
         }
         h.tvTopic.setText("Chủ đề: " + (topicName != null ? topicName : (topicId != null ? topicId : "-")));
-        h.tvScore.setText(it.getDiemSo() + "%");
+        // Điểm bây giờ là điểm tuyệt đối (mỗi câu đúng = 10 điểm), không phải phần trăm
+        h.tvScore.setText(it.getDiemSo() + " điểm");
 
         String dateStr = "-";
         if (it.getNgayLamBai() != null) {
@@ -64,6 +74,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> 
         // FIX: The field is soCauDung, not diemDanhDuoc
         String detailText = it.getSoCauDung() + "/" + it.getTongSoCau() + " câu đúng • " + dateStr;
         h.tvDetail.setText(detailText);
+        
+        // Thêm click listener
+        h.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(it);
+            }
+        });
     }
 
     @Override

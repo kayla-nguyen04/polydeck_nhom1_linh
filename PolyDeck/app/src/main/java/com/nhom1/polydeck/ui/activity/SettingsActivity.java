@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.button.MaterialButton;
 import com.nhom1.polydeck.R;
@@ -18,7 +19,6 @@ import com.nhom1.polydeck.utils.SessionManager;
 public class SettingsActivity extends AppCompatActivity {
     private static final String PREFS = "PolyDeckSettings";
     private static final String KEY_SOUND = "sound_enabled";
-    private static final String KEY_DARK = "dark_mode";
     private SharedPreferences prefs;
     private SessionManager sessionManager;
 
@@ -33,30 +33,26 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupViews() {
-        // Back button
-        ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         // Switches
         SwitchCompat switchSound = findViewById(R.id.switchSound);
-        SwitchCompat switchDarkMode = findViewById(R.id.switchDarkMode);
 
         // Load saved preferences
         switchSound.setChecked(prefs.getBoolean(KEY_SOUND, true));
-        switchDarkMode.setChecked(prefs.getBoolean(KEY_DARK, false));
 
         // Switch listeners
         switchSound.setOnCheckedChangeListener((buttonView, isChecked) -> {
             prefs.edit().putBoolean(KEY_SOUND, isChecked).apply();
             Toast.makeText(this, isChecked ? "Âm thanh đã bật" : "Âm thanh đã tắt", 
                     Toast.LENGTH_SHORT).show();
-        });
-
-        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean(KEY_DARK, isChecked).apply();
-            Toast.makeText(this, isChecked ? "Chế độ tối đã bật" : "Chế độ tối đã tắt", 
-                    Toast.LENGTH_SHORT).show();
-            // Note: To apply dark mode, you may need to restart the app or use AppCompatDelegate
         });
 
         // Language item

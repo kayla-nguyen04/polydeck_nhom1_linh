@@ -23,8 +23,10 @@ import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.data.model.TuVung;
 import com.nhom1.polydeck.ui.activity.EditDeckActivity;
 import com.nhom1.polydeck.ui.activity.VocabularyListActivity;
+import com.nhom1.polydeck.utils.LearningStatusManager;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -144,7 +146,12 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             Intent intent = new Intent(context, VocabularyListActivity.class);
             intent.putExtra(VocabularyListActivity.EXTRA_DECK_ID, deck.getId());
             intent.putExtra(VocabularyListActivity.EXTRA_DECK_NAME, deck.getTenChuDe());
-            context.startActivity(intent);
+            // Use startActivityForResult if context is an Activity to track vocabulary changes
+            if (context instanceof android.app.Activity) {
+                ((android.app.Activity) context).startActivityForResult(intent, 2002);
+            } else {
+                context.startActivity(intent);
+            }
         });
 
         // Edit button
@@ -168,21 +175,49 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     }
 
     private void deleteDeck(BoTu deck, int position) {
-        apiService.deleteChuDe(deck.getId()).enqueue(new Callback<Void>() {
+        // Backend đã được sửa để tự động xóa từ vựng khi xóa bộ từ
+        // Không cần thử xóa từ vựng trước nữa, xóa bộ từ trực tiếp
+        android.util.Log.d("DeckAdapter", "Deleting deck: " + deck.getTenChuDe() + " (ID: " + deck.getId() + ")");
+        android.util.Log.d("DeckAdapter", "Backend will automatically delete all related vocabularies");
+        Toast.makeText(context, "Đang xóa bộ từ...", Toast.LENGTH_SHORT).show();
+        deleteDeckOnly(deck, position);
+    }
+
+    private void deleteDeckOnly(BoTu deck, int position) {
+        String deckId = deck.getId();
+        
+        // Thử xóa bộ từ với option xóa cả từ vựng trước
+        android.util.Log.d("DeckAdapter", "Attempting to delete deck with vocab deletion option");
+        apiService.deleteChuDe(deckId, true).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "Đã xóa bộ từ", Toast.LENGTH_SHORT).show();
-                    deckList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, deckList.size());
-                    
-                    // Notify activity to refresh data (update stats and fullDeckList)
-                    if (onDeckDeletedListener != null) {
-                        onDeckDeletedListener.onDeckDeleted();
-                    }
+                    android.util.Log.d("DeckAdapter", "✅ Deck deleted with vocab deletion option");
+                    handleDeckDeletionSuccess(deckId, deck, position);
                 } else {
-                    Toast.makeText(context, "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                    // Endpoint với query parameter không hoạt động, thử endpoint thông thường
+                    android.util.Log.w("DeckAdapter", "Delete with vocab option failed (Code: " + response.code() + "), trying normal delete...");
+                    deleteDeckNormal(deckId, deck, position);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Endpoint với query parameter không hoạt động, thử endpoint thông thường
+                android.util.Log.w("DeckAdapter", "Delete with vocab option failed: " + t.getMessage() + ", trying normal delete...");
+                deleteDeckNormal(deckId, deck, position);
+            }
+        });
+    }
+
+    private void deleteDeckNormal(String deckId, BoTu deck, int position) {
+        apiService.deleteChuDe(deckId, null).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    handleDeckDeletionSuccess(deckId, deck, position);
+                } else {
+                    Toast.makeText(context, "Xóa bộ từ thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -191,6 +226,42 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 Toast.makeText(context, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void handleDeckDeletionSuccess(String deckId, BoTu deck, int position) {
+        // Xóa learning status local của bộ từ này
+        LearningStatusManager learningStatusManager = new LearningStatusManager(context);
+        learningStatusManager.clearDeckStatus(deckId);
+        
+        // Xóa khỏi cache vocab count
+        vocabCountCache.remove(deckId);
+        
+        // Kiểm tra xem từ vựng có còn không (để xác nhận backend có cascade delete không)
+        checkVocabulariesAfterDeckDeletion(deckId, deck, position);
+    }
+
+    private void checkVocabulariesAfterDeckDeletion(String deckId, BoTu deck, int position) {
+        // Backend đã có cascade delete, không cần kiểm tra nữa
+        // Chỉ log để debug
+        android.util.Log.d("DeckAdapter", "✅ Deck deleted successfully");
+        
+        // Hiển thị thông báo đơn giản
+        Toast.makeText(context, "Đã xóa bộ từ", Toast.LENGTH_SHORT).show();
+        
+        // Cập nhật UI
+        updateUIAfterDeletion(position);
+    }
+
+    private void updateUIAfterDeletion(int position) {
+        // Cập nhật UI
+        deckList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, deckList.size());
+        
+        // Notify activity to refresh data (update stats and fullDeckList)
+        if (onDeckDeletedListener != null) {
+            onDeckDeletedListener.onDeckDeleted();
+        }
     }
 
     @Override

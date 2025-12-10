@@ -30,6 +30,9 @@ public class User {
     @SerializedName("trang_thai")
     private String trangThai;
 
+    @SerializedName("vai_tro")
+    private String vaiTro;
+
     public User() {}
 
     public String getId() { return id; }
@@ -58,6 +61,9 @@ public class User {
 
     public String getTrangThai() { return trangThai; }
     public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
+
+    public String getVaiTro() { return vaiTro; }
+    public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
 
     public String getInitials() {
         if (hoTen == null || hoTen.isEmpty()) return "?";

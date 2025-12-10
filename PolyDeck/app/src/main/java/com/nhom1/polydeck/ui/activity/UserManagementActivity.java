@@ -5,13 +5,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +37,6 @@ public class UserManagementActivity extends AppCompatActivity {
     private EditText etSearchUser;
     private RecyclerView rvUsers;
     private TextView tvTotalUsers, tvBannedUsers;
-    private ImageView btnRefresh;
     private UserAdapter userAdapter;
     private APIService apiService;
     private List<User> fullUserList = new ArrayList<>();
@@ -67,9 +67,14 @@ public class UserManagementActivity extends AppCompatActivity {
         rvUsers = findViewById(R.id.rvUsers);
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
         tvBannedUsers = findViewById(R.id.tvBannedUsers);
-        btnRefresh = findViewById(R.id.btnRefresh);
         
-        btnRefresh.setOnClickListener(v -> fetchUsers());
+        // Xử lý window insets cho RecyclerView
+        ViewCompat.setOnApplyWindowInsetsListener(rvUsers, (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
+                        Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
+            return insets;
+        });
     }
 
     private void setupToolbar() {
@@ -87,6 +92,8 @@ public class UserManagementActivity extends AppCompatActivity {
         userAdapter.setOnUserStatusChangedListener(() -> {
             // Refresh data when user status is changed (block/unblock)
             fetchUsers();
+            // Set result to notify AdminDashboardActivity to refresh stats
+            setResult(RESULT_OK);
         });
         rvUsers.setAdapter(userAdapter);
     }
@@ -147,5 +154,12 @@ public class UserManagementActivity extends AppCompatActivity {
         long bannedCount = fullUserList.stream().filter(u -> "banned".equalsIgnoreCase(u.getTrangThai())).count();
         tvTotalUsers.setText(String.format("%d Hoạt động", activeCount));
         tvBannedUsers.setText(String.format("%d Bị khóa", bannedCount));
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Set result when going back to refresh stats in AdminDashboardActivity
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }

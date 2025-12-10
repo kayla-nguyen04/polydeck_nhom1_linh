@@ -150,7 +150,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         ImageView ivAvatar;
         TextView tvUserName, tvEmail, tvStatus, tvUserInfo;
         Button btnDetail, btnBlock;
-        ImageView btnMore;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -161,7 +160,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             tvUserInfo = itemView.findViewById(R.id.tvUserInfo);
             btnDetail = itemView.findViewById(R.id.btnDetail);
             btnBlock = itemView.findViewById(R.id.btnBlock);
-            btnMore = itemView.findViewById(R.id.btnMore);
         }
     }
 }

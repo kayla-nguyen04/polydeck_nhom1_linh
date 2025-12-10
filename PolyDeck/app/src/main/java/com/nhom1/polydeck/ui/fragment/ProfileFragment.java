@@ -55,13 +55,6 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.LeaderboardActivity.class)));
         view.findViewById(R.id.row_support).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SupportActivity.class)));
-        view.findViewById(R.id.row_logout).setOnClickListener(v -> {
-            SessionManager sm = new SessionManager(requireContext());
-            sm.logout();
-            Intent i = new Intent(requireContext(), LoginActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-        });
     }
 
     @Override

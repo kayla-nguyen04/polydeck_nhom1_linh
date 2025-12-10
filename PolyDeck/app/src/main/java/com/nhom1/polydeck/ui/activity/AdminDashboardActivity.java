@@ -23,10 +23,13 @@ import retrofit2.Response;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_DECK_MANAGEMENT = 1001;
+    private static final int REQUEST_CODE_USER_MANAGEMENT = 1002;
+
     private TextView tvTotalUsers, tvTotalDecks, tvActiveUsers, tvTotalWords;
     private TextView tvUserGrowth, tvDeckGrowth, tvActiveGrowth, tvWordGrowth;
 
-    private CardView cardUsers, cardDecks, cardQuiz, cardNotification, cardSupport;
+    private CardView cardUsers, cardDecks, cardQuiz, cardNotification, cardStatistics;
 
     // Logout button
     private ImageView btnLogout;
@@ -46,6 +49,25 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh stats khi quay lại màn hình (sau khi thêm bộ từ/từ vựng/người dùng)
+        loadStats();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Refresh stats khi quay lại từ các activity quản lý
+        if (requestCode == REQUEST_CODE_DECK_MANAGEMENT || requestCode == REQUEST_CODE_USER_MANAGEMENT) {
+            if (resultCode == RESULT_OK) {
+                // Refresh ngay lập tức khi có thay đổi
+                loadStats();
+            }
+        }
+    }
+
     private void initViews() {
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
         tvTotalDecks = findViewById(R.id.tvTotalDecks);
@@ -61,7 +83,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         cardDecks = findViewById(R.id.cardDecks);
         cardQuiz = findViewById(R.id.cardQuiz);
         cardNotification = findViewById(R.id.cardNotification);
-        cardSupport = findViewById(R.id.cardSupport);
+        cardStatistics = findViewById(R.id.cardStatistics);
 
         btnLogout = findViewById(R.id.btnLogout);
     }
@@ -110,12 +132,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private void setupClickListeners() {
         cardUsers.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboardActivity.this, UserManagementActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_USER_MANAGEMENT);
         });
 
         cardDecks.setOnClickListener(v -> {
             Intent intent = new Intent(AdminDashboardActivity.this, DeckManagementActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_DECK_MANAGEMENT);
         });
 
         cardQuiz.setOnClickListener(v -> {
@@ -128,8 +150,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Support requests removed - users now contact via Gmail
-        cardSupport.setVisibility(View.GONE);
+        cardStatistics.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, AdminStatisticsActivity.class);
+            startActivity(intent);
+        });
 
         btnLogout.setOnClickListener(v -> {
             showLogoutDialog();

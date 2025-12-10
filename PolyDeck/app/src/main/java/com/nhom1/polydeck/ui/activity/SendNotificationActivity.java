@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.nhom1.polydeck.R;
@@ -43,6 +45,17 @@ public class SendNotificationActivity extends AppCompatActivity {
         android.widget.ImageButton btnBack = findViewById(R.id.btn_back);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> onBackPressed());
+        }
+
+        // Xử lý window insets cho NestedScrollView
+        android.view.View nestedScrollView = findViewById(R.id.nestedScrollView);
+        if (nestedScrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(nestedScrollView, (v, insets) -> {
+                androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
+                            Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
+                return insets;
+            });
         }
 
         // Set Listener

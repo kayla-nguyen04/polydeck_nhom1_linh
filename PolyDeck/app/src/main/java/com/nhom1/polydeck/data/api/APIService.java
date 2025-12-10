@@ -2,6 +2,8 @@ package com.nhom1.polydeck.data.api;
 
 import com.nhom1.polydeck.data.model.AdminStats;
 import com.nhom1.polydeck.data.model.ApiResponse;
+import com.nhom1.polydeck.data.model.UserMonthlyStats;
+import com.nhom1.polydeck.data.model.UserDailyStats;
 import com.nhom1.polydeck.data.model.BaiQuiz;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.data.model.ChangePasswordRequest;
@@ -24,6 +26,9 @@ import com.nhom1.polydeck.data.model.User;
 import com.nhom1.polydeck.data.model.FavoriteRequest;
 import com.nhom1.polydeck.data.model.YeuCauHoTro;
 import com.nhom1.polydeck.data.model.DeckProgress;
+import com.nhom1.polydeck.data.model.UpdateProgressRequest;
+import com.nhom1.polydeck.data.model.AddXpRequest;
+import com.nhom1.polydeck.data.model.AddXpResponse;
 
 import java.util.List;
 
@@ -53,6 +58,18 @@ public interface APIService {
     // ============= ADMIN =============
     @GET("api/admin/stats")
     Call<AdminStats> getAdminStats();
+
+    @GET("api/admin/user-statistics")
+    Call<List<UserMonthlyStats>> getUserStatistics(@Query("year") Integer year);
+
+    @GET("api/admin/user-daily-statistics")
+    Call<List<UserDailyStats>> getUserDailyStatistics(@Query("year") Integer year, @Query("month") Integer month);
+
+    @GET("api/users/filter-by-date")
+    Call<List<User>> getUsersByDateRange(@Query("startDate") String startDate, @Query("endDate") String endDate);
+
+    @GET("api/admin/stats-by-date")
+    Call<AdminStats> getAdminStatsByDateRange(@Query("startDate") String startDate, @Query("endDate") String endDate);
 
     @POST("api/admin/thong-bao")
     Call<Void> createSystemNotification(@Body ThongBao thongBao);
@@ -91,6 +108,10 @@ public interface APIService {
     @POST("api/users/{id}/favorites")
     Call<ApiResponse<Void>> addFavorite(@Path("id") String userId, @Body FavoriteRequest body);
 
+    // Cập nhật streak khi học flashcard
+    @POST("api/users/{id}/update-streak")
+    Call<ApiResponse<Void>> updateStreak(@Path("id") String userId);
+
     @DELETE("api/users/{id}/favorites/{fav}")
     Call<ApiResponse<Void>> removeFavorite(@Path("id") String userId, @Path("fav") String favId);
 
@@ -120,7 +141,7 @@ public interface APIService {
     Call<BoTu> updateChuDe(@Path("id") String chuDeId, @Body BoTu boTu);
 
     @DELETE("api/chude/{id}")
-    Call<Void> deleteChuDe(@Path("id") String chuDeId);
+    Call<Void> deleteChuDe(@Path("id") String chuDeId, @Query("deleteVocab") Boolean deleteVocab);
 
     // ============= VOCABULARY MANAGEMENT =============
     @POST("api/chude/{chuDeId}/them-tu-vung")
@@ -132,9 +153,28 @@ public interface APIService {
     @POST("api/chude/{chuDeId}/import-vocab")
     Call<Void> importVocab(@Path("chuDeId") String chuDeId, @Body List<TuVung> vocabList);
 
+    @DELETE("api/tuvung/{id}")
+    Call<Void> deleteTuVung(@Path("id") String tuVungId);
+
+    // Xóa một từ vựng trong bộ từ (thử endpoint này nếu endpoint trên không hoạt động)
+    @DELETE("api/chude/{chuDeId}/tuvung/{id}")
+    Call<Void> deleteTuVungInChuDe(@Path("chuDeId") String chuDeId, @Path("id") String tuVungId);
+
+    // Xóa tất cả từ vựng của một bộ từ (nếu backend hỗ trợ)
+    @DELETE("api/chude/{chuDeId}/tuvung")
+    Call<Void> deleteAllTuVungByChuDe(@Path("chuDeId") String chuDeId);
+
     // Tiến độ học tập cho 1 chủ đề của 1 người dùng
     @GET("api/chude/{id}/progress")
     Call<ApiResponse<DeckProgress>> getDeckProgress(@Path("id") String chuDeId, @Query("userId") String userId);
+
+    // Cập nhật tiến độ học tập cho một từ vựng
+    @POST("api/chude/{chuDeId}/progress")
+    Call<ApiResponse<Void>> updateWordProgress(@Path("chuDeId") String chuDeId, @Body UpdateProgressRequest request);
+
+    // Cộng XP khi học flashcard
+    @POST("api/users/{id}/add-xp")
+    Call<ApiResponse<AddXpResponse>> addXp(@Path("id") String userId, @Body AddXpRequest request);
 
     // ============= QUIZ MANAGEMENT =============
     @GET("api/quizzes")

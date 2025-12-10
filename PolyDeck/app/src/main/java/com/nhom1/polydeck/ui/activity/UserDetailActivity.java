@@ -2,11 +2,13 @@ package com.nhom1.polydeck.ui.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -32,6 +34,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private CircleImageView ivDetailAvatar;
+    private TextView tvDetailInitials;
     private TextView tvDetailUserName;
     private EditText etDetailFullName, etDetailEmail, etDetailLevel, etDetailXp, etDetailJoinDate;
     private Button btnSaveChanges;
@@ -63,6 +66,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void initViews() {
         toolbar = findViewById(R.id.toolbar_user_detail);
         ivDetailAvatar = findViewById(R.id.ivDetailAvatar);
+        tvDetailInitials = findViewById(R.id.tvDetailInitials);
         tvDetailUserName = findViewById(R.id.tvDetailUserName);
         etDetailFullName = findViewById(R.id.etDetailFullName);
         etDetailEmail = findViewById(R.id.etDetailEmail);
@@ -102,10 +106,24 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void populateUserData(User user) {
-        Glide.with(this)
-                .load(user.getLinkAnhDaiDien())
-                .error(R.drawable.circle_purple) // Fallback image
-                .into(ivDetailAvatar);
+        // Hiển thị ảnh đại diện hoặc initials
+        String avatarUrl = user.getLinkAnhDaiDien();
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            // Có ảnh - hiển thị ảnh
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .circleCrop()
+                    .error(R.drawable.circle_purple)
+                    .into(ivDetailAvatar);
+            ivDetailAvatar.setVisibility(android.view.View.VISIBLE);
+            tvDetailInitials.setVisibility(android.view.View.GONE);
+        } else {
+            // Không có ảnh - hiển thị initials
+            String initials = makeInitials(user.getHoTen());
+            tvDetailInitials.setText(initials);
+            ivDetailAvatar.setVisibility(android.view.View.GONE);
+            tvDetailInitials.setVisibility(android.view.View.VISIBLE);
+        }
 
         tvDetailUserName.setText(user.getHoTen());
         etDetailFullName.setText(user.getHoTen());
@@ -115,30 +133,170 @@ public class UserDetailActivity extends AppCompatActivity {
         etDetailJoinDate.setText(user.getNgayThamGia());
     }
 
+    private String makeInitials(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            return "?";
+        }
+        String[] words = fullName.trim().split("\\s+");
+        if (words.length >= 2) {
+            return (words[0].charAt(0) + "" + words[words.length - 1].charAt(0)).toUpperCase();
+        }
+        if (fullName.length() > 0) {
+            return fullName.substring(0, 1).toUpperCase();
+        }
+        return "?";
+    }
+
     private void saveUserChanges() {
         if (currentUser == null) return;
 
-        // Update user object from EditText fields
-        currentUser.setHoTen(etDetailFullName.getText().toString());
-        currentUser.setEmail(etDetailEmail.getText().toString());
-        currentUser.setLevel(Integer.parseInt(etDetailLevel.getText().toString()));
-        currentUser.setXp(Integer.parseInt(etDetailXp.getText().toString()));
+        // Validate input
+        String newFullName = etDetailFullName.getText().toString().trim();
+        String newEmail = etDetailEmail.getText().toString().trim();
+        String levelStr = etDetailLevel.getText().toString().trim();
+        String xpStr = etDetailXp.getText().toString().trim();
 
+        // Validation
+        if (newFullName.isEmpty()) {
+            etDetailFullName.setError("Họ và tên không được để trống");
+            etDetailFullName.requestFocus();
+            return;
+        }
+
+        if (newEmail.isEmpty()) {
+            etDetailEmail.setError("Email không được để trống");
+            etDetailEmail.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+            etDetailEmail.setError("Email không hợp lệ");
+            etDetailEmail.requestFocus();
+            return;
+        }
+
+        int newLevel;
+        int newXp;
+        try {
+            newLevel = Integer.parseInt(levelStr);
+            newXp = Integer.parseInt(xpStr);
+            if (newLevel < 1) {
+                etDetailLevel.setError("Level phải >= 1");
+                etDetailLevel.requestFocus();
+                return;
+            }
+            if (newXp < 0) {
+                etDetailXp.setError("XP phải >= 0");
+                etDetailXp.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Level và XP phải là số", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra xem có thay đổi gì không
+        boolean hasChanges = false;
+        boolean emailChanged = false;
+        StringBuilder changesLog = new StringBuilder();
+
+        if (!newFullName.equals(currentUser.getHoTen())) {
+            hasChanges = true;
+            changesLog.append("• Tên: ").append(currentUser.getHoTen()).append(" → ").append(newFullName).append("\n");
+        }
+        if (!newEmail.equals(currentUser.getEmail())) {
+            hasChanges = true;
+            emailChanged = true;
+            changesLog.append("• Email: ").append(currentUser.getEmail()).append(" → ").append(newEmail).append("\n");
+        }
+        if (newLevel != currentUser.getLevel()) {
+            hasChanges = true;
+            changesLog.append("• Level: ").append(currentUser.getLevel()).append(" → ").append(newLevel).append("\n");
+        }
+        if (newXp != currentUser.getXp()) {
+            hasChanges = true;
+            changesLog.append("• XP: ").append(currentUser.getXp()).append(" → ").append(newXp).append("\n");
+        }
+
+        if (!hasChanges) {
+            Toast.makeText(this, "Không có thay đổi nào", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Cảnh báo khi sửa email
+        if (emailChanged) {
+            showEmailChangeWarning(newFullName, newEmail, newLevel, newXp, changesLog.toString());
+        } else {
+            // Không sửa email - xác nhận trực tiếp
+            showConfirmDialog(newFullName, newEmail, newLevel, newXp, changesLog.toString());
+        }
+    }
+
+    private void showEmailChangeWarning(String newFullName, String newEmail, int newLevel, int newXp, String changesLog) {
+        new AlertDialog.Builder(this)
+                .setTitle("⚠️ Cảnh báo")
+                .setMessage("Bạn đang thay đổi email của người dùng.\n\n" +
+                           "Thay đổi email có thể ảnh hưởng đến:\n" +
+                           "• Khả năng đăng nhập của người dùng\n" +
+                           "• Xác thực email\n" +
+                           "• Bảo mật tài khoản\n\n" +
+                           "Bạn có chắc chắn muốn tiếp tục?")
+                .setPositiveButton("Tiếp tục", (dialog, which) -> {
+                    showConfirmDialog(newFullName, newEmail, newLevel, newXp, changesLog);
+                })
+                .setNegativeButton("Hủy", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void showConfirmDialog(String newFullName, String newEmail, int newLevel, int newXp, String changesLog) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận thay đổi")
+                .setMessage("Bạn có chắc chắn muốn lưu các thay đổi sau?\n\n" + changesLog + "\n" +
+                           "Người dùng sẽ được thông báo về các thay đổi này.")
+                .setPositiveButton("Lưu", (dialog, which) -> {
+                    performSave(newFullName, newEmail, newLevel, newXp, changesLog);
+                })
+                .setNegativeButton("Hủy", null)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+    }
+
+    private void performSave(String newFullName, String newEmail, int newLevel, int newXp, String changesLog) {
+        // Log thay đổi
+        Log.i(TAG, "Admin đang cập nhật thông tin user ID: " + userId);
+        Log.i(TAG, "Thay đổi:\n" + changesLog);
+
+        // Update user object
+        currentUser.setHoTen(newFullName);
+        currentUser.setEmail(newEmail);
+        currentUser.setLevel(newLevel);
+        currentUser.setXp(newXp);
+
+        // Gọi API
         apiService.updateUser(userId, currentUser).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(UserDetailActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "✅ Đã cập nhật thông tin user thành công");
+                    Toast.makeText(UserDetailActivity.this, 
+                        "✅ Đã cập nhật thông tin người dùng thành công", 
+                        Toast.LENGTH_SHORT).show();
                     finish(); // Go back to the list
                 } else {
-                    Toast.makeText(UserDetailActivity.this, "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "❌ Cập nhật thất bại - Response code: " + response.code());
+                    Toast.makeText(UserDetailActivity.this, 
+                        "Cập nhật thất bại. Vui lòng thử lại.", 
+                        Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.e(TAG, "API Error: " + t.getMessage());
-                Toast.makeText(UserDetailActivity.this, "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "❌ API Error: " + t.getMessage());
+                Toast.makeText(UserDetailActivity.this, 
+                    "Lỗi mạng: " + t.getMessage(), 
+                    Toast.LENGTH_SHORT).show();
             }
         });
     }

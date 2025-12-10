@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -78,6 +80,14 @@ public class QuizManagementActivity extends AppCompatActivity {
         rvQuizList = findViewById(R.id.recyclerViewQuizzes);
         tvTotalQuizzes = findViewById(R.id.tvTotalQuizzes);
         tvPublishedQuizzes = findViewById(R.id.tvPublishedQuizzes);
+        
+        // Xử lý window insets cho RecyclerView
+        ViewCompat.setOnApplyWindowInsetsListener(rvQuizList, (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
+                        Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
+            return insets;
+        });
     }
 
     private void setupRecyclerView() {

@@ -32,6 +32,7 @@ public class VocabularyListActivity extends AppCompatActivity {
     public static final String EXTRA_DECK_ID = "EXTRA_DECK_ID";
     public static final String EXTRA_DECK_NAME = "EXTRA_DECK_NAME";
     private static final String TAG = "VocabListActivity";
+    private static final int REQUEST_CODE_ADD_VOCAB = 2001;
 
     private Toolbar toolbar;
     private RecyclerView rvVocabulary;
@@ -108,7 +109,7 @@ public class VocabularyListActivity extends AppCompatActivity {
         fabAddVocabulary.setOnClickListener(v -> {
             Intent intent = new Intent(VocabularyListActivity.this, AddVocabularyActivity.class);
             intent.putExtra("DECK_ID", deckId);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_ADD_VOCAB);
         });
     }
 
@@ -140,5 +141,25 @@ public class VocabularyListActivity extends AppCompatActivity {
         if (deckId != null && !deckId.isEmpty()) {
             fetchVocabulary(deckId);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Refresh vocabulary list when returning from AddVocabularyActivity (after adding a new word)
+        if (requestCode == REQUEST_CODE_ADD_VOCAB) {
+            if (deckId != null && !deckId.isEmpty()) {
+                fetchVocabulary(deckId);
+            }
+            // Set result to notify parent activity (DeckManagementActivity) that vocabulary changed
+            setResult(RESULT_OK);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Set result to notify DeckManagementActivity that vocabulary might have changed
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }

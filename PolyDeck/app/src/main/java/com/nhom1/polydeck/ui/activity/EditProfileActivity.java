@@ -15,6 +15,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.nhom1.polydeck.R;
@@ -56,6 +57,15 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         api = RetrofitClient.getApiService();
         SessionManager sm = new SessionManager(this);
         LoginResponse user = sm.getUserData();
@@ -63,7 +73,6 @@ public class EditProfileActivity extends AppCompatActivity {
             userId = user.getId();
         }
 
-        ImageButton btnBack = findViewById(R.id.btn_back);
         tvInitials = findViewById(R.id.tv_initials);
         ivAvatar = findViewById(R.id.iv_avatar);
         tvChangeAvatar = findViewById(R.id.tv_change_avatar);
@@ -90,7 +99,6 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
 
-        btnBack.setOnClickListener(v -> onBackPressed());
         tvChangeAvatar.setOnClickListener(v -> openFileChooser());
         btnSave.setOnClickListener(v -> saveChanges());
     }

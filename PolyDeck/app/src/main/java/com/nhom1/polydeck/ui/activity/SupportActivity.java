@@ -5,10 +5,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
@@ -36,8 +36,14 @@ public class SupportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support);
 
-        ImageButton btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        // Setup Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         etName = findViewById(R.id.et_name);
         etEmail = findViewById(R.id.et_email);
@@ -47,9 +53,17 @@ public class SupportActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
         sessionManager = new SessionManager(this);
         
+        // Luôn lấy thông tin từ user đang đăng nhập trong app
         if (sessionManager.getUserData() != null) {
             etName.setText(sessionManager.getUserData().getHoTen());
             etEmail.setText(sessionManager.getUserData().getEmail());
+            // Disable email field để tránh chỉnh sửa, đảm bảo dùng đúng email đăng nhập
+            etEmail.setEnabled(false);
+            etEmail.setFocusable(false);
+        } else {
+            // Nếu chưa đăng nhập, cho phép nhập thủ công
+            Toast.makeText(this, "Vui lòng đăng nhập để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         btnSend.setOnClickListener(v -> sendSupportRequest());

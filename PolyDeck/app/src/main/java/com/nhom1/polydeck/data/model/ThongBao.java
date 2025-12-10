@@ -2,7 +2,9 @@ package com.nhom1.polydeck.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ThongBao {
+import java.io.Serializable;
+
+public class ThongBao implements Serializable {
 
     @SerializedName("_id")
     private String id;

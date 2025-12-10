@@ -66,7 +66,7 @@
                         android:id="@+id/tv_progress_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="40%"
+                        android:text="0%"
                         android:textColor="@android:color/white"/>
                 </LinearLayout>
 
@@ -76,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:layout_marginTop="8dp"
-                    android:progress="40"
+                    android:progress="0"
                     android:indeterminate="false"
                     android:progressDrawable="@drawable/progress_xp_drawable"/>
             </LinearLayout>

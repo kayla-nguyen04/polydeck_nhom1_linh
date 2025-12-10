@@ -1,50 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#FF9800">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/btnBack"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_back"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bảng xếp hạng"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnBack" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="#FF9800"
+        android:fitsSystemWindows="true">
 
-    <!-- Top 3 Container -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/top3Container"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnBack">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#FF9800"
+            app:titleTextColor="@android:color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Bảng hạng" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FF9800"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <!-- Top 3 Container -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/top3Container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="0dp">
 
         <!-- Guideline để chia đều 3 phần -->
         <androidx.constraintlayout.widget.Guideline
@@ -79,16 +77,27 @@
                 app:cardCornerRadius="30dp"
                 app:cardElevation="4dp">
 
-                <TextView
-                    android:id="@+id/tvRank2Avatar"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#E0E0E0"
-                    android:gravity="center"
-                    android:text="LC"
-                    android:textColor="#757575"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivRank2Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tvRank2Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#E0E0E0"
+                        android:gravity="center"
+                        android:text="LC"
+                        android:textColor="#757575"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -173,16 +182,27 @@
                 app:cardCornerRadius="40dp"
                 app:cardElevation="8dp">
 
-                <TextView
-                    android:id="@+id/tvRank1Avatar"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:gravity="center"
-                    android:text="TB"
-                    android:textColor="#FF9800"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivRank1Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tvRank1Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:text="TB"
+                        android:textColor="#FF9800"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -265,16 +285,27 @@
                 app:cardCornerRadius="30dp"
                 app:cardElevation="4dp">
 
-                <TextView
-                    android:id="@+id/tvRank3Avatar"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#EF5350"
-                    android:gravity="center"
-                    android:text="PD"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivRank3Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/tvRank3Avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#EF5350"
+                        android:gravity="center"
+                        android:text="PD"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -344,15 +375,12 @@
     <!-- List Card Container -->
     <androidx.cardview.widget.CardView
         android:id="@+id/listCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="-8dp"
         app:cardCornerRadius="32dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top3Container">
+        app:cardElevation="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvLeaderboard"
@@ -366,4 +394,6 @@
             tools:listitem="@layout/item_leaderboard_row" />
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

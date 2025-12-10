@@ -23,7 +23,8 @@ const tienDoHocTapSchema = new mongoose.Schema({
   collection: 'tien_do_hoc_tap'
 });
 
-tienDoHocTapSchema.index({ ma_nguoi_dung: 1, ma_tu_vung: 1 }, { unique: true });
+// Unique index: mỗi user chỉ có 1 record cho mỗi từ vựng trong mỗi chủ đề
+tienDoHocTapSchema.index({ ma_nguoi_dung: 1, ma_tu_vung: 1, ma_chu_de: 1 }, { unique: true });
 
 module.exports = mongoose.model('TienDoHocTap', tienDoHocTapSchema);
 

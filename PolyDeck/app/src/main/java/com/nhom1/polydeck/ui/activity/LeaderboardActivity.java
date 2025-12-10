@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     private TextView tvRank1Name, tvRank1Avatar, tvRank1Badge, tvRank1Score;
     private TextView tvRank2Name, tvRank2Avatar, tvRank2Badge, tvRank2Score;
     private TextView tvRank3Name, tvRank3Avatar, tvRank3Badge, tvRank3Score;
+    private ImageView ivRank1Avatar, ivRank2Avatar, ivRank3Avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,14 @@ public class LeaderboardActivity extends AppCompatActivity {
         api = RetrofitClient.getApiService();
         sessionManager = new SessionManager(this);
 
-        ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        // Setup Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         initTop3Views();
         
@@ -71,16 +79,19 @@ public class LeaderboardActivity extends AppCompatActivity {
         tvRank1Avatar = findViewById(R.id.tvRank1Avatar);
         tvRank1Badge = findViewById(R.id.tvRank1Badge);
         tvRank1Score = findViewById(R.id.tvRank1Score);
+        ivRank1Avatar = findViewById(R.id.ivRank1Avatar);
         
         tvRank2Name = findViewById(R.id.tvRank2Name);
         tvRank2Avatar = findViewById(R.id.tvRank2Avatar);
         tvRank2Badge = findViewById(R.id.tvRank2Badge);
         tvRank2Score = findViewById(R.id.tvRank2Score);
+        ivRank2Avatar = findViewById(R.id.ivRank2Avatar);
         
         tvRank3Name = findViewById(R.id.tvRank3Name);
         tvRank3Avatar = findViewById(R.id.tvRank3Avatar);
         tvRank3Badge = findViewById(R.id.tvRank3Badge);
         tvRank3Score = findViewById(R.id.tvRank3Score);
+        ivRank3Avatar = findViewById(R.id.ivRank3Avatar);
     }
 
     private void loadData() {
@@ -123,9 +134,9 @@ public class LeaderboardActivity extends AppCompatActivity {
             tvRank1Badge.setText("1");
             tvRank1Score.setText(String.valueOf(user1.getXp()));
             
-            // Set background color for rank 1
-            tvRank1Avatar.setBackgroundColor(0xFFFFFFFF); // White background
-            tvRank1Avatar.setTextColor(0xFFFF9800); // Orange text
+            // Load avatar
+            loadAvatar(ivRank1Avatar, tvRank1Avatar, user1.getLinkAnhDaiDien(), 
+                    0xFFFFFFFF, 0xFFFF9800); // White background, Orange text
             
             rank1Container.setVisibility(View.VISIBLE);
         } else {
@@ -141,9 +152,9 @@ public class LeaderboardActivity extends AppCompatActivity {
             tvRank2Badge.setText("2");
             tvRank2Score.setText(String.valueOf(user2.getXp()));
             
-            // Set background color for rank 2
-            tvRank2Avatar.setBackgroundColor(0xFFE0E0E0); // Light gray
-            tvRank2Avatar.setTextColor(0xFF757575); // Gray text
+            // Load avatar
+            loadAvatar(ivRank2Avatar, tvRank2Avatar, user2.getLinkAnhDaiDien(), 
+                    0xFFE0E0E0, 0xFF757575); // Light gray background, Gray text
             
             rank2Container.setVisibility(View.VISIBLE);
         } else {
@@ -159,13 +170,36 @@ public class LeaderboardActivity extends AppCompatActivity {
             tvRank3Badge.setText("3");
             tvRank3Score.setText(String.valueOf(user3.getXp()));
             
-            // Set background color for rank 3
-            tvRank3Avatar.setBackgroundColor(0xFFEF5350); // Red/Pink
-            tvRank3Avatar.setTextColor(0xFFFFFFFF); // White text
+            // Load avatar
+            loadAvatar(ivRank3Avatar, tvRank3Avatar, user3.getLinkAnhDaiDien(), 
+                    0xFFEF5350, 0xFFFFFFFF); // Red/Pink background, White text
             
             rank3Container.setVisibility(View.VISIBLE);
         } else {
             rank3Container.setVisibility(View.GONE);
+        }
+    }
+    
+    private void loadAvatar(ImageView imageView, TextView textView, String avatarUrl, 
+                           int defaultBgColor, int defaultTextColor) {
+        if (avatarUrl != null && !avatarUrl.trim().isEmpty()) {
+            // Show ImageView, hide TextView
+            imageView.setVisibility(View.VISIBLE);
+            textView.setVisibility(View.GONE);
+            
+            // Load image with Glide
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .circleCrop()
+                    .placeholder(defaultBgColor)
+                    .error(defaultBgColor)
+                    .into(imageView);
+        } else {
+            // No avatar URL, show TextView with initials
+            imageView.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+            textView.setBackgroundColor(defaultBgColor);
+            textView.setTextColor(defaultTextColor);
         }
     }
 }

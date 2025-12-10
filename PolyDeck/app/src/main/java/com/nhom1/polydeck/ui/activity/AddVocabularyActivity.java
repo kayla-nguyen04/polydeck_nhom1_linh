@@ -158,6 +158,8 @@ public class AddVocabularyActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         existingVocab.add(response.body());
                     }
+                    // Set result to notify VocabularyListActivity to refresh
+                    setResult(RESULT_OK);
                     // Clear fields
                     etEnglishWord.setText("");
                     etPronunciation.setText("");
@@ -405,6 +407,8 @@ public class AddVocabularyActivity extends AppCompatActivity {
                         message += " (Đã bỏ qua " + duplicateCount + " từ trùng)";
                     }
                     Toast.makeText(AddVocabularyActivity.this, message, Toast.LENGTH_LONG).show();
+                    // Set result to notify VocabularyListActivity to refresh
+                    setResult(RESULT_OK);
                     finish(); // Close activity after successful import
                 } else {
                     String errorMessage = "Import thất bại";

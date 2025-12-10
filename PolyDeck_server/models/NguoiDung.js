@@ -9,6 +9,7 @@ const nguoiDungSchema = new mongoose.Schema({
   cap_do: { type: Number, default: 1, min: 1 },
   diem_tich_luy: { type: Number, default: 0, min: 0 },
   chuoi_ngay_hoc: { type: Number, default: 0, min: 0 },
+  ngay_hoc_cuoi: { type: Date, default: null }, // Ngày học cuối cùng để tính streak
   vai_tro: { type: String, enum: ['student', 'admin'], default: 'student' },
   trang_thai: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
   tu_vung_yeu_thich: [{ type: String }],

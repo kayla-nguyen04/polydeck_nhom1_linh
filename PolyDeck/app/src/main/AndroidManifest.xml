@@ -36,6 +36,7 @@
         <!-- Main/App Activities -->
         <activity android:name=".ui.activity.MainActivity" android:exported="false" />
         <activity android:name=".ui.activity.AdminDashboardActivity" android:exported="false" />
+        <activity android:name=".ui.activity.AdminStatisticsActivity" android:exported="false" />
         <activity android:name=".ui.activity.AdminPanelActivity" android:exported="false" />
         <activity android:name=".ui.activity.EditProfileActivity" android:exported="false" />
         <activity android:name=".ui.activity.SettingsActivity" android:exported="false" />
@@ -60,8 +61,11 @@
         <!-- Newly added user UI activities -->
         <activity android:name=".ui.activity.TopicDetailActivity" android:exported="false" />
         <activity android:name=".ui.activity.NotificationsActivity" android:exported="false" />
+        <activity android:name=".ui.activity.NotificationDetailActivity" android:exported="false" />
         <activity android:name=".ui.activity.QuizActivity" android:exported="false" />
         <activity android:name=".ui.activity.QuizResultActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizHistoryActivity" android:exported="false" />
+        <activity android:name=".ui.activity.QuizHistoryDetailActivity" android:exported="false" />
         <activity android:name=".ui.activity.FlashcardActivity" android:exported="false" />
         <activity android:name=".ui.activity.FlashcardDoneActivity" android:exported="false" />
         <activity android:name=".ui.activity.FavoritesActivity" android:exported="false" />

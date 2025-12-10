@@ -31,4 +31,15 @@
 	
 	<!-- Bottom bar -->
 	<color name="yellow_bar">#FACC15</color> <!-- vivid amber for nav background -->
+	
+	<!-- Statistics colors -->
+	<color name="background_gray">#F5F5F5</color>
+	<color name="purple_primary">#6366F1</color>
+	<color name="purple_500">#6366F1</color>
+	<color name="teal_500">#14B8A6</color>
+	<color name="orange_500">#F97316</color>
+	<color name="red_500">#EF4444</color>
+	<color name="text_primary">#1F2937</color>
+	<color name="text_secondary">#6B7280</color>
+	<color name="divider">#E5E7EB</color>
 </resources>

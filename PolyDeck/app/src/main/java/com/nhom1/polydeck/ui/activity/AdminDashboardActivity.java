@@ -27,9 +27,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_USER_MANAGEMENT = 1002;
 
     private TextView tvTotalUsers, tvTotalDecks, tvActiveUsers, tvTotalWords;
-    private TextView tvUserGrowth, tvDeckGrowth, tvActiveGrowth, tvWordGrowth;
 
-    private CardView cardUsers, cardDecks, cardQuiz, cardNotification, cardStatistics;
+    private CardView cardUsers, cardDecks, cardQuiz, cardNotification, cardStatistics, cardSupportRequests;
 
     // Logout button
     private ImageView btnLogout;
@@ -74,16 +73,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
         tvActiveUsers = findViewById(R.id.tvActiveUsers);
         tvTotalWords = findViewById(R.id.tvTotalWords);
 
-        tvUserGrowth = findViewById(R.id.tvUserGrowth);
-        tvDeckGrowth = findViewById(R.id.tvDeckGrowth);
-        tvActiveGrowth = findViewById(R.id.tvActiveGrowth);
-        tvWordGrowth = findViewById(R.id.tvWordGrowth);
-
         cardUsers = findViewById(R.id.cardUsers);
         cardDecks = findViewById(R.id.cardDecks);
         cardQuiz = findViewById(R.id.cardQuiz);
         cardNotification = findViewById(R.id.cardNotification);
         cardStatistics = findViewById(R.id.cardStatistics);
+        cardSupportRequests = findViewById(R.id.cardSupportRequests);
 
         btnLogout = findViewById(R.id.btnLogout);
     }
@@ -102,17 +97,42 @@ public class AdminDashboardActivity extends AppCompatActivity {
             public void onResponse(Call<AdminStats> call, Response<AdminStats> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     AdminStats stats = response.body();
-                    updateStatsUI(stats);
+                    if (stats != null) {
+                        updateStatsUI(stats);
+                    } else {
+                        Toast.makeText(AdminDashboardActivity.this,
+                                "Dữ liệu thống kê rỗng", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(AdminDashboardActivity.this,
-                            "Không thể tải thống kê", Toast.LENGTH_SHORT).show();
+                    String errorMsg = "Không thể tải thống kê";
+                    if (response.errorBody() != null) {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            android.util.Log.e("AdminDashboard", "Error response: " + errorBody);
+                            if (errorBody.contains("message")) {
+                                // Try to extract message if it's JSON
+                                try {
+                                    com.google.gson.JsonObject json = new com.google.gson.JsonParser().parse(errorBody).getAsJsonObject();
+                                    if (json.has("message")) {
+                                        errorMsg = json.get("message").getAsString();
+                                    }
+                                } catch (Exception e) {
+                                    // Not JSON, use default message
+                                }
+                            }
+                        } catch (Exception e) {
+                            android.util.Log.e("AdminDashboard", "Error reading error body", e);
+                        }
+                    }
+                    Toast.makeText(AdminDashboardActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<AdminStats> call, Throwable t) {
+                android.util.Log.e("AdminDashboard", "API call failed: " + t.getMessage(), t);
                 Toast.makeText(AdminDashboardActivity.this,
-                        "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -122,11 +142,6 @@ public class AdminDashboardActivity extends AppCompatActivity {
         tvTotalDecks.setText(String.format("%,d", stats.getTongBoTu()));
         tvActiveUsers.setText(String.format("%,d", stats.getNguoiHoatDong()));
         tvTotalWords.setText(String.format("%,d", stats.getTongTuVung()));
-
-        tvUserGrowth.setText(stats.getTyLeNguoiDung());
-        tvDeckGrowth.setText(stats.getTyLeBoTu());
-        tvActiveGrowth.setText(stats.getTyLeHoatDong());
-        tvWordGrowth.setText(stats.getTyLeTuVung());
     }
 
     private void setupClickListeners() {
@@ -154,6 +169,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(AdminDashboardActivity.this, AdminStatisticsActivity.class);
             startActivity(intent);
         });
+        
+        if (cardSupportRequests != null) {
+            cardSupportRequests.setOnClickListener(v -> {
+                Intent intent = new Intent(AdminDashboardActivity.this, SupportRequestManagementActivity.class);
+                startActivity(intent);
+            });
+        }
 
         btnLogout.setOnClickListener(v -> {
             showLogoutDialog();

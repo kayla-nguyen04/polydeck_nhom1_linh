@@ -57,6 +57,8 @@
         <activity android:name=".ui.activity.ViewQuizActivity" android:exported="false" />
         <activity android:name=".ui.activity.SendNotificationActivity" android:exported="false" />
         <activity android:name=".ui.activity.VocabularyListActivity" android:exported="false" />
+        <activity android:name=".ui.activity.EditVocabularyActivity" android:exported="false" />
+        <activity android:name=".ui.activity.SupportRequestManagementActivity" android:exported="false" />
 
         <!-- Newly added user UI activities -->
         <activity android:name=".ui.activity.TopicDetailActivity" android:exported="false" />

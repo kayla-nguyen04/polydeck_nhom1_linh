@@ -4,7 +4,8 @@ const yeuCauHoTroSchema = new mongoose.Schema({
   ma_nguoi_dung: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'NguoiDung', 
-    required: true 
+    required: false,
+    default: null
   },
   noi_dung: { type: String, required: true },
   ten_nguoi_gui: { type: String, required: true, trim: true },

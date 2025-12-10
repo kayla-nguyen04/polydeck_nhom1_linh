@@ -160,6 +160,10 @@ public interface APIService {
     @DELETE("api/chude/{chuDeId}/tuvung/{id}")
     Call<Void> deleteTuVungInChuDe(@Path("chuDeId") String chuDeId, @Path("id") String tuVungId);
 
+    // Cập nhật từ vựng
+    @PUT("api/chude/{chuDeId}/tuvung/{tuVungId}")
+    Call<TuVung> updateTuVung(@Path("chuDeId") String chuDeId, @Path("tuVungId") String tuVungId, @Body TuVung tuVung);
+
     // Xóa tất cả từ vựng của một bộ từ (nếu backend hỗ trợ)
     @DELETE("api/chude/{chuDeId}/tuvung")
     Call<Void> deleteAllTuVungByChuDe(@Path("chuDeId") String chuDeId);

@@ -352,6 +352,55 @@ router.post('/:chuDeId/progress', async (req, res) => {
     }
 });
 
+// PUT: Cập nhật từ vựng
+router.put('/:chuDeId/tuvung/:tuVungId', async (req, res) => {
+    try {
+        const chuDe = await ChuDe.findOne(resolveChuDeFilter(req.params.chuDeId));
+        if (!chuDe) {
+            return res.status(404).json({ message: 'Không tìm thấy chủ đề' });
+        }
+
+        const { tu_tieng_anh, nghia_tieng_viet, phien_am, cau_vi_du } = req.body;
+        if (!tu_tieng_anh || !nghia_tieng_viet) {
+            return res.status(400).json({ message: 'Từ tiếng Anh và nghĩa tiếng Việt là bắt buộc.' });
+        }
+
+        // Kiểm tra từ vựng có tồn tại và thuộc chủ đề này không
+        const tuVung = await TuVung.findOne({ 
+            _id: req.params.tuVungId,
+            ma_chu_de: chuDe._id 
+        });
+        
+        if (!tuVung) {
+            return res.status(404).json({ message: 'Không tìm thấy từ vựng hoặc từ vựng không thuộc chủ đề này' });
+        }
+
+        // Kiểm tra trùng lặp (nếu thay đổi từ tiếng Anh)
+        if (tu_tieng_anh !== tuVung.tu_tieng_anh) {
+            const existingVocab = await TuVung.findOne({
+                ma_chu_de: chuDe._id,
+                tu_tieng_anh: tu_tieng_anh,
+                _id: { $ne: req.params.tuVungId }
+            });
+            if (existingVocab) {
+                return res.status(409).json({ message: 'Từ vựng này đã tồn tại trong chủ đề' });
+            }
+        }
+
+        // Cập nhật từ vựng
+        tuVung.tu_tieng_anh = tu_tieng_anh.trim();
+        tuVung.nghia_tieng_viet = nghia_tieng_viet.trim();
+        tuVung.phien_am = phien_am ? phien_am.trim() : null;
+        tuVung.cau_vi_du = cau_vi_du ? cau_vi_du.trim() : null;
+
+        const updatedTuVung = await tuVung.save();
+        res.json(updatedTuVung);
+    } catch (err) {
+        console.error('Error updating TuVung:', err);
+        res.status(500).json({ message: err.message });
+    }
+});
+
 // POST: Import từ vựng hàng loạt từ Excel
 router.post('/:chuDeId/import-vocab', async (req, res) => {
     try {

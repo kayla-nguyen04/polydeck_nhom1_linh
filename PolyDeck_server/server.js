@@ -53,7 +53,7 @@ app.get('/api/info', (req, res) => {
     res.json({ error: e.message });
   }
 });
-// app.use('/api/tuvung', require('./routes/tuVung'));      
+app.use('/api/tuvung', require('./routes/tuVung'));      
 app.use('/api/quizzes', require('./routes/quiz'));        
 app.use('/api/hotro', require('./routes/hoTro'));         
 app.use('/api/thongbao', require('./routes/thongBao'));   

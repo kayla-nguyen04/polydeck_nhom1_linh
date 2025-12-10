@@ -111,6 +111,31 @@ router.get('/search', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// GET: Lọc người dùng theo khoảng thời gian (theo ngày tham gia)
+router.get('/filter-by-date', async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        
+        if (!startDate || !endDate) {
+            return res.status(400).json({ message: 'Thiếu startDate hoặc endDate' });
+        }
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999); // Set to end of day
+        
+        // Find users created in date range
+        const users = await NguoiDung.find({
+            createdAt: { $gte: start, $lte: end }
+        }).sort({ createdAt: -1 });
+        
+        res.json(users);
+    } catch (err) {
+        console.error('Lỗi khi lọc người dùng theo ngày:', err);
+        res.status(500).json({ message: err.message });
+    }
+});
 // GET: Lấy chi tiết một người dùng theo ID
 router.get('/:id', async (req, res) => {
     try {

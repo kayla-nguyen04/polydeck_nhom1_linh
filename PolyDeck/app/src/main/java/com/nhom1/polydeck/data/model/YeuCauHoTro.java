@@ -11,6 +11,14 @@ public class YeuCauHoTro {
     @SerializedName("ma_nguoi_dung")
     private String maNguoiDung;
     
+    public String getMaNguoiDung() {
+        return maNguoiDung;
+    }
+    
+    public void setMaNguoiDung(String maNguoiDung) {
+        this.maNguoiDung = maNguoiDung;
+    }
+    
     @SerializedName("noi_dung")
     private String noiDung;
     
@@ -21,7 +29,7 @@ public class YeuCauHoTro {
     private String emailNguoiGui;
     
     @SerializedName("ngay_gui")
-    private Date ngayGui;
+    private String ngayGui; // Changed to String to handle ISO date strings
     
     // Getters and Setters
     public String getId() {
@@ -32,13 +40,6 @@ public class YeuCauHoTro {
         this.id = id;
     }
     
-    public String getMaNguoiDung() {
-        return maNguoiDung;
-    }
-    
-    public void setMaNguoiDung(String maNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
-    }
     
     public String getNoiDung() {
         return noiDung;
@@ -64,12 +65,31 @@ public class YeuCauHoTro {
         this.emailNguoiGui = emailNguoiGui;
     }
     
-    public Date getNgayGui() {
+    public String getNgayGui() {
         return ngayGui;
     }
     
-    public void setNgayGui(Date ngayGui) {
+    public void setNgayGui(String ngayGui) {
         this.ngayGui = ngayGui;
+    }
+    
+    // Helper method to get ngay_gui as Date
+    public Date getNgayGuiAsDate() {
+        if (ngayGui == null || ngayGui.isEmpty()) return null;
+        try {
+            // Try ISO format first
+            java.text.SimpleDateFormat isoFormat = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault());
+            isoFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+            return isoFormat.parse(ngayGui);
+        } catch (Exception e) {
+            try {
+                // Try simple date format
+                java.text.SimpleDateFormat simpleFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+                return simpleFormat.parse(ngayGui);
+            } catch (Exception e2) {
+                return null;
+            }
+        }
     }
 }
 

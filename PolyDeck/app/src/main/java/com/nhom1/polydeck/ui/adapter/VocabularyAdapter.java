@@ -202,7 +202,34 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vo
                 }
             });
         } else {
-            holder.btnFavorite.setOnClickListener(null);
+            // Admin: Use favorite button as edit button
+            holder.btnFavorite.setImageResource(R.drawable.ic_edit);
+            holder.btnFavorite.setColorFilter(context.getResources().getColor(R.color.purple_primary, null));
+            holder.btnFavorite.setOnClickListener(v -> {
+                if (vocab.getId() == null || vocab.getId().isEmpty()) {
+                    Toast.makeText(context, "ID từ vựng không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Open edit vocabulary activity
+                android.content.Intent intent = new android.content.Intent(context, com.nhom1.polydeck.ui.activity.EditVocabularyActivity.class);
+                intent.putExtra("VOCAB_ID", vocab.getId());
+                intent.putExtra("DECK_ID", vocab.getMaChuDe());
+                context.startActivity(intent);
+            });
+        }
+        
+        // Make entire item clickable for admin to edit
+        if (isAdmin) {
+            holder.itemView.setOnClickListener(v -> {
+                if (vocab.getId() == null || vocab.getId().isEmpty()) {
+                    Toast.makeText(context, "ID từ vựng không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                android.content.Intent intent = new android.content.Intent(context, com.nhom1.polydeck.ui.activity.EditVocabularyActivity.class);
+                intent.putExtra("VOCAB_ID", vocab.getId());
+                intent.putExtra("DECK_ID", vocab.getMaChuDe());
+                context.startActivity(intent);
+            });
         }
     }
 

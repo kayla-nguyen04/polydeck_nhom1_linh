@@ -66,6 +66,56 @@ router.get('/stats', async (req, res) => {
     }
 });
 
+// GET: Lấy thống kê theo khoảng thời gian
+router.get('/stats-by-date', async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        
+        if (!startDate || !endDate) {
+            return res.status(400).json({ message: 'Thiếu startDate hoặc endDate' });
+        }
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999); // Set to end of day
+        
+        // Count users created in date range
+        const tongNguoiDung = await NguoiDung.countDocuments({
+            createdAt: { $gte: start, $lte: end }
+        });
+        
+        // Count active users in date range
+        const nguoiHoatDong = await NguoiDung.countDocuments({
+            trang_thai: 'active',
+            createdAt: { $gte: start, $lte: end }
+        });
+        
+        // Count decks created in date range
+        const tongBoTu = await ChuDe.countDocuments({
+            createdAt: { $gte: start, $lte: end }
+        });
+        
+        // Count vocabulary created in date range
+        const tongTuVung = await TuVung.countDocuments({
+            createdAt: { $gte: start, $lte: end }
+        });
+        
+        res.json({
+            tongNguoiDung,
+            tongBoTu,
+            nguoiHoatDong,
+            tongTuVung,
+            tyLeNguoiDung: '0%',
+            tyLeBoTu: '0%',
+            tyLeHoatDong: '0%',
+            tyLeTuVung: '0%'
+        });
+    } catch (err) {
+        console.error('Lỗi khi lấy thống kê theo ngày:', err);
+        res.status(500).json({ message: 'Lỗi server khi lấy thống kê' });
+    }
+});
+
 router.post('/thong-bao', async (req, res) => {
     const { tieu_de, noi_dung } = req.body;
 

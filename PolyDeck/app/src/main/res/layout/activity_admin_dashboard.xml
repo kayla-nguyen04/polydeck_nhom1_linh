@@ -2,15 +2,20 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    android:paddingBottom="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="0dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -476,14 +481,14 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/ic_notification"
+                        android:src="@drawable/ic_support"
                         app:tint="#10B981"
-                        android:contentDescription="Phản hồi khách hàng"/>
+                        android:contentDescription="Hỗ trợ khách hàng"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Phản hồi"
+                        android:text="Hỗ trợ"
                         android:textColor="#1F2937"
                         android:textSize="13sp"
                         android:textAlignment="center"

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.nhom1.polydeck.R;
@@ -55,6 +56,38 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.LeaderboardActivity.class)));
         view.findViewById(R.id.row_support).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), com.nhom1.polydeck.ui.activity.SupportActivity.class)));
+        
+        // Logout button
+        view.findViewById(R.id.row_logout).setOnClickListener(v -> showLogoutDialog());
+    }
+    
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                    performLogout();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void performLogout() {
+        // Clear session
+        SessionManager sessionManager = new SessionManager(requireContext());
+        sessionManager.logout();
+        
+        // Navigate to login screen
+        Intent intent = new Intent(requireContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        
+        // Finish MainActivity if exists
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
+        
+        Toast.makeText(requireContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
     }
 
     @Override

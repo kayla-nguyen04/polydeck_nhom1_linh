@@ -93,19 +93,19 @@
                 android:textStyle="bold"
                 android:textColor="#7C3AED"/>
 
-            <!-- Delete Button -->
+            <!-- Hide Button -->
             <TextView
                 android:id="@+id/btnDelete"
                 android:layout_width="0dp"
                 android:layout_height="36dp"
                 android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                android:background="@drawable/bg_button_delete"
+                android:background="@drawable/bg_button_hide"
                 android:gravity="center"
-                android:text="🗑 Xóa"
+                android:text="👁️‍🗨️ Ẩn"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#EF4444"/>
+                android:textColor="#D97706"/>
         </LinearLayout>
 
     </LinearLayout>

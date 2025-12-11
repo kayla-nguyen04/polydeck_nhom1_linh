@@ -52,8 +52,9 @@ public class SendNotificationActivity extends AppCompatActivity {
         if (nestedScrollView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(nestedScrollView, (v, insets) -> {
                 androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
-                            Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
+                int topInset = systemBars.top;
+                int bottomInset = Math.max(systemBars.bottom, 16); // Tối thiểu 16dp
+                v.setPadding(0, topInset, 0, bottomInset);
                 return insets;
             });
         }

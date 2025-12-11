@@ -21,12 +21,14 @@ import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.BaiQuiz;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.ui.adapter.QuizAdminAdapter;
+import com.nhom1.polydeck.utils.HiddenQuizManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -45,6 +47,7 @@ public class QuizListActivity extends AppCompatActivity {
     private APIService apiService;
     private List<BaiQuiz> fullQuizList = new ArrayList<>(); // Store the full list for search restoration
     private Map<String, BoTu> deckMap = new HashMap<>();
+    private HiddenQuizManager hiddenQuizManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class QuizListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_list);
 
         apiService = RetrofitClient.getApiService();
+        hiddenQuizManager = new HiddenQuizManager(this);
 
         initViews();
         setupRecyclerView();
@@ -102,15 +106,24 @@ public class QuizListActivity extends AppCompatActivity {
     }
 
     private void searchQuizzes(String query) {
+        // Filter out hidden quizzes first
+        Set<String> hiddenQuizIds = hiddenQuizManager.getHiddenQuizIds();
+        List<BaiQuiz> visibleQuizzes = new ArrayList<>();
+        for (BaiQuiz quiz : fullQuizList) {
+            if (!hiddenQuizIds.contains(quiz.getId())) {
+                visibleQuizzes.add(quiz);
+            }
+        }
+        
         if (query == null || query.trim().isEmpty()) {
-            adapter.updateData(new ArrayList<>(fullQuizList), deckMap); // Restore the full list
+            adapter.updateData(new ArrayList<>(visibleQuizzes), deckMap); // Restore the visible list
             return;
         }
 
         List<BaiQuiz> filteredList = new ArrayList<>();
         String lowerQuery = query.toLowerCase(Locale.getDefault());
         
-        for (BaiQuiz quiz : fullQuizList) {
+        for (BaiQuiz quiz : visibleQuizzes) {
             BoTu deck = deckMap.get(quiz.getMaChuDe());
             String deckName = (deck != null) ? deck.getTenChuDe() : "";
             
@@ -144,11 +157,20 @@ public class QuizListActivity extends AppCompatActivity {
                                 fullQuizList.clear();
                                 fullQuizList.addAll(response.body());
                                 
-                                if (fullQuizList.isEmpty()) {
+                                // Filter out hidden quizzes
+                                Set<String> hiddenQuizIds = hiddenQuizManager.getHiddenQuizIds();
+                                List<BaiQuiz> visibleQuizzes = new ArrayList<>();
+                                for (BaiQuiz quiz : fullQuizList) {
+                                    if (!hiddenQuizIds.contains(quiz.getId())) {
+                                        visibleQuizzes.add(quiz);
+                                    }
+                                }
+                                
+                                if (visibleQuizzes.isEmpty()) {
                                     Toast.makeText(QuizListActivity.this, "Chưa có quiz nào", Toast.LENGTH_SHORT).show();
                                 }
                                 
-                                adapter.updateData(new ArrayList<>(fullQuizList), deckMap);
+                                adapter.updateData(new ArrayList<>(visibleQuizzes), deckMap);
                                 updateStats();
                             } else {
                                 Toast.makeText(QuizListActivity.this, "Không thể tải danh sách quiz", Toast.LENGTH_SHORT).show();
@@ -175,9 +197,20 @@ public class QuizListActivity extends AppCompatActivity {
     }
 
     private void updateStats() {
+        // Tổng = tất cả quiz (bao gồm cả ẩn)
         int totalQuizzes = fullQuizList.size();
-        // Assuming all quizzes are published for now
-        int publishedQuizzes = totalQuizzes; // You can add logic to check published status
+        
+        // Đã xuất bản = chỉ quiz đang hiển thị (không ẩn)
+        Set<String> hiddenQuizIds = hiddenQuizManager.getHiddenQuizIds();
+        int visibleQuizzes = 0;
+        for (BaiQuiz quiz : fullQuizList) {
+            if (!hiddenQuizIds.contains(quiz.getId())) {
+                visibleQuizzes++;
+            }
+        }
+        // Assuming all visible quizzes are published for now
+        int publishedQuizzes = visibleQuizzes;
+        
         tvTotalQuizzes.setText(String.valueOf(totalQuizzes));
         tvPublishedQuizzes.setText(String.valueOf(publishedQuizzes));
     }

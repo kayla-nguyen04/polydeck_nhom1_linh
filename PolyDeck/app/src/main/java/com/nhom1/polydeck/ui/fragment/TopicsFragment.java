@@ -19,6 +19,7 @@ import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.ui.adapter.UserDeckAdapter;
+import com.nhom1.polydeck.utils.HiddenDeckManager;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class TopicsFragment extends Fragment {
     private UserDeckAdapter adapter;
     private APIService apiService;
     private EditText edtSearch;
+    private HiddenDeckManager hiddenDeckManager;
 
     @Nullable
     @Override
@@ -42,6 +44,7 @@ public class TopicsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         apiService = RetrofitClient.getApiService();
+        hiddenDeckManager = new HiddenDeckManager(requireContext());
 
         edtSearch = view.findViewById(R.id.edt_search_topic);
         RecyclerView rvDecks = view.findViewById(R.id.rv_decks);
@@ -87,7 +90,9 @@ public class TopicsFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter.setItems(response.body());
+                    // Lọc bỏ các bộ từ đã ẩn
+                    List<BoTu> visibleDecks = filterHiddenDecks(response.body());
+                    adapter.setItems(visibleDecks);
                 }
             }
             @Override
@@ -100,12 +105,27 @@ public class TopicsFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter.setItems(response.body());
+                    // Lọc bỏ các bộ từ đã ẩn
+                    List<BoTu> visibleDecks = filterHiddenDecks(response.body());
+                    adapter.setItems(visibleDecks);
                 }
             }
             @Override
             public void onFailure(@NonNull Call<List<BoTu>> call, @NonNull Throwable t) { }
         });
+    }
+    
+    /**
+     * Lọc bỏ các bộ từ đã ẩn khỏi danh sách
+     */
+    private List<BoTu> filterHiddenDecks(List<BoTu> allDecks) {
+        List<BoTu> visibleDecks = new java.util.ArrayList<>();
+        for (BoTu deck : allDecks) {
+            if (deck.getId() != null && !hiddenDeckManager.isDeckHidden(deck.getId())) {
+                visibleDecks.add(deck);
+            }
+        }
+        return visibleDecks;
     }
 }
 

@@ -190,13 +190,17 @@
             android:layout_marginTop="24dp"/>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_continue_learning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="12dp"
             android:elevation="3dp"
-            app:cardCornerRadius="16dp">
+            app:cardCornerRadius="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"

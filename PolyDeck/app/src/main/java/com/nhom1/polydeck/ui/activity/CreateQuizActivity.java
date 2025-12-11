@@ -23,6 +23,8 @@ import com.google.android.material.button.MaterialButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
@@ -77,13 +79,14 @@ public class CreateQuizActivity extends AppCompatActivity {
 
         apiService = RetrofitClient.getApiService();
 
+        // Check if editing existing quiz - get this BEFORE initViews so title can be updated
+        currentQuizId = getIntent().getStringExtra("QUIZ_ID");
+        String deckId = getIntent().getStringExtra("DECK_ID");
+
         initViews();
         setupToolbar();
         setupListeners();
-
-        // Check if editing existing quiz
-        currentQuizId = getIntent().getStringExtra("QUIZ_ID");
-        String deckId = getIntent().getStringExtra("DECK_ID");
+        setupWindowInsets();
         
         fetchDecksForSpinner();
         
@@ -113,6 +116,17 @@ public class CreateQuizActivity extends AppCompatActivity {
     private void setupToolbar() {
         btnBack.setOnClickListener(v -> onBackPressed());
         btnSaveHeader.setOnClickListener(v -> saveQuiz());
+    }
+
+    private void setupWindowInsets() {
+        View mainLayout = findViewById(R.id.mainLayout);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void setupListeners() {

@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.nhom1.polydeck.R;
@@ -71,6 +73,7 @@ public class EditDeckActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
         initViews();
         setupToolbar();
+        setupWindowInsets();
         fetchDeckDetails();
         
         // Load existing decks to check for duplicates
@@ -124,6 +127,17 @@ public class EditDeckActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
+    }
+
+    private void setupWindowInsets() {
+        android.view.View mainLayout = findViewById(R.id.mainLayout);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void fetchDeckDetails() {

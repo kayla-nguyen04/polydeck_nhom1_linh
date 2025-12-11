@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
@@ -29,6 +31,7 @@ public class EditVocabularyActivity extends AppCompatActivity {
     private static final String TAG = "EditVocabularyActivity";
 
     private ImageView btnBack;
+    private TextView tvTitle;
     private EditText etEnglishWord, etPronunciation, etVietnameseMeaning, etExample;
     private Button btnSaveVocabulary;
 
@@ -56,6 +59,7 @@ public class EditVocabularyActivity extends AppCompatActivity {
 
         initViews();
         setupToolbar();
+        setupWindowInsets();
         setupListeners();
         
         // Load existing vocabulary to check for duplicates
@@ -121,18 +125,33 @@ public class EditVocabularyActivity extends AppCompatActivity {
 
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
+        tvTitle = findViewById(R.id.tvTitle);
         etEnglishWord = findViewById(R.id.inputWord);
         etPronunciation = findViewById(R.id.inputIPA);
         etVietnameseMeaning = findViewById(R.id.inputMeaning);
         etExample = findViewById(R.id.inputExample);
         btnSaveVocabulary = findViewById(R.id.btnAddWord);
         
-        // Change button text for edit mode
+        // Change title and button text for edit mode
+        if (tvTitle != null) {
+            tvTitle.setText("Sửa từ vựng");
+        }
         btnSaveVocabulary.setText("Lưu thay đổi");
     }
 
     private void setupToolbar() {
         btnBack.setOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupWindowInsets() {
+        android.view.View mainScrollView = findViewById(R.id.mainScrollView);
+        if (mainScrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainScrollView, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void setupListeners() {

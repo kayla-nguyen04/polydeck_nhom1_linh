@@ -1,12 +1,15 @@
 package com.nhom1.polydeck.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +54,7 @@ public class ViewQuizActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
 
         initViews();
+        setupWindowInsets();
         setupRecyclerView();
         loadQuiz();
     }
@@ -62,6 +66,17 @@ public class ViewQuizActivity extends AppCompatActivity {
         rvQuestions = findViewById(R.id.rvQuestions);
 
         btnBack.setOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupWindowInsets() {
+        View mainLayout = findViewById(R.id.mainLayout);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void setupRecyclerView() {

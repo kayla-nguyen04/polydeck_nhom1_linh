@@ -65,7 +65,6 @@ public class SupportRequestManagementActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         rvSupportRequests.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SupportRequestAdapter(supportRequests, this);
-        adapter.setOnDeleteListener((request, position) -> deleteSupportRequest(request, position));
         adapter.setOnItemClickListener((request, position) -> showSupportRequestDetail(request));
         rvSupportRequests.setAdapter(adapter);
     }
@@ -172,7 +171,7 @@ public class SupportRequestManagementActivity extends AppCompatActivity {
 
     private void showSupportRequestDetail(YeuCauHoTro request) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("Chi tiết phản hồi");
+        builder.setTitle("Chi tiết hỗ trợ");
         
         StringBuilder message = new StringBuilder();
         message.append("Người gửi: ").append(request.getTenNguoiGui() != null ? request.getTenNguoiGui() : "Không có tên").append("\n\n");
@@ -196,12 +195,6 @@ public class SupportRequestManagementActivity extends AppCompatActivity {
         
         builder.setMessage(message.toString());
         builder.setPositiveButton("Đóng", null);
-        builder.setNeutralButton("Xóa", (dialog, which) -> {
-            int position = supportRequests.indexOf(request);
-            if (position >= 0) {
-                deleteSupportRequest(request, position);
-            }
-        });
         
         android.app.AlertDialog dialog = builder.create();
         dialog.show();

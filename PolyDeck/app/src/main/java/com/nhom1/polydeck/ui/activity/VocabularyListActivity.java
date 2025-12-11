@@ -3,12 +3,15 @@ package com.nhom1.polydeck.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,6 +65,7 @@ public class VocabularyListActivity extends AppCompatActivity {
 
         initViews();
         setupToolbar(deckName);
+        setupWindowInsets();
         setupRecyclerView();
         setupSearch();
         setupFab();
@@ -80,6 +84,17 @@ public class VocabularyListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupWindowInsets() {
+        View mainLayout = findViewById(R.id.mainLayout);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void setupRecyclerView() {

@@ -49,15 +49,6 @@
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/btnDelete"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_delete"
-                app:tint="#EF4444"
-                android:padding="6dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Xóa"/>
         </LinearLayout>
 
         <!-- Content -->

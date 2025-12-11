@@ -22,6 +22,7 @@ import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.ui.adapter.DeckAdapter;
+import com.nhom1.polydeck.utils.HiddenDeckManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,15 @@ public class DeckManagementActivity extends AppCompatActivity {
     private ImageView btnBack;
     private EditText etSearchDeck;
     private RecyclerView rvDecks;
+    private RecyclerView rvHiddenDecks;
+    private android.view.View sectionHiddenDecks;
     private ImageView btnAddDeck;
     private TextView tvTotalDecks, tvPublishedDecks;
     private DeckAdapter deckAdapter;
+    private DeckAdapter hiddenDeckAdapter;
     private APIService apiService;
     private List<BoTu> fullDeckList = new ArrayList<>(); // Store the full list for search restoration
+    private HiddenDeckManager hiddenDeckManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class DeckManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deck_management);
 
         apiService = RetrofitClient.getApiService();
+        hiddenDeckManager = new HiddenDeckManager(this);
 
         initViews();
         setupToolbar();
@@ -109,17 +115,22 @@ public class DeckManagementActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         etSearchDeck = findViewById(R.id.inputSearch);
         rvDecks = findViewById(R.id.recyclerViewDecks);
+        rvHiddenDecks = findViewById(R.id.recyclerViewHiddenDecks);
+        sectionHiddenDecks = findViewById(R.id.sectionHiddenDecks);
         btnAddDeck = findViewById(R.id.btnAddDeck);
         tvTotalDecks = findViewById(R.id.tvTotalDecks);
         tvPublishedDecks = findViewById(R.id.tvPublishedDecks);
         
-        // Xử lý window insets cho RecyclerView
-        ViewCompat.setOnApplyWindowInsetsListener(rvDecks, (v, insets) -> {
+        // Xử lý window insets cho NestedScrollView
+        android.view.View nestedScrollView = findViewById(R.id.nestedScrollView);
+        if (nestedScrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(nestedScrollView, (v, insets) -> {
             androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), 
                         Math.max(systemBars.bottom, 16)); // Tối thiểu 16dp
             return insets;
         });
+        }
     }
 
     private void setupToolbar(){
@@ -127,15 +138,26 @@ public class DeckManagementActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
+        // Adapter cho bộ từ đang hiển thị
         rvDecks.setLayoutManager(new LinearLayoutManager(this));
         deckAdapter = new DeckAdapter(this, new ArrayList<>());
         deckAdapter.setOnDeckDeletedListener(() -> {
-            // Refresh data when deck is deleted
+            // Refresh data when deck is hidden
             fetchDecks();
             // Set result to notify AdminDashboardActivity to refresh stats
             setResult(RESULT_OK);
         });
         rvDecks.setAdapter(deckAdapter);
+        
+        // Adapter cho bộ từ đã ẩn
+        rvHiddenDecks.setLayoutManager(new LinearLayoutManager(this));
+        hiddenDeckAdapter = new DeckAdapter(this, new ArrayList<>(), true); // true = mode hiển thị lại
+        hiddenDeckAdapter.setOnDeckDeletedListener(() -> {
+            // Refresh data when deck is unhidden
+            fetchDecks();
+            setResult(RESULT_OK);
+        });
+        rvHiddenDecks.setAdapter(hiddenDeckAdapter);
     }
 
     private void fetchDecks() {
@@ -146,13 +168,27 @@ public class DeckManagementActivity extends AppCompatActivity {
                     fullDeckList.clear();
                     fullDeckList.addAll(response.body());
                     
+                    // Lọc bỏ các bộ từ đã ẩn
+                    List<BoTu> visibleDecks = filterHiddenDecks(fullDeckList);
+                    // Lấy các bộ từ đã ẩn
+                    List<BoTu> hiddenDecks = getHiddenDecks(fullDeckList);
+                    
                     // Log deck data to check icon URLs
-                    for (BoTu deck : fullDeckList) {
+                    for (BoTu deck : visibleDecks) {
                         String iconUrl = deck.getLinkAnhIcon();
                         Log.d(TAG, "📦 Deck: " + deck.getTenChuDe() + " | Icon: [" + iconUrl + "] | IsNull: " + (iconUrl == null) + " | IsEmpty: " + (iconUrl != null && iconUrl.isEmpty()));
                     }
                     
-                    deckAdapter.updateData(new ArrayList<>(fullDeckList)); // Pass a copy to the adapter
+                    deckAdapter.updateData(new ArrayList<>(visibleDecks)); // Pass a copy to the adapter
+                    hiddenDeckAdapter.updateData(new ArrayList<>(hiddenDecks)); // Update hidden decks list
+                    
+                    // Hiển thị/ẩn section bộ từ đã ẩn
+                    if (hiddenDecks.isEmpty()) {
+                        sectionHiddenDecks.setVisibility(android.view.View.GONE);
+                    } else {
+                        sectionHiddenDecks.setVisibility(android.view.View.VISIBLE);
+                    }
+                    
                     updateStats();
                 } else {
                     Toast.makeText(DeckManagementActivity.this, "Failed to load decks", Toast.LENGTH_SHORT).show();
@@ -165,6 +201,32 @@ public class DeckManagementActivity extends AppCompatActivity {
                 Toast.makeText(DeckManagementActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    
+    /**
+     * Lọc bỏ các bộ từ đã ẩn khỏi danh sách
+     */
+    private List<BoTu> filterHiddenDecks(List<BoTu> allDecks) {
+        List<BoTu> visibleDecks = new ArrayList<>();
+        for (BoTu deck : allDecks) {
+            if (deck.getId() != null && !hiddenDeckManager.isDeckHidden(deck.getId())) {
+                visibleDecks.add(deck);
+            }
+        }
+        return visibleDecks;
+    }
+    
+    /**
+     * Lấy danh sách các bộ từ đã ẩn
+     */
+    private List<BoTu> getHiddenDecks(List<BoTu> allDecks) {
+        List<BoTu> hiddenDecks = new ArrayList<>();
+        for (BoTu deck : allDecks) {
+            if (deck.getId() != null && hiddenDeckManager.isDeckHidden(deck.getId())) {
+                hiddenDecks.add(deck);
+            }
+        }
+        return hiddenDecks;
     }
 
     private void setupSearch() {
@@ -183,13 +245,16 @@ public class DeckManagementActivity extends AppCompatActivity {
     }
 
     private void searchDecks(String query) {
+        // Lọc bỏ các bộ từ đã ẩn trước
+        List<BoTu> visibleDecks = filterHiddenDecks(fullDeckList);
+        
         if (query == null || query.trim().isEmpty()) {
-            deckAdapter.updateData(new ArrayList<>(fullDeckList)); // Restore the full list
+            deckAdapter.updateData(new ArrayList<>(visibleDecks)); // Restore the visible list
             return;
         }
 
         List<BoTu> filteredList = new ArrayList<>();
-        for (BoTu deck : fullDeckList) {
+        for (BoTu deck : visibleDecks) {
             if (deck.getTenChuDe().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(deck);
             }
@@ -198,9 +263,14 @@ public class DeckManagementActivity extends AppCompatActivity {
     }
 
     private void updateStats() {
+        // Tổng = tất cả bộ từ (bao gồm cả ẩn)
         int totalDecks = fullDeckList.size();
-        // Assuming all decks are published for now
-        int publishedDecks = totalDecks; // You can add logic to check published status
+        
+        // Đã xuất bản = chỉ bộ từ đang hiển thị (không ẩn)
+        List<BoTu> visibleDecks = filterHiddenDecks(fullDeckList);
+        // Assuming all visible decks are published for now
+        int publishedDecks = visibleDecks.size();
+        
         tvTotalDecks.setText(String.valueOf(totalDecks));
         tvPublishedDecks.setText(String.valueOf(publishedDecks));
     }

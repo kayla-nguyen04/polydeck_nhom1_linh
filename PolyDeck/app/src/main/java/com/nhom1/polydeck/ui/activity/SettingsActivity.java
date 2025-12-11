@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.button.MaterialButton;
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.utils.SessionManager;
 
@@ -67,10 +66,6 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
             startActivity(intent);
         });
-
-        // Logout button
-        MaterialButton btnLogout = findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(v -> showLogoutDialog());
     }
 
     private void showLanguageDialog() {
@@ -82,29 +77,5 @@ public class SettingsActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 })
                 .show();
-    }
-
-    private void showLogoutDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Đăng xuất")
-                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
-                .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                    performLogout();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void performLogout() {
-        // Clear session
-        sessionManager.logout();
-        
-        // Navigate to login screen
-        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-        
-        Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
     }
 }

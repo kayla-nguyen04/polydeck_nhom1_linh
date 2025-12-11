@@ -18,11 +18,15 @@
 
         <!-- Custom Header -->
         <LinearLayout
+            android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:padding="20dp"
+            android:paddingTop="8dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp"
             android:background="@android:color/white"
             android:elevation="2dp">
 

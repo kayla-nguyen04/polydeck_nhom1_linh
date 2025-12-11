@@ -24,6 +24,9 @@ public class ThongBao implements Serializable {
     @SerializedName("ngay_gui")
     private String ngayGui;
 
+    @SerializedName("da_doc")
+    private Boolean daDoc;
+
     public ThongBao(String tieuDe, String noiDung) {
         this.tieuDe = tieuDe;
         this.noiDung = noiDung;
@@ -35,7 +38,9 @@ public class ThongBao implements Serializable {
     public String getTieuDe() { return tieuDe; }
     public String getNoiDung() { return noiDung; }
     public String getNgayGui() { return ngayGui; }
+    public Boolean getDaDoc() { return daDoc != null ? daDoc : false; }
 
     public void setTieuDe(String tieuDe) { this.tieuDe = tieuDe; }
     public void setNoiDung(String noiDung) { this.noiDung = noiDung; }
+    public void setDaDoc(Boolean daDoc) { this.daDoc = daDoc; }
 }

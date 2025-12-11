@@ -79,13 +79,6 @@ public class SupportRequestAdapter extends RecyclerView.Adapter<SupportRequestAd
             holder.tvDate.setText("");
         }
         
-        // Click listener for delete button
-        holder.btnDelete.setOnClickListener(v -> {
-            if (onDeleteListener != null) {
-                onDeleteListener.onDelete(request, position);
-            }
-        });
-
         // Click listener for entire item to view details
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
@@ -101,7 +94,6 @@ public class SupportRequestAdapter extends RecyclerView.Adapter<SupportRequestAd
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvSenderName, tvSenderEmail, tvContent, tvDate;
-        ImageView btnDelete;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,7 +101,6 @@ public class SupportRequestAdapter extends RecyclerView.Adapter<SupportRequestAd
             tvSenderEmail = itemView.findViewById(R.id.tvSenderEmail);
             tvContent = itemView.findViewById(R.id.tvContent);
             tvDate = itemView.findViewById(R.id.tvDate);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

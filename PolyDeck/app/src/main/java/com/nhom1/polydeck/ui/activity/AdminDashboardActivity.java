@@ -10,6 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
@@ -46,6 +49,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
         setupSessionManager();
         loadStats();
         setupClickListeners();
+        setupWindowInsets();
+    }
+
+    private void setupWindowInsets() {
+        View scrollView = findViewById(R.id.scrollView);
+        if (scrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(scrollView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(0, systemBars.top, 0, Math.max(systemBars.bottom, 24));
+                return insets;
+            });
+        }
     }
 
     @Override

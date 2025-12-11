@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,9 +39,9 @@ public class AdminStatisticsActivity extends AppCompatActivity {
 
     private ImageView btnBack, btnFilter, btnCloseFilter;
     private TextView tvQuickFilter, tvDateRangeDisplay;
-    private TextView tvTotalUsers, tvActiveUsers, tvNewUsers, tvTotalSessions;
-    private TextView tvTotalUsersChange, tvActiveUsersChange, tvNewUsersChange, tvTotalSessionsChange;
-    private TextView tvTotalUsersPrevious, tvActiveUsersPrevious, tvNewUsersPrevious, tvTotalSessionsPrevious;
+    private TextView tvTotalUsers, tvActiveUsers, tvNewUsers;
+    private TextView tvTotalUsersChange, tvActiveUsersChange, tvNewUsersChange;
+    private TextView tvTotalUsersPrevious, tvActiveUsersPrevious, tvNewUsersPrevious;
     private TextView tvTotalDecks, tvTotalVocab;
     private TextView tvTotalDecksChange, tvTotalVocabChange;
     private TextView tvTotalDecksPrevious, tvTotalVocabPrevious;
@@ -83,15 +85,12 @@ public class AdminStatisticsActivity extends AppCompatActivity {
         tvTotalUsers = findViewById(R.id.tvTotalUsers);
         tvActiveUsers = findViewById(R.id.tvActiveUsers);
         tvNewUsers = findViewById(R.id.tvNewUsers);
-        tvTotalSessions = findViewById(R.id.tvTotalSessions);
         tvTotalUsersChange = findViewById(R.id.tvTotalUsersChange);
         tvActiveUsersChange = findViewById(R.id.tvActiveUsersChange);
         tvNewUsersChange = findViewById(R.id.tvNewUsersChange);
-        tvTotalSessionsChange = findViewById(R.id.tvTotalSessionsChange);
         tvTotalUsersPrevious = findViewById(R.id.tvTotalUsersPrevious);
         tvActiveUsersPrevious = findViewById(R.id.tvActiveUsersPrevious);
         tvNewUsersPrevious = findViewById(R.id.tvNewUsersPrevious);
-        tvTotalSessionsPrevious = findViewById(R.id.tvTotalSessionsPrevious);
         tvTotalDecks = findViewById(R.id.tvTotalDecks);
         tvTotalVocab = findViewById(R.id.tvTotalVocab);
         tvTotalDecksChange = findViewById(R.id.tvTotalDecksChange);
@@ -111,6 +110,18 @@ public class AdminStatisticsActivity extends AppCompatActivity {
         tvUserCount = findViewById(R.id.tvUserCount);
         
         setupRecyclerView();
+        
+        // Xử lý window insets cho NestedScrollView
+        android.view.View nestedScrollView = findViewById(R.id.nestedScrollView);
+        if (nestedScrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(nestedScrollView, (v, insets) -> {
+                androidx.core.graphics.Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                int topInset = systemBars.top;
+                int bottomInset = Math.max(systemBars.bottom, 24); // Tối thiểu 24dp
+                v.setPadding(0, topInset, 0, bottomInset);
+                return insets;
+            });
+        }
     }
     
     private void setupRecyclerView() {
@@ -439,36 +450,67 @@ public class AdminStatisticsActivity extends AppCompatActivity {
                         
                         final int finalNewDecks = newDecks;
                         
-                        // Load admin stats by date range
+                        // Load admin stats by date range - this gives us totals UP TO the end date
                         apiService.getAdminStatsByDateRange(currentStartStr, currentEndStr).enqueue(new Callback<AdminStats>() {
                             @Override
                             public void onResponse(@NonNull Call<AdminStats> call, @NonNull Response<AdminStats> response) {
                                 if (response.isSuccessful() && response.body() != null) {
                                     AdminStats currentStats = response.body();
                                     
-                                    // Load previous period stats for comparison
+                                    // Load previous period stats for comparison - totals UP TO the previous end date
                                     apiService.getAdminStatsByDateRange(previousStartStr, previousEndStr).enqueue(new Callback<AdminStats>() {
                                         @Override
                                         public void onResponse(@NonNull Call<AdminStats> call, @NonNull Response<AdminStats> response) {
                                             AdminStats previousStats = response.isSuccessful() && response.body() != null 
                                                     ? response.body() : new AdminStats();
                                             
-                                            // Calculate previous period new users and decks
+                                            // Calculate previous period new users (users created in previous period)
                                             apiService.getUsersByDateRange(previousStartStr, previousEndStr).enqueue(new Callback<List<User>>() {
                                                 @Override
                                                 public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
                                                     List<User> previousUsers = response.isSuccessful() && response.body() != null 
                                                             ? response.body() : new ArrayList<>();
-                                                    int previousNewUsers = previousUsers.size(); // All users in period are new
                                                     
+                                                    // Count new users in previous period
+                                                    int previousNewUsers = 0;
+                                                    try {
+                                                        Calendar prevStartCal = Calendar.getInstance();
+                                                        Calendar prevEndCal = Calendar.getInstance();
+                                                        prevStartCal.setTime(apiDateFormat.parse(previousStartStr));
+                                                        prevEndCal.setTime(apiDateFormat.parse(previousEndStr));
+                                                        prevEndCal.set(Calendar.HOUR_OF_DAY, 23);
+                                                        prevEndCal.set(Calendar.MINUTE, 59);
+                                                        prevEndCal.set(Calendar.SECOND, 59);
+                                                        
+                                                        SimpleDateFormat userDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                                        for (User user : previousUsers) {
+                                                            if (user.getNgayThamGia() != null && !user.getNgayThamGia().isEmpty()) {
+                                                                try {
+                                                                    Calendar userDate = Calendar.getInstance();
+                                                                    userDate.setTime(userDateFormat.parse(user.getNgayThamGia()));
+                                                                    if (!userDate.before(prevStartCal) && !userDate.after(prevEndCal)) {
+                                                                        previousNewUsers++;
+                                                                    }
+                                                                } catch (Exception e) {
+                                                                    // Skip if date parsing fails
+                                                                }
+                                                            }
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    
+                                                    // Use stats from API which gives totals UP TO the end date
+                                                    // currentStats.getTongNguoiDung() = tổng users đến cuối kỳ hiện tại
+                                                    // previousStats.getTongNguoiDung() = tổng users đến cuối kỳ trước
                                                     updateStatsWithComparison(
-                                                            currentTotal,
-                                                            currentActive,
+                                                            currentStats.getTongNguoiDung(), // Tổng users đến cuối kỳ hiện tại
+                                                            currentStats.getNguoiHoatDong(),
                                                             finalNewUsers,
                                                             0, // Sessions not available
                                                             currentStats.getTongBoTu(),
                                                             currentStats.getTongTuVung(),
-                                                            previousUsers.size(),
+                                                            previousStats.getTongNguoiDung(), // Tổng users đến cuối kỳ trước
                                                             previousStats.getNguoiHoatDong(),
                                                             previousNewUsers,
                                                             0,
@@ -479,14 +521,20 @@ public class AdminStatisticsActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
+                                                    // Use stats from API
                                                     updateStatsWithComparison(
-                                                            currentTotal,
-                                                            currentActive,
+                                                            currentStats.getTongNguoiDung(),
+                                                            currentStats.getNguoiHoatDong(),
                                                             finalNewUsers,
                                                             0,
                                                             currentStats.getTongBoTu(),
                                                             currentStats.getTongTuVung(),
-                                                            0, 0, 0, 0, 0, 0
+                                                            previousStats.getTongNguoiDung(),
+                                                            previousStats.getNguoiHoatDong(),
+                                                            0,
+                                                            0,
+                                                            previousStats.getTongBoTu(),
+                                                            previousStats.getTongTuVung()
                                                     );
                                                 }
                                             });
@@ -495,8 +543,8 @@ public class AdminStatisticsActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Call<AdminStats> call, @NonNull Throwable t) {
                                             updateStatsWithComparison(
-                                                    currentTotal,
-                                                    currentActive,
+                                                    currentStats.getTongNguoiDung(),
+                                                    currentStats.getNguoiHoatDong(),
                                                     finalNewUsers,
                                                     0,
                                                     currentStats.getTongBoTu(),
@@ -566,14 +614,12 @@ public class AdminStatisticsActivity extends AppCompatActivity {
         tvTotalUsers.setText(String.format(Locale.getDefault(), "%,d", currentTotal));
         tvActiveUsers.setText(String.format(Locale.getDefault(), "%,d", currentActive));
         tvNewUsers.setText(String.format(Locale.getDefault(), "%,d", currentNew));
-        tvTotalSessions.setText(String.format(Locale.getDefault(), "%,d", currentSessions));
         tvTotalDecks.setText(String.format(Locale.getDefault(), "%,d", currentDecks));
         tvTotalVocab.setText(String.format(Locale.getDefault(), "%,d", currentVocab));
         
         updateChangeText(tvTotalUsersChange, previousTotal, currentTotal);
         updateChangeText(tvActiveUsersChange, previousActive, currentActive);
         updateChangeText(tvNewUsersChange, previousNew, currentNew);
-        updateChangeText(tvTotalSessionsChange, previousSessions, currentSessions);
         updateChangeText(tvTotalDecksChange, previousDecks, currentDecks);
         updateChangeText(tvTotalVocabChange, previousVocab, currentVocab);
         
@@ -581,22 +627,31 @@ public class AdminStatisticsActivity extends AppCompatActivity {
         tvTotalUsersPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousTotal));
         tvActiveUsersPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousActive));
         tvNewUsersPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousNew));
-        tvTotalSessionsPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousSessions));
         tvTotalDecksPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousDecks));
         tvTotalVocabPrevious.setText(String.format(Locale.getDefault(), "Kỳ trước: %,d", previousVocab));
     }
 
     private void updateChangeText(TextView textView, int previous, int current) {
+        float change;
+        
         if (previous == 0) {
-            textView.setText(current > 0 ? "↑ 100%" : "0%");
-            textView.setTextColor(0xFFA7F3D0);
+            // Nếu kỳ trước = 0 và hiện tại > 0, coi như tăng 100%
+            // Nếu cả 2 đều = 0, thì không có thay đổi (0%)
+            if (current > 0) {
+                change = 100f; // Tăng từ 0 lên current được coi là tăng 100%
+            } else {
+                change = 0f;
+            }
         } else {
-            float change = ((float)(current - previous) / previous) * 100f;
-            String sign = change >= 0 ? "↑" : "↓";
-            String formatted = String.format(Locale.getDefault(), "%s %.1f%%", sign, Math.abs(change));
-            textView.setText(formatted);
-            textView.setTextColor(change >= 0 ? 0xFFA7F3D0 : 0xFFFF6B6B);
+            // Tính % thay đổi: ((current - previous) / previous) * 100
+            change = ((float)(current - previous) / previous) * 100f;
         }
+        
+        // Format và hiển thị
+        String sign = change >= 0 ? "↑" : "↓";
+        String formatted = String.format(Locale.getDefault(), "%s %.1f%%", sign, Math.abs(change));
+        textView.setText(formatted);
+        textView.setTextColor(change >= 0 ? 0xFFA7F3D0 : 0xFFFF6B6B);
     }
 
     private void loadOverallStats() {

@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
@@ -75,6 +77,7 @@ public class AddDeckActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        setupWindowInsets();
 
         btnSelectImage.setOnClickListener(v -> openFileChooser());
         ivIconPreview.setOnClickListener(v -> openFileChooser());
@@ -108,6 +111,17 @@ public class AddDeckActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void setupWindowInsets() {
+        View mainLayout = findViewById(R.id.mainLayout);
+        if (mainLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainLayout, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void openFileChooser() {

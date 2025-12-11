@@ -24,6 +24,7 @@ import com.nhom1.polydeck.data.model.TuVung;
 import com.nhom1.polydeck.ui.activity.EditDeckActivity;
 import com.nhom1.polydeck.ui.activity.VocabularyListActivity;
 import com.nhom1.polydeck.utils.LearningStatusManager;
+import com.nhom1.polydeck.utils.HiddenDeckManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,17 +43,25 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     private Context context;
     private APIService apiService;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    private OnDeckDeletedListener onDeckDeletedListener; // Callback for when deck is deleted
+    private OnDeckDeletedListener onDeckDeletedListener; // Callback for when deck is hidden/unhidden
     private Map<String, Integer> vocabCountCache = new HashMap<>(); // Cache số từ vựng
+    private HiddenDeckManager hiddenDeckManager;
+    private boolean isUnhideMode; // true = mode hiển thị lại, false = mode ẩn
 
     public interface OnDeckDeletedListener {
         void onDeckDeleted();
     }
 
     public DeckAdapter(Context context, List<BoTu> deckList) {
+        this(context, deckList, false);
+    }
+    
+    public DeckAdapter(Context context, List<BoTu> deckList, boolean isUnhideMode) {
         this.context = context;
         this.deckList = deckList;
         this.apiService = RetrofitClient.getApiService();
+        this.hiddenDeckManager = new HiddenDeckManager(context);
+        this.isUnhideMode = isUnhideMode;
     }
     
     public void setOnDeckDeletedListener(OnDeckDeletedListener listener) {
@@ -161,104 +170,97 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             context.startActivity(intent);
         });
 
-        // Delete button
-        holder.btnDelete.setOnClickListener(v -> showDeleteConfirmationDialog(deck, position));
+        // Hide/Unhide button
+        if (isUnhideMode) {
+            // Mode hiển thị lại: đổi text và màu nút
+            holder.btnDelete.setText("👁️ Hiển thị lại");
+            holder.btnDelete.setTextColor(android.graphics.Color.parseColor("#059669")); // Green
+            holder.btnDelete.setBackgroundResource(R.drawable.bg_button_unhide);
+            holder.btnDelete.setOnClickListener(v -> showUnhideConfirmationDialog(deck, position));
+        } else {
+            // Mode ẩn: giữ nguyên
+            holder.btnDelete.setText("👁️‍🗨️ Ẩn");
+            holder.btnDelete.setTextColor(android.graphics.Color.parseColor("#D97706")); // Orange
+            holder.btnDelete.setBackgroundResource(R.drawable.bg_button_hide);
+            holder.btnDelete.setOnClickListener(v -> showHideConfirmationDialog(deck, position));
+        }
     }
 
-    private void showDeleteConfirmationDialog(BoTu deck, int position) {
+    private void showHideConfirmationDialog(BoTu deck, int position) {
         new AlertDialog.Builder(context)
-                .setTitle("Xác nhận xóa")
-                .setMessage("Bạn có chắc chắn muốn xóa bộ từ '" + deck.getTenChuDe() + "'?")
-                .setPositiveButton("Xóa", (dialog, which) -> deleteDeck(deck, position))
+                .setTitle("Xác nhận ẩn")
+                .setMessage("Bạn có chắc chắn muốn ẩn bộ từ '" + deck.getTenChuDe() + "'?\n\nBộ từ sẽ không hiển thị trong danh sách quản lý nhưng dữ liệu vẫn được giữ nguyên. Người dùng đang học vẫn có thể tiếp tục học.")
+                .setPositiveButton("Ẩn", (dialog, which) -> hideDeck(deck, position))
                 .setNegativeButton("Hủy", null)
                 .show();
     }
 
-    private void deleteDeck(BoTu deck, int position) {
-        // Backend đã được sửa để tự động xóa từ vựng khi xóa bộ từ
-        // Không cần thử xóa từ vựng trước nữa, xóa bộ từ trực tiếp
-        android.util.Log.d("DeckAdapter", "Deleting deck: " + deck.getTenChuDe() + " (ID: " + deck.getId() + ")");
-        android.util.Log.d("DeckAdapter", "Backend will automatically delete all related vocabularies");
-        Toast.makeText(context, "Đang xóa bộ từ...", Toast.LENGTH_SHORT).show();
-        deleteDeckOnly(deck, position);
-    }
-
-    private void deleteDeckOnly(BoTu deck, int position) {
+    private void hideDeck(BoTu deck, int position) {
         String deckId = deck.getId();
+        if (deckId == null || deckId.isEmpty()) {
+            Toast.makeText(context, "ID bộ từ không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
         
-        // Thử xóa bộ từ với option xóa cả từ vựng trước
-        android.util.Log.d("DeckAdapter", "Attempting to delete deck with vocab deletion option");
-        apiService.deleteChuDe(deckId, true).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    android.util.Log.d("DeckAdapter", "✅ Deck deleted with vocab deletion option");
-                    handleDeckDeletionSuccess(deckId, deck, position);
-                } else {
-                    // Endpoint với query parameter không hoạt động, thử endpoint thông thường
-                    android.util.Log.w("DeckAdapter", "Delete with vocab option failed (Code: " + response.code() + "), trying normal delete...");
-                    deleteDeckNormal(deckId, deck, position);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                // Endpoint với query parameter không hoạt động, thử endpoint thông thường
-                android.util.Log.w("DeckAdapter", "Delete with vocab option failed: " + t.getMessage() + ", trying normal delete...");
-                deleteDeckNormal(deckId, deck, position);
-            }
-        });
+        android.util.Log.d("DeckAdapter", "Hiding deck: " + deck.getTenChuDe() + " (ID: " + deckId + ")");
+        
+        // Lưu vào danh sách ẩn
+        hiddenDeckManager.hideDeck(deckId);
+        
+        // Hiển thị thông báo
+        Toast.makeText(context, "Đã ẩn bộ từ", Toast.LENGTH_SHORT).show();
+        
+        // Cập nhật UI - xóa khỏi danh sách hiển thị
+        updateUIAfterHiding(position);
     }
 
-    private void deleteDeckNormal(String deckId, BoTu deck, int position) {
-        apiService.deleteChuDe(deckId, null).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    handleDeckDeletionSuccess(deckId, deck, position);
-                } else {
-                    Toast.makeText(context, "Xóa bộ từ thất bại", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(context, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void handleDeckDeletionSuccess(String deckId, BoTu deck, int position) {
-        // Xóa learning status local của bộ từ này
-        LearningStatusManager learningStatusManager = new LearningStatusManager(context);
-        learningStatusManager.clearDeckStatus(deckId);
-        
-        // Xóa khỏi cache vocab count
-        vocabCountCache.remove(deckId);
-        
-        // Kiểm tra xem từ vựng có còn không (để xác nhận backend có cascade delete không)
-        checkVocabulariesAfterDeckDeletion(deckId, deck, position);
-    }
-
-    private void checkVocabulariesAfterDeckDeletion(String deckId, BoTu deck, int position) {
-        // Backend đã có cascade delete, không cần kiểm tra nữa
-        // Chỉ log để debug
-        android.util.Log.d("DeckAdapter", "✅ Deck deleted successfully");
-        
-        // Hiển thị thông báo đơn giản
-        Toast.makeText(context, "Đã xóa bộ từ", Toast.LENGTH_SHORT).show();
-        
-        // Cập nhật UI
-        updateUIAfterDeletion(position);
-    }
-
-    private void updateUIAfterDeletion(int position) {
-        // Cập nhật UI
+    private void updateUIAfterHiding(int position) {
+        // Xóa khỏi danh sách hiển thị
         deckList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, deckList.size());
         
         // Notify activity to refresh data (update stats and fullDeckList)
+        if (onDeckDeletedListener != null) {
+            onDeckDeletedListener.onDeckDeleted();
+        }
+    }
+    
+    private void showUnhideConfirmationDialog(BoTu deck, int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Xác nhận hiển thị lại")
+                .setMessage("Bạn có chắc chắn muốn hiển thị lại bộ từ '" + deck.getTenChuDe() + "'?\n\nBộ từ sẽ xuất hiện lại trong danh sách quản lý và người dùng có thể thấy.")
+                .setPositiveButton("Hiển thị lại", (dialog, which) -> unhideDeck(deck, position))
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void unhideDeck(BoTu deck, int position) {
+        String deckId = deck.getId();
+        if (deckId == null || deckId.isEmpty()) {
+            Toast.makeText(context, "ID bộ từ không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        android.util.Log.d("DeckAdapter", "Unhiding deck: " + deck.getTenChuDe() + " (ID: " + deckId + ")");
+        
+        // Xóa khỏi danh sách ẩn
+        hiddenDeckManager.showDeck(deckId);
+        
+        // Hiển thị thông báo
+        Toast.makeText(context, "Đã hiển thị lại bộ từ", Toast.LENGTH_SHORT).show();
+        
+        // Cập nhật UI - xóa khỏi danh sách ẩn
+        updateUIAfterUnhiding(position);
+    }
+
+    private void updateUIAfterUnhiding(int position) {
+        // Xóa khỏi danh sách ẩn
+        deckList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, deckList.size());
+        
+        // Notify activity to refresh data
         if (onDeckDeletedListener != null) {
             onDeckDeletedListener.onDeckDeleted();
         }

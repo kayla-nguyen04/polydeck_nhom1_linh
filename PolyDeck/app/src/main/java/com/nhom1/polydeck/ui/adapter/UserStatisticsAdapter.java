@@ -114,3 +114,4 @@ public class UserStatisticsAdapter extends RecyclerView.Adapter<UserStatisticsAd
     }
 }
 
+

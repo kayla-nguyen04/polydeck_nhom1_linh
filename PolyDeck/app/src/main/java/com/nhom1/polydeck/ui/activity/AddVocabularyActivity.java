@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.nhom1.polydeck.R;
 import com.nhom1.polydeck.data.api.APIService;
 import com.nhom1.polydeck.data.api.RetrofitClient;
@@ -70,6 +72,7 @@ public class AddVocabularyActivity extends AppCompatActivity {
         initViews();
         setupToolbar();
         setupListeners();
+        setupWindowInsets();
         
         // Load existing vocabulary to check for duplicates
         loadExistingVocabulary();
@@ -116,6 +119,17 @@ public class AddVocabularyActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         btnBack.setOnClickListener(v -> onBackPressed());
+    }
+
+    private void setupWindowInsets() {
+        View mainScrollView = findViewById(R.id.mainScrollView);
+        if (mainScrollView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainScrollView, (v, insets) -> {
+                int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+                v.setPadding(0, topInset, 0, 0);
+                return insets;
+            });
+        }
     }
 
     private void setupListeners() {

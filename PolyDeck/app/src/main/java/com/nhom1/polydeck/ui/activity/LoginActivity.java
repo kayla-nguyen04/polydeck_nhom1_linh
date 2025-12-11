@@ -78,10 +78,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupGoogleSignIn() {
-        // TODO: Thay YOUR_WEB_CLIENT_ID bằng Google Client ID từ Google Cloud Console
-        // Lấy từ: https://console.cloud.google.com/apis/credentials
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("362338924386-2ivjv5vd5r57g9er53cco26bs5r906it.apps.googleusercontent.com") // Web Client ID, không phải Android Client ID
+                .requestIdToken("362338924386-2ivjv5vd5r57g9er53cco26bs5r906it.apps.googleusercontent.com") 
                 .requestEmail()
                 .build();
 
@@ -131,7 +129,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Quên mật khẩu
-
         forgotPassword.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
@@ -170,8 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             inputPassword.requestFocus();
             return;
         }
-
-        // TODO: Implement actual login logic with API
+        
         performLogin(email, password);
     }
 

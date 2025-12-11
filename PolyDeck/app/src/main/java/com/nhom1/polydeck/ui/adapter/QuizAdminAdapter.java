@@ -20,6 +20,7 @@ import com.nhom1.polydeck.data.model.BaiQuiz;
 import com.nhom1.polydeck.data.model.BoTu;
 import com.nhom1.polydeck.ui.activity.CreateQuizActivity;
 import com.nhom1.polydeck.ui.activity.ViewQuizActivity;
+import com.nhom1.polydeck.utils.HiddenQuizManager;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -37,10 +38,12 @@ public class QuizAdminAdapter extends RecyclerView.Adapter<QuizAdminAdapter.Quiz
     private Context context;
     private APIService apiService;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-    private OnQuizDeletedListener onQuizDeletedListener; // Callback for when quiz is deleted
+    private OnQuizHiddenListener onQuizHiddenListener; // Callback for when quiz is hidden/unhidden
+    private HiddenQuizManager hiddenQuizManager;
+    private boolean isUnhideMode; // Mode to show hidden quizzes
 
-    public interface OnQuizDeletedListener {
-        void onQuizDeleted();
+    public interface OnQuizHiddenListener {
+        void onQuizHidden();
     }
 
     public QuizAdminAdapter(Context context, List<BaiQuiz> quizList, Map<String, BoTu> deckMap) {
@@ -48,10 +51,17 @@ public class QuizAdminAdapter extends RecyclerView.Adapter<QuizAdminAdapter.Quiz
         this.quizList = quizList;
         this.deckMap = deckMap;
         this.apiService = RetrofitClient.getApiService();
+        this.hiddenQuizManager = new HiddenQuizManager(context);
+        this.isUnhideMode = false;
     }
     
-    public void setOnQuizDeletedListener(OnQuizDeletedListener listener) {
-        this.onQuizDeletedListener = listener;
+    public void setOnQuizHiddenListener(OnQuizHiddenListener listener) {
+        this.onQuizHiddenListener = listener;
+    }
+    
+    public void setUnhideMode(boolean isUnhideMode) {
+        this.isUnhideMode = isUnhideMode;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -94,55 +104,86 @@ public class QuizAdminAdapter extends RecyclerView.Adapter<QuizAdminAdapter.Quiz
             context.startActivity(intent);
         });
 
-        // Delete button - Show confirmation dialog
-        holder.btnDeleteQuiz.setOnClickListener(v -> {
-            showDeleteConfirmationDialog(quiz, position);
-        });
+        // Hide/Unhide button - Show confirmation dialog
+        if (isUnhideMode) {
+            holder.btnDeleteQuiz.setText("👁 Hiển thị lại");
+            holder.btnDeleteQuiz.setBackground(context.getDrawable(R.drawable.bg_button_unhide));
+            holder.btnDeleteQuiz.setTextColor(0xFFF97316); // orange_500
+            holder.btnDeleteQuiz.setOnClickListener(v -> {
+                showUnhideConfirmationDialog(quiz, position);
+            });
+        } else {
+            holder.btnDeleteQuiz.setText("👁️‍🗨️ Ẩn");
+            holder.btnDeleteQuiz.setBackground(context.getDrawable(R.drawable.bg_button_hide));
+            holder.btnDeleteQuiz.setTextColor(0xFFFACC15); // yellow_bar
+            holder.btnDeleteQuiz.setOnClickListener(v -> {
+                showHideConfirmationDialog(quiz, position);
+            });
+        }
     }
 
-    private void showDeleteConfirmationDialog(BaiQuiz quiz, int position) {
+    private void showHideConfirmationDialog(BaiQuiz quiz, int position) {
         BoTu deck = deckMap.get(quiz.getMaChuDe());
         String deckName = (deck != null) ? deck.getTenChuDe() : "Unknown Deck";
         
         new AlertDialog.Builder(context)
-                .setTitle("Xóa Quiz")
-                .setMessage("Bạn có chắc chắn muốn xóa quiz của bộ từ \"" + deckName + "\"?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
-                    deleteQuiz(quiz.getId(), position);
+                .setTitle("Ẩn Quiz")
+                .setMessage("Bạn có chắc chắn muốn ẩn quiz của bộ từ \"" + deckName + "\"?")
+                .setPositiveButton("Ẩn", (dialog, which) -> {
+                    hideQuiz(quiz.getId(), position);
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
     }
 
-    private void deleteQuiz(String quizId, int position) {
+    private void showUnhideConfirmationDialog(BaiQuiz quiz, int position) {
+        BoTu deck = deckMap.get(quiz.getMaChuDe());
+        String deckName = (deck != null) ? deck.getTenChuDe() : "Unknown Deck";
+        
+        new AlertDialog.Builder(context)
+                .setTitle("Hiển thị lại Quiz")
+                .setMessage("Bạn có chắc chắn muốn hiển thị lại quiz của bộ từ \"" + deckName + "\"?")
+                .setPositiveButton("Hiển thị lại", (dialog, which) -> {
+                    unhideQuiz(quiz.getId(), position);
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void hideQuiz(String quizId, int position) {
         if (quizId == null || quizId.isEmpty()) {
             Toast.makeText(context, "ID quiz không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        apiService.deleteQuiz(quizId).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    quizList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, quizList.size());
-                    Toast.makeText(context, "Đã xóa quiz thành công", Toast.LENGTH_SHORT).show();
-                    
-                    // Notify activity to refresh data (update stats and fullQuizList)
-                    if (onQuizDeletedListener != null) {
-                        onQuizDeletedListener.onQuizDeleted();
-                    }
-                } else {
-                    Toast.makeText(context, "Không thể xóa quiz", Toast.LENGTH_SHORT).show();
-                }
-            }
+        hiddenQuizManager.hideQuiz(quizId);
+        quizList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, quizList.size());
+        Toast.makeText(context, "Đã ẩn quiz thành công", Toast.LENGTH_SHORT).show();
+        
+        // Notify activity to refresh data
+        if (onQuizHiddenListener != null) {
+            onQuizHiddenListener.onQuizHidden();
+        }
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Toast.makeText(context, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void unhideQuiz(String quizId, int position) {
+        if (quizId == null || quizId.isEmpty()) {
+            Toast.makeText(context, "ID quiz không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        hiddenQuizManager.unhideQuiz(quizId);
+        quizList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, quizList.size());
+        Toast.makeText(context, "Đã hiển thị lại quiz thành công", Toast.LENGTH_SHORT).show();
+        
+        // Notify activity to refresh data
+        if (onQuizHiddenListener != null) {
+            onQuizHiddenListener.onQuizHidden();
+        }
     }
 
     @Override

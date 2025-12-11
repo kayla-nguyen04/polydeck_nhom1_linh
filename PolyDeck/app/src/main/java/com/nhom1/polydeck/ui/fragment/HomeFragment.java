@@ -24,6 +24,7 @@ import com.nhom1.polydeck.data.model.User;
 import com.nhom1.polydeck.ui.adapter.UserDeckAdapter;
 import com.nhom1.polydeck.ui.activity.NotificationsActivity;
 import com.nhom1.polydeck.utils.SessionManager;
+import com.nhom1.polydeck.utils.HiddenDeckManager;
 import com.nhom1.polydeck.data.model.ApiResponse;
 import com.nhom1.polydeck.data.model.DeckProgress;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment {
 
     private UserDeckAdapter adapter;
     private APIService apiService;
+    private HiddenDeckManager hiddenDeckManager;
     private TextView tvUsername;
     private TextView tvGreeting;
     private TextView tvStreak;
@@ -48,6 +50,9 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressContinue;
     private ImageView ivContinueIcon;
     private ImageView ivAvatar;
+    private android.view.View cardContinueLearning;
+    private String currentContinueDeckId;
+    private String currentContinueDeckName;
 
     @Nullable
     @Override
@@ -59,6 +64,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         apiService = RetrofitClient.getApiService();
+        hiddenDeckManager = new HiddenDeckManager(requireContext());
 
         tvGreeting = view.findViewById(R.id.tv_greeting);
         tvUsername = view.findViewById(R.id.tv_username);
@@ -69,6 +75,20 @@ public class HomeFragment extends Fragment {
         progressContinue = view.findViewById(R.id.progress_continue);
         ivContinueIcon = view.findViewById(R.id.iv_continue_icon);
         ivAvatar = view.findViewById(R.id.iv_avatar);
+        cardContinueLearning = view.findViewById(R.id.card_continue_learning);
+        
+        // Click listener cho card tiếp tục học
+        if (cardContinueLearning != null) {
+            cardContinueLearning.setOnClickListener(v -> {
+                if (currentContinueDeckId != null && currentContinueDeckName != null) {
+                    android.content.Intent intent = new android.content.Intent(requireContext(), 
+                            com.nhom1.polydeck.ui.activity.TopicDetailActivity.class);
+                    intent.putExtra(com.nhom1.polydeck.ui.activity.TopicDetailActivity.EXTRA_DECK_ID, currentContinueDeckId);
+                    intent.putExtra(com.nhom1.polydeck.ui.activity.TopicDetailActivity.EXTRA_DECK_NAME, currentContinueDeckName);
+                    startActivity(intent);
+                }
+            });
+        }
 
         loadUserData();
 
@@ -114,9 +134,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (isAdded() && response.isSuccessful() && response.body() != null) {
-                    List<BoTu> items = response.body();
+                    // Lọc bỏ các bộ từ đã ẩn
+                    List<BoTu> items = filterHiddenDecks(response.body());
                     if (items != null && !items.isEmpty()) {
                         BoTu first = items.get(0);
+                        currentContinueDeckId = first.getId();
+                        currentContinueDeckName = first.getTenChuDe();
                         if (tvContinueTitle != null) {
                             tvContinueTitle.setText(first.getTenChuDe());
                         }
@@ -306,12 +329,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<BoTu>> call, @NonNull Response<List<BoTu>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<BoTu> items = response.body();
+                    // Lọc bỏ các bộ từ đã ẩn
+                    List<BoTu> items = filterHiddenDecks(response.body());
                     adapter.setItems(items);
 
                     // Bind continue learning card with first topic as placeholder
                     if (items != null && !items.isEmpty()) {
                         BoTu first = items.get(0);
+                        currentContinueDeckId = first.getId();
+                        currentContinueDeckName = first.getTenChuDe();
                         if (tvContinueTitle != null) {
                             tvContinueTitle.setText(first.getTenChuDe());
                         }
@@ -418,6 +444,19 @@ public class HomeFragment extends Fragment {
             public void onFailure(@NonNull Call<List<BoTu>> call, @NonNull Throwable t) {
             }
         });
+    }
+    
+    /**
+     * Lọc bỏ các bộ từ đã ẩn khỏi danh sách
+     */
+    private List<BoTu> filterHiddenDecks(List<BoTu> allDecks) {
+        List<BoTu> visibleDecks = new java.util.ArrayList<>();
+        for (BoTu deck : allDecks) {
+            if (deck.getId() != null && !hiddenDeckManager.isDeckHidden(deck.getId())) {
+                visibleDecks.add(deck);
+            }
+        }
+        return visibleDecks;
     }
 }
 
